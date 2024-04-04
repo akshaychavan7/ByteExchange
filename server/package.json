@@ -11,11 +11,11 @@
     "dependencies": {
         "bcrypt": "^5.1.1",
         "cors": "*",
-        "express": "*",
+        "express": "^4.19.2",
         "express-session": "*",
         "jest": "^29.7.0",
         "jsonwebtoken": "*",
-        "mongoose": "*",
+        "mongoose": "^8.3.0",
         "mysql": "*"
     },
     "devDependencies": {
