@@ -1,0 +1,58 @@
+.answer_form {
+    background-color: #f4f4f4;
+    padding: 20px;
+    width: 60%; /* Adjust as per requirement */
+    margin: 20px auto; /* Centers the form on the page */
+  }
+
+  .form_username_lable {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  .form_username_input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+
+  .form_text_label{
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.form_text_input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btn_indicator_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* This will push child elements to the extremes of the container */
+    width: 100%;
+  }
+
+
+  .form_postBtn {
+    background: #3090e2;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .mandatory_indicator {
+    font-size: 0.8rem;
+    color: red;
+    margin-top: 10px;
+  }

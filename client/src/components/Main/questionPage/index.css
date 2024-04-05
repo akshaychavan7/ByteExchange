@@ -1,0 +1,20 @@
+.btns {
+  margin-right: 15%;
+}
+
+.question_list:last-child {
+  border-bottom: #000000 1px dashed;
+}
+
+.questions_table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.questions_table td {
+  margin-bottom: 20px;
+  padding-top: 4px;
+  padding: 20px 10px;
+  vertical-align: top;
+}

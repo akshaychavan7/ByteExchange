@@ -3,11 +3,11 @@
 import React from "react";
 import "./stylesheets/App.css";
 import FakeStackOverflow from "./components/fakestackoverflow.js";
-
+import data from "./data/model.js";
+import Application from "./models/application";
 function App() {
-    return (
-        <FakeStackOverflow />
-    );
+  const app = new Application(data);
+  return <FakeStackOverflow app={app} />;
 }
 
 export default App;
