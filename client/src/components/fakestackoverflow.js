@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Header from "./Header";
 import Main from "./Main";
+import { ApplicationContext } from "../context/ApplicationContext";
+import UnauthorizedAccess from "./Login/UnauthorizedAccess";
 
 export default function fakeStackOverflow({ app }) {
+  const { isAuthenticated } = useContext(ApplicationContext);
   const [search, setSearch] = useState("");
   const [mainTitle, setMainTitle] = useState("All Questions");
 
@@ -11,7 +14,7 @@ export default function fakeStackOverflow({ app }) {
     setMainTitle(title);
   };
 
-  return (
+  return isAuthenticated ? (
     <>
       <Header setQuesitonPage={setQuesitonPage} search={search} />
       <Main
@@ -22,5 +25,7 @@ export default function fakeStackOverflow({ app }) {
         setQuesitonPage={setQuesitonPage}
       />
     </>
+  ) : (
+    <UnauthorizedAccess />
   );
 }
