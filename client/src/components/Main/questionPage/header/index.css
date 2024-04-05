@@ -1,0 +1,12 @@
+.btns {
+  margin-right: 15%;
+}
+
+.btn {
+  background: #ffffff;
+  border: #000000 1px solid;
+}
+
+#question_count {
+  font-weight: 600;
+}
