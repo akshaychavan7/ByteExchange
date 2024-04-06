@@ -78,10 +78,12 @@ function questionCreate(
   return question.save();
 }
 
-function userCreate(username, password, userRole) {
+function userCreate(username, password, firstname, lastname, userRole) {
   let userdetail = {
     username: username,
     password: password,
+    firstname: firstname,
+    lastname: lastname,
     userRole: userRole,
   };
 
@@ -118,15 +120,23 @@ const init = async () => {
   let t5 = await tagCreate("storage");
   let t6 = await tagCreate("website");
   let t7 = await tagCreate("Flutter");
-  let user1 = await userCreate("hamkalo", "password", "general");
+  let user1 = await userCreate("hamkalo", "password", "john", "doe", "general");
   let user2 = await userCreate(
     "akshay",
     "$2b$10$UdvIwdWB1y1BWLknpmgeDelPx1OIsGCjrg0ciLIMGFpqfaXdAA3JK",
+    "Akshay",
+    "Chavan",
     "moderator"
   );
-  let user3 = await userCreate("shawn", "password", "general");
-  let user4 = await userCreate("azad", "password", "general");
-  let user5 = await userCreate("moley", "password", "general");
+  let user3 = await userCreate("shawn", "password", "Shiu", "Chen", "general");
+  let user4 = await userCreate(
+    "vedant",
+    "password",
+    "Vedant Rishi",
+    "Das",
+    "general"
+  );
+  let user5 = await userCreate("sam", "password", "Sameer", "Ahire", "general");
   let comment1 = await commentCreate(
     "Nice!",
     user1,
