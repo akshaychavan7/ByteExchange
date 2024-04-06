@@ -1,6 +1,7 @@
 // Application server
 
 const express = require("express");
+const bodyParser = require("body-parser");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
@@ -21,6 +22,8 @@ app.use(
   })
 );
 
+app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
+
 app.use(express.json());
 
 // Middleware to authorize JWT token - ref: https://dev.to/franciscomendes10866/using-cookies-with-jwt-in-node-js-8fn
@@ -31,7 +34,6 @@ const authorization = (req, res, next) => {
   }
   try {
     const data = jwt.verify(token, SECRET_KEY);
-    console.log(data);
     req.userId = data.id;
     req.userRole = data.role;
     return next();

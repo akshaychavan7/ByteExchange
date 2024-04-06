@@ -33,17 +33,30 @@ const authenticateCredentials = async (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { username, password } = req.body;
-  // check if user already exists
-  const existing = await User.findOne({ username });
-  if (existing) {
-    return res.status(400).json({ message: "User already exists" });
-  } else {
-    const user = new User({ username, password });
-    await user.save();
-    res
-      .status(200)
-      .json({ status: 200, message: "User registered successfully" });
+  try {
+    const { username, password, firstname, lastname, profilePic } = req.body;
+    // check if user already exists
+    const existing = await User.findOne({ username });
+    if (existing) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "User already exists" });
+    } else {
+      const user = new User({
+        username,
+        password,
+        firstname,
+        lastname,
+        profilePic,
+      });
+      await user.save();
+      res
+        .status(200)
+        .json({ status: 200, message: "User registered successfully" });
+    }
+  } catch (error) {
+    console.error(`Error while calling register API: ${error}`);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 

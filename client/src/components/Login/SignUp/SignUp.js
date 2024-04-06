@@ -1,4 +1,5 @@
 import * as React from "react";
+import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -14,6 +15,7 @@ import Background from "../../../assets/images/bg2.jpg";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Paper from "@mui/material/Paper";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import register from "../../../services/registerService";
 
 const defaultTheme = createTheme();
 
@@ -30,17 +32,83 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  const [image, setImage] = React.useState(null);
+  const [alert, setAlert] = React.useState({ type: "success", message: "" });
+  const [displayAlert, setDisplayAlert] = React.useState(false);
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
+    const payload = {
+      username: data.get("email"),
       password: data.get("password"),
-    });
+      firstname: data.get("firstName"),
+      lastname: data.get("lastName"),
+    };
+
+    if (image) {
+      payload.profilePic = image;
+    }
+
+    const fiedlsMissing =
+      !payload.firstname ||
+      !payload.lastname ||
+      !payload.username ||
+      !payload.password;
+
+    if (fiedlsMissing) {
+      setDisplayAlert(true);
+      setAlert({ type: "error", message: "All fields are required" });
+      setTimeout(() => {
+        setDisplayAlert(false);
+      }, 3000);
+      return;
+    }
+    const response = await register(payload);
+    switch (response.status) {
+      case 200:
+        setDisplayAlert(true);
+        setAlert({ type: "success", message: "User registered successfully" });
+        break;
+      case 400:
+        setDisplayAlert(true);
+        setAlert({ type: "error", message: "User already exists" });
+        break;
+      default:
+        setDisplayAlert(true);
+        setAlert({ type: "error", message: "Internal Server Error" });
+    }
+    setTimeout(() => {
+      setDisplayAlert(false);
+    }, 3000);
+  };
+
+  const handleFileInputChange = () => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+        setDisplayAlert(true);
+        setAlert({ type: "success", message: "Image uploaded successfully" });
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setDisplayAlert(true);
+      setAlert({ type: "error", message: "Failed to upload image" });
+    }
+
+    setTimeout(() => {
+      setDisplayAlert(false);
+    }, 3000);
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      {displayAlert && (
+        <Alert severity={alert.type} onClose={() => setDisplayAlert(false)}>
+          {alert.message}
+        </Alert>
+      )}
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
@@ -69,7 +137,7 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }} src={image}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -133,7 +201,13 @@ export default function SignUp() {
                     startIcon={<AccountCircle />}
                   >
                     Upload Profile Picture
-                    <VisuallyHiddenInput type="file" />
+                    <VisuallyHiddenInput
+                      id="profilePic"
+                      name="profilePic"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileInputChange}
+                    />
                   </Button>
                 </Grid>
               </Grid>

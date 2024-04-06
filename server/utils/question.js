@@ -95,7 +95,7 @@ const getQuestionsByOrder = async (order) => {
         return questions;
     }
   } catch (err) {
-    console.log("err", err);
+    console.error("err", err);
     return null;
   }
 };
