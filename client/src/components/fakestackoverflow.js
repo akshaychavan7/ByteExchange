@@ -1,36 +1,30 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import Header from "./Header";
 import Main from "./Main";
 import { ApplicationContext } from "../context/ApplicationContext";
 import UnauthorizedAccess from "./Login/UnauthorizedAccess";
-import isAuthenticated from "../services/authenticationService";
+import useIsAuthenticated from "../hooks/useIsAuthenticated";
 
 export default function fakeStackOverflow({ app }) {
   const applicationCtx = useContext(ApplicationContext);
   const [search, setSearch] = useState("");
   const [mainTitle, setMainTitle] = useState("All Questions");
+  useIsAuthenticated();
 
-  useEffect(() => {
-    (async () => {
-      const response = await isAuthenticated();
-      console.log("response", response);
-    })();
-  }, []);
-
-  const setQuesitonPage = (search = "", title = "All Questions") => {
+  const setQuestionPage = (search = "", title = "All Questions") => {
     setSearch(search);
     setMainTitle(title);
   };
 
   return applicationCtx.isAuthenticated ? (
     <>
-      <Header setQuesitonPage={setQuesitonPage} search={search} />
+      <Header setQuestionPage={setQuestionPage} search={search} />
       <Main
         search={search}
         setSearch={setSearch}
         app={app}
         title={mainTitle}
-        setQuesitonPage={setQuesitonPage}
+        setQuestionPage={setQuestionPage}
       />
     </>
   ) : (

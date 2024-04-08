@@ -16,6 +16,7 @@ import Background from "../../assets/images/bg2.jpg";
 import { ApplicationContext } from "../../context/ApplicationContext";
 import login from "../../services/loginService";
 import { useNavigate } from "react-router-dom";
+import useIsAuthenticated from "../../hooks/useIsAuthenticated";
 function Copyright(props) {
   return (
     <Typography
@@ -41,9 +42,15 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function Login() {
+  useIsAuthenticated();
   let navigate = useNavigate();
   const applicationCtx = React.useContext(ApplicationContext);
-  console.log(applicationCtx);
+
+  // if user is already logged in then redirect to home page
+  if (applicationCtx.isAuthenticated) {
+    navigate("/home");
+  }
+
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
