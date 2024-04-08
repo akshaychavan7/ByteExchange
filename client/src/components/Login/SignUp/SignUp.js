@@ -1,5 +1,4 @@
 import * as React from "react";
-import Alert from "@mui/material/Alert";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,6 +17,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import register from "../../../services/registerService";
 import { useNavigate } from "react-router";
 import { isValidEmail } from "../../../util/utils";
+import { useAlert } from "../../../context/AlertContext";
 
 const defaultTheme = createTheme();
 
@@ -36,16 +36,11 @@ const VisuallyHiddenInput = styled("input")({
 export default function SignUp() {
   let navigate = useNavigate();
   const [image, setImage] = React.useState(null);
-  const [alert, setAlert] = React.useState({ type: "success", message: "" });
-  const [displayAlert, setDisplayAlert] = React.useState(false);
+  const alert = useAlert();
 
   const validateEmail = (email) => {
     if (!isValidEmail(email)) {
-      setDisplayAlert(true);
-      setAlert({ type: "error", message: "Invalid email address" });
-      setTimeout(() => {
-        setDisplayAlert(false);
-      }, 3000);
+      alert.showAlert("Invalid email address", "error");
       return false;
     }
     return true;
@@ -74,31 +69,21 @@ export default function SignUp() {
       !payload.password;
 
     if (fiedlsMissing) {
-      setDisplayAlert(true);
-      setAlert({ type: "error", message: "All fields are required" });
-      setTimeout(() => {
-        setDisplayAlert(false);
-      }, 3000);
+      alert.showAlert("All fields are required", "error");
       return;
     }
     const response = await register(payload);
     switch (response.status) {
       case 200:
-        setDisplayAlert(true);
-        setAlert({ type: "success", message: "User registered successfully" });
+        alert.showAlert("User registered successfully", "success");
         navigate("/login");
         break;
       case 400:
-        setDisplayAlert(true);
-        setAlert({ type: "error", message: "User already exists" });
+        alert.showAlert("User already exists", "error");
         break;
       default:
-        setDisplayAlert(true);
-        setAlert({ type: "error", message: "Internal Server Error" });
+        alert.showAlert("Failed to register user", "error");
     }
-    setTimeout(() => {
-      setDisplayAlert(false);
-    }, 3000);
   };
 
   const handleFileInputChange = () => {
@@ -107,27 +92,16 @@ export default function SignUp() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImage(reader.result);
-        setDisplayAlert(true);
-        setAlert({ type: "success", message: "Image uploaded successfully" });
+        alert.showAlert("Image uploaded successfully", "success");
       };
       reader.readAsDataURL(file);
     } else {
-      setDisplayAlert(true);
-      setAlert({ type: "error", message: "Failed to upload image" });
+      alert.showAlert("Failed to upload image", "error");
     }
-
-    setTimeout(() => {
-      setDisplayAlert(false);
-    }, 3000);
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      {displayAlert && (
-        <Alert severity={alert.type} onClose={() => setDisplayAlert(false)}>
-          {alert.message}
-        </Alert>
-      )}
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid

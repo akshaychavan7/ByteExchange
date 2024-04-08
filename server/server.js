@@ -2,12 +2,12 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
-const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const authorization = require("./middleware/authorization"); // custom middleware defined for user authorization
 
-const { MONGO_URL, port, CLIENT_URL, SECRET_KEY } = require("./config");
+const { MONGO_URL, port, CLIENT_URL } = require("./config");
 
 mongoose.connect(MONGO_URL);
 
@@ -25,22 +25,6 @@ app.use(
 app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 
 app.use(express.json());
-
-// Middleware to authorize JWT token - ref: https://dev.to/franciscomendes10866/using-cookies-with-jwt-in-node-js-8fn
-const authorization = (req, res, next) => {
-  const token = req.cookies.access_token;
-  if (!token) {
-    return res.sendStatus(403);
-  }
-  try {
-    const data = jwt.verify(token, SECRET_KEY);
-    req.userId = data.id;
-    req.userRole = data.role;
-    return next();
-  } catch {
-    return res.sendStatus(403);
-  }
-};
 
 app.get("/", (_, res) => {
   res.send("Fake SO Server Dummy Endpoint");
@@ -63,7 +47,7 @@ let server = app.listen(port, () => {
 
 // route to check if user is authenticated
 app.get("/isUserAuthenticated", authorization, (req, res) => {
-  res.json({ message: "User is authenticated" });
+  res.status(200).json({ message: "User is authenticated" });
 });
 
 // Logout route

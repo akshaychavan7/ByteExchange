@@ -7,19 +7,22 @@ import Application from "./models/application";
 import Login from "./components/Login/Login.js";
 import SignUp from "./components/Login/SignUp/SignUp.js";
 import { ApplicationContextProvider } from "./context/ApplicationContext.js";
+import { AlertContextProvider } from "./context/AlertContext.js";
 function App() {
   const app = new Application(data);
 
   return (
     <ApplicationContextProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/home" element={<FakeStackOverflow app={app} />} />
-        </Routes>
-      </BrowserRouter>
+      <AlertContextProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/home" element={<FakeStackOverflow app={app} />} />
+          </Routes>
+        </BrowserRouter>
+      </AlertContextProvider>
     </ApplicationContextProvider>
   );
 }
