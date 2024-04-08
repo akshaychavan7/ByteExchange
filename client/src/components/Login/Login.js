@@ -42,8 +42,8 @@ const defaultTheme = createTheme();
 
 export default function Login() {
   let navigate = useNavigate();
-  const { setIsAuthenticated } = React.useContext(ApplicationContext);
-
+  const applicationCtx = React.useContext(ApplicationContext);
+  console.log(applicationCtx);
   const handleSubmit = async (event) => {
     try {
       event.preventDefault();
@@ -54,7 +54,10 @@ export default function Login() {
       };
       const response = await login(payload);
       if (response.status === 200) {
-        setIsAuthenticated(true);
+        applicationCtx.dispatch({
+          type: "SET_IS_AUTHENTICATED",
+          payload: true,
+        });
       }
       navigate("/home");
     } catch (error) {

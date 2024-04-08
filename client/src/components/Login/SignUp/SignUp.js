@@ -16,6 +16,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import Paper from "@mui/material/Paper";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import register from "../../../services/registerService";
+import { useNavigate } from "react-router";
+import { isValidEmail } from "../../../util/utils";
 
 const defaultTheme = createTheme();
 
@@ -32,9 +34,23 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function SignUp() {
+  let navigate = useNavigate();
   const [image, setImage] = React.useState(null);
   const [alert, setAlert] = React.useState({ type: "success", message: "" });
   const [displayAlert, setDisplayAlert] = React.useState(false);
+
+  const validateEmail = (email) => {
+    if (!isValidEmail(email)) {
+      setDisplayAlert(true);
+      setAlert({ type: "error", message: "Invalid email address" });
+      setTimeout(() => {
+        setDisplayAlert(false);
+      }, 3000);
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -48,6 +64,8 @@ export default function SignUp() {
     if (image) {
       payload.profilePic = image;
     }
+
+    if (!validateEmail(payload.username)) return;
 
     const fiedlsMissing =
       !payload.firstname ||
@@ -68,6 +86,7 @@ export default function SignUp() {
       case 200:
         setDisplayAlert(true);
         setAlert({ type: "success", message: "User registered successfully" });
+        navigate("/login");
         break;
       case 400:
         setDisplayAlert(true);
