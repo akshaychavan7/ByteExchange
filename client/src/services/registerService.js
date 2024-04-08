@@ -9,6 +9,7 @@ export default async function register(requestObject) {
       headers: myHeaders,
       body: body,
       redirect: "follow",
+      credentials: "include",
     };
 
     const response = await fetch(

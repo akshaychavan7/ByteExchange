@@ -6,7 +6,8 @@ export default async function isAuthenticated() {
     const requestOptions = {
       method: "GET",
       headers: myHeaders,
-      redirect: "follow",
+      // redirect: "follow",
+      credentials: "include",
     };
 
     const response = await fetch(
