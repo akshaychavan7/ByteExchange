@@ -14,7 +14,9 @@ const authenticateCredentials = async (req, res) => {
     const user = await User.findOne({ username: username });
 
     if (!user || !bcrypt.compareSync(password, user.password)) {
-      return res.status(401).json({ message: "Invalid username or password" });
+      return res
+        .status(401)
+        .json({ status: 401, message: "Invalid username or password" });
     }
 
     // Generate JWT token

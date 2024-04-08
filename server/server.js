@@ -64,10 +64,15 @@ app.get("/isUserAuthenticated", authorization, (req, res) => {
 
 // Logout route
 app.get("/logout", authorization, (req, res) => {
-  return res
-    .clearCookie("access_token")
-    .status(200)
-    .json({ message: "Successfully logged out" });
+  try {
+    return res
+      .clearCookie("access_token")
+      .status(200)
+      .json({ status: 200, message: "Successfully logged out" });
+  } catch (error) {
+    console.error(`Error while calling logout API: ${error}`);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 });
 
 process.on("SIGINT", () => {

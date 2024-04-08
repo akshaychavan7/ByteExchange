@@ -65,8 +65,10 @@ export default function Login() {
           type: "SET_IS_AUTHENTICATED",
           payload: true,
         });
+        navigate("/home");
+      } else {
+        alert.showAlert("Invalid credentials", "error");
       }
-      navigate("/home");
     } catch (error) {
       console.error(`Error while calling login API: ${error}`);
     }
