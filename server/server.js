@@ -1,5 +1,6 @@
 // Application server
 
+const rateLimit = require("express-rate-limit");
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -12,6 +13,16 @@ const { MONGO_URL, port, CLIENT_URL } = require("./config");
 mongoose.connect(MONGO_URL);
 
 const app = express();
+
+// Define rate limiting options
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again later",
+});
+
+// Apply rate limiter to all requests
+app.use(limiter);
 
 app.use(cookieParser());
 
