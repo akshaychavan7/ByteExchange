@@ -1,12 +1,12 @@
 import { useState } from "react";
 import "./index.css";
 
-const Header = ({ setQuesitonPage, search }) => {
+const Header = ({ setQuestionPage, search }) => {
   const [searchText, setSearchText] = useState(search);
   const handleSearch = (e) => {
     if (e.keyCode === 13) {
       const pageTitle = searchText === "" ? "All Questions" : `Search Results`;
-      setQuesitonPage(searchText, pageTitle);
+      setQuestionPage(searchText, pageTitle);
     }
   };
 

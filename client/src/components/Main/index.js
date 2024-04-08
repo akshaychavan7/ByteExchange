@@ -12,7 +12,7 @@ const Main = ({
   setSearch = () => {},
   app,
   title,
-  setQuesitonPage,
+  setQuestionPage,
 }) => {
   const [page, setPage] = useState("home");
   const [questionOrder, setQuestionOrder] = useState("newest");
@@ -26,7 +26,7 @@ const Main = ({
   };
   const handleQuestions = () => {
     setSelected("q");
-    setQuesitonPage();
+    setQuestionPage();
     setPage("home");
   };
 
