@@ -7,29 +7,35 @@ const { SECRET_KEY } = require("../config");
 
 const router = express.Router();
 
-// validate crentials of the user
+// validate crentials of the user - LOGIN
 const authenticateCredentials = async (req, res) => {
-  const { username, password } = req.body;
-  const user = await User.findOne({ username: username });
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username: username });
 
-  if (!user || !bcrypt.compareSync(password, user.password)) {
-    return res.status(401).json({ message: "Invalid username or password" });
+    if (!user || !bcrypt.compareSync(password, user.password)) {
+      return res.status(401).json({ message: "Invalid username or password" });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, username: user.username },
+      SECRET_KEY,
+      { expiresIn: "1d" }
+    );
+
+    return res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        secure: true,
+        expires: new Date(Date.now() + 900000),
+      })
+      .status(200)
+      .json({ status: 200, message: "Logged In Successfully" });
+  } catch (error) {
+    console.error(`Error while calling authenticate API: ${error}`);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-
-  // Generate JWT token
-  const token = jwt.sign(
-    { userId: user._id, username: user.username },
-    SECRET_KEY,
-    { expiresIn: "1d" }
-  );
-
-  return res
-    .cookie("access_token", token, {
-      httpOnly: true,
-      secure: true,
-    })
-    .status(200)
-    .json({ status: 200, message: "Logged In Successfully" });
 };
 
 const registerUser = async (req, res) => {

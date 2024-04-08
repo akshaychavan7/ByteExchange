@@ -13,7 +13,8 @@ const authorization = (req, res, next) => {
     req.userId = data.id;
     req.userRole = data.role;
     return next();
-  } catch {
+  } catch (e) {
+    console.error(`Error while verifying token: ${e}`);
     return res.sendStatus(403);
   }
 };
