@@ -13,7 +13,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Background from "../../assets/images/bg2.jpg";
-
+import { ApplicationContext } from "../../context/ApplicationContext";
+import login from "../../services/loginService";
+import { useNavigate } from "react-router-dom";
+import useIsAuthenticated from "../../hooks/useIsAuthenticated";
 function Copyright(props) {
   return (
     <Typography
@@ -38,15 +41,37 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function SignInSide() {
-  //   const [showSignUp, setShowSignUp] = React.useState();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+export default function Login() {
+  useIsAuthenticated();
+  let navigate = useNavigate();
+  const applicationCtx = React.useContext(ApplicationContext);
+
+  // if user is already logged in then redirect to home page
+  if (applicationCtx.isAuthenticated) {
+    navigate("/home");
+  }
+
+  const handleSubmit = async (event) => {
+    try {
+      event.preventDefault();
+      const data = new FormData(event.currentTarget);
+      const payload = {
+        username: data.get("email"),
+        password: data.get("password"),
+      };
+      const response = await login(payload);
+      if (response.status === 200) {
+        applicationCtx.dispatch({
+          type: "SET_IS_AUTHENTICATED",
+          payload: true,
+        });
+        navigate("/home");
+      } else {
+        alert.showAlert("Invalid credentials", "error");
+      }
+    } catch (error) {
+      console.error(`Error while calling login API: ${error}`);
+    }
   };
 
   return (

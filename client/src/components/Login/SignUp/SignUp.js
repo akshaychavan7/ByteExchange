@@ -14,6 +14,10 @@ import Background from "../../../assets/images/bg2.jpg";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Paper from "@mui/material/Paper";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import register from "../../../services/registerService";
+import { useNavigate } from "react-router";
+import { isValidEmail } from "../../../util/utils";
+import { useAlert } from "../../../context/AlertContext";
 
 const defaultTheme = createTheme();
 
@@ -30,13 +34,70 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 export default function SignUp() {
-  const handleSubmit = (event) => {
+  let navigate = useNavigate();
+  const [image, setImage] = React.useState(null);
+  const alert = useAlert();
+
+  const validateEmail = (email) => {
+    if (!isValidEmail(email)) {
+      alert.showAlert("Invalid email address", "error");
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
+    const payload = {
+      username: data.get("email"),
       password: data.get("password"),
-    });
+      firstname: data.get("firstName"),
+      lastname: data.get("lastName"),
+    };
+
+    if (image) {
+      payload.profilePic = image;
+    }
+
+    if (!validateEmail(payload.username)) return;
+
+    const fiedlsMissing =
+      !payload.firstname ||
+      !payload.lastname ||
+      !payload.username ||
+      !payload.password;
+
+    if (fiedlsMissing) {
+      alert.showAlert("All fields are required", "error");
+      return;
+    }
+    const response = await register(payload);
+    switch (response.status) {
+      case 200:
+        alert.showAlert("User registered successfully", "success");
+        navigate("/login");
+        break;
+      case 400:
+        alert.showAlert("User already exists", "error");
+        break;
+      default:
+        alert.showAlert("Failed to register user", "error");
+    }
+  };
+
+  const handleFileInputChange = () => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+        alert.showAlert("Image uploaded successfully", "success");
+      };
+      reader.readAsDataURL(file);
+    } else {
+      alert.showAlert("Failed to upload image", "error");
+    }
   };
 
   return (
@@ -69,7 +130,7 @@ export default function SignUp() {
               alignItems: "center",
             }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }} src={image}>
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
@@ -133,7 +194,13 @@ export default function SignUp() {
                     startIcon={<AccountCircle />}
                   >
                     Upload Profile Picture
-                    <VisuallyHiddenInput type="file" />
+                    <VisuallyHiddenInput
+                      id="profilePic"
+                      name="profilePic"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileInputChange}
+                    />
                   </Button>
                 </Grid>
               </Grid>
