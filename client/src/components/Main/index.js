@@ -7,12 +7,12 @@ import NewAnswer from "./newAnswer";
 import NewQuestion from "./newQuestion";
 import TagPage from "./tagPage";
 import { addQuestion } from "../../services/questionService";
+import { addAnswer } from "../../services/answerService";
 import { getTagsWithQuestionNumber } from "../../services/tagService";
 
 const Main = ({
   search = "",
   setSearch = () => {},
-  app,
   title,
   setQuestionPage,
 }) => {
@@ -21,6 +21,7 @@ const Main = ({
   const [qid, setQid] = useState("");
   const [selected, setSelected] = useState("q");
   let content = null;
+
 
   const clickTag = (tagName) => {
     setSearch(`[${tagName}]`);
@@ -50,6 +51,11 @@ const Main = ({
     setPage("newAnswer");
   };
 
+  const handleAddQuestion = async (question) => {
+    await addQuestion(question);
+    handleQuestions();
+  };
+
   const getQuestionPage = (order, search) => {
     return (
       <QuestionPage
@@ -66,7 +72,6 @@ const Main = ({
 
   switch (page) {
     case "home": {
-      // setSelected("q");
       content = getQuestionPage(questionOrder.toLowerCase(), search);
       break;
     }
@@ -81,22 +86,19 @@ const Main = ({
       break;
     }
     case "newAnswer": {
-      // setSelected("");
       content = (
         <NewAnswer
           qid={qid}
-          addAnswer={app.addAnswer}
+          addAnswer={addAnswer}
           handleAnswer={handleAnswer}
         />
       );
       break;
     }
     case "newQuestion": {
-      // setSelected("");
       content = (
         <NewQuestion
-          addQuestion={(question) => addQuestion(question)}
-          handleQuestions={handleQuestions}
+          addQuestion={(question) => handleAddQuestion(question)}
         />
       );
       break;
@@ -112,7 +114,7 @@ const Main = ({
       break;
     }
     default:
-      content = <QuestionPage app={app} />;
+      content = getQuestionPage(questionOrder.toLowerCase(), search);
       break;
   }
 

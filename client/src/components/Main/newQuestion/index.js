@@ -4,7 +4,7 @@ import Input from "../baseComponents/input";
 import Textarea from "../baseComponents/textarea";
 import "./index.css";
 
-const NewQuestion = ({ addQuestion, handleQuestions }) => {
+const NewQuestion = ({ addQuestion }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tag, setTag] = useState("");
@@ -53,7 +53,6 @@ const NewQuestion = ({ addQuestion, handleQuestions }) => {
     };
 
     addQuestion(question);
-    handleQuestions();
   };
 
   return (

@@ -16,12 +16,14 @@ const QuestionPage = ({
 }) => {
     const [qlist, setQlist] = useState([]);
     useEffect(() => {
+        console.log('useEffectWork')
         const fetchData = async () => {
             let res = await getQuestionsByFilter(order, search);
             setQlist(res || []);
         };
 
         fetchData().catch((e) => console.log(e));
+        console.log(qlist)
     }, [order, search]);
     return (
         <>
