@@ -56,6 +56,12 @@ const Main = ({
     handleQuestions();
   };
 
+  const handleAddAnswer = async (qid, answer) => {
+    await addAnswer(qid, answer);
+    handleAnswer(qid);
+  }
+
+
   const getQuestionPage = (order, search) => {
     return (
       <QuestionPage
@@ -88,9 +94,7 @@ const Main = ({
     case "newAnswer": {
       content = (
         <NewAnswer
-          qid={qid}
-          addAnswer={addAnswer}
-          handleAnswer={handleAnswer}
+          handleAddAnswer={(answer) => handleAddAnswer(qid, answer)}
         />
       );
       break;

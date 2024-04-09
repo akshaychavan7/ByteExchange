@@ -13,16 +13,13 @@ const authorization = require("../middleware/authorization");
 // To get Questions by Filter
 const getQuestionsByFilter = async (req, res) => {
   try {
-    let qList = await getQuestionsByOrder(req.query.order);
-
-    let filteredQuestionsList = filterQuestionsBySearch(
-      qList,
-      req.query.search
-    );
-    res.status(200);
-    res.json(filteredQuestionsList);
-  } catch (err) {
-    res.json({ error: "Something went wrong", details: err.message });
+      let questions = await getQuestionsByOrder(req.query.order);
+      questions = filterQuestionsBySearch(questions, req.query.search);
+      
+      res.status(200).json(questions); 
+  } catch (error) {
+      console.error("Error:", error);
+      res.status(500).send("Internal Server Error"); 
   }
 };
 
