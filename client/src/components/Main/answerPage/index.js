@@ -1,60 +1,54 @@
+import { useState, useEffect } from "react"; 
+import { getQuestionById } from "../../../services/questionService";
+import { getMetaData } from "../../../tool";
 import AnswerHeader from "./header";
+import Answer from "./answer";
 import "./index.css";
 
-const AnswerPage = (props) => {
-  const getAnswerById = (id, answers) => {
-    for (let a of answers) {
-      if (a.aid == id) {
-        return a;
-      }
-    }
-
-    return null;
-  };
+const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
+  const [question, setQuestion] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      let res = await getQuestionById(qid);
+      setQuestion(res || {});
+    };
+    fetchData().catch((e) => console.log(e));
+  },[])
 
   return (
     <>
       <AnswerHeader
-        ansCount={props.question.ansIds.length}
-        title={props.question.title}
-        handleNewQuestion={props.handleNewQuestion}
+        ansCount={question.answers?.length}
+        title={question.title}
+        handleNewQuestion={handleNewQuestion}
       />
       <div id="questionBody" className="questionBody right_padding">
         <div className="bold_title answer_question_view">
-          {props.question.getQuestionViews()} views
+          {question.views} views
         </div>
         <div className="answer_question_text">
-          <div>{props.question.text}</div>
+          <div>{question.description}</div>
         </div>
         <div className="answer_question_right">
-          <div className="question_author">{props.question.askedBy}</div>
+          <div className="question_author">{question.asked_by?.firstname + ' ' + question.asked_by?.lastname}</div>
           <div className="answer_question_meta">
-            {props.question.calculateTimeElapsed()}
+            {getMetaData(new Date(question.ask_date_time))}
           </div>
         </div>
       </div>
       <div>
-        {props.question.ansIds.map((answerID) => {
-          const answer = getAnswerById(answerID, props.ans);
+        {question.answers?.map((answer) => {
           return (
-            <div className="answer right_padding" key={answer.aid}>
-              <div id="answerText" className="answerText">
-                <div>{answer.text}</div>
-              </div>
-              <div className="answerAuthor">
-                <div className="answer_author">
-                  <div>{answer.ansBy}</div>
-                </div>
-                <div className="answer_question_meta">
-                  {answer.calculateTimeElapsed()}
-                </div>
-                <div className="answer_question_meta"></div>
-              </div>
-            </div>
+            <Answer
+              key={answer._id}
+              text={answer.description}
+              ansBy={answer.ans_by.firstname + ' ' + answer.ans_by.lastname}
+              meta={getMetaData(new Date(answer.ans_date_time))}
+            />
           );
         })}
       </div>
-      <button className="bluebtn ansButton" onClick={props.handleNewAnswer}>
+      <button className="bluebtn ansButton" onClick={handleNewAnswer}>
         Answer Question
       </button>
     </>

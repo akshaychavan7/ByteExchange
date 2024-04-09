@@ -31,7 +31,15 @@ const getQuestionById = async (req, res) => {
       { _id: req.params.questionId },
       { $inc: { views: 1 } },
       { new: true }
-    ).populate("answers");
+    )
+    .populate({
+      path: 'answers',
+      populate: {
+        path: 'ans_by',
+        select: 'username firstname lastname'
+      }
+    })
+    .populate("asked_by")
     res.status(200);
     res.json(question);
   } catch (err) {
@@ -49,7 +57,7 @@ const addQuestion = async (req, res) => {
   );
   let question = await Question.create({
     title: req.body.title,
-    text: req.body.text,
+    description: req.body.text,
     asked_by: req.body.asked_by,
     ask_date_time: req.body.ask_date_time,
     tags: tags,
