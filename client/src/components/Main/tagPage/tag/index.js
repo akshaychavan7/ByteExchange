@@ -1,6 +1,6 @@
 import "./index.css";
 
-const Tag = ({ t, getQuestionCountByTag, clickTag }) => {
+const Tag = ({ t, clickTag }) => {
   return (
     <div
       className="tagNode"
@@ -9,7 +9,7 @@ const Tag = ({ t, getQuestionCountByTag, clickTag }) => {
       }}
     >
       <div className="tagName">{t.name}</div>
-      <div>{getQuestionCountByTag(t.tid)} questions</div>
+      <div>{t.qcnt} questions</div>
     </div>
   );
 };

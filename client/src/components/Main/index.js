@@ -7,6 +7,7 @@ import NewAnswer from "./newAnswer";
 import NewQuestion from "./newQuestion";
 import TagPage from "./tagPage";
 import { addQuestion } from "../../services/questionService";
+import { getTagsWithQuestionNumber } from "../../services/tagService";
 
 const Main = ({
   search = "",
@@ -102,12 +103,11 @@ const Main = ({
     }
     case "tag": {
       content = (
-        <TagPage
-          tlist={app.getTags()}
-          getQuestionCountByTag={app.getQuestionCountByTag}
-          clickTag={clickTag}
-          handleNewQuestion={handleNewQuestion}
-        />
+          <TagPage
+            getTagsWithQuestionNumber={getTagsWithQuestionNumber}
+            clickTag={clickTag}
+            handleNewQuestion={handleNewQuestion}
+          />
       );
       break;
     }
