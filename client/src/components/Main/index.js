@@ -6,6 +6,7 @@ import AnswerPage from "./answerPage";
 import NewAnswer from "./newAnswer";
 import NewQuestion from "./newQuestion";
 import TagPage from "./tagPage";
+import { addQuestion } from "../../services/questionService";
 
 const Main = ({
   search = "",
@@ -51,11 +52,11 @@ const Main = ({
   const getQuestionPage = (order, search) => {
     return (
       <QuestionPage
-        app={app}
         title_text={title}
-        qlist={app.getQuestionsByFilter(order, search)}
-        getTagById={app.getTagById}
+        order={order}
+        search={search}
         setQuestionOrder={setQuestionOrder}
+        clickTag={clickTag}
         handleAnswer={handleAnswer}
         handleNewQuestion={handleNewQuestion}
       />
@@ -69,14 +70,9 @@ const Main = ({
       break;
     }
     case "answer": {
-      // setSelected("");
-      let q = app.getQuestionById(qid);
-      q.addViewCount();
       content = (
         <AnswerPage
-          app={app}
-          question={q}
-          ans={app.getQuestionAnswer(q)}
+          qid={qid}
           handleNewQuestion={handleNewQuestion}
           handleNewAnswer={handleNewAnswer}
         />
@@ -98,7 +94,7 @@ const Main = ({
       // setSelected("");
       content = (
         <NewQuestion
-          addQuestion={(question) => app.addQuestion(question)}
+          addQuestion={(question) => addQuestion(question)}
           handleQuestions={handleQuestions}
         />
       );
