@@ -1,13 +1,21 @@
+import { useState, useEffect } from "react";
 import AskAQuestionButton from "../askAQuestionButton";
 import "./index.css";
 import Tag from "./tag";
 
 const TagPage = ({
-  tlist,
-  getQuestionCountByTag,
+  getTagsWithQuestionNumber,
   clickTag,
   handleNewQuestion,
 }) => {
+
+  const [tlist, setTlist] = useState([]);
+  useEffect(() => {
+    getTagsWithQuestionNumber().then((res) => {
+      setTlist(res);
+    });
+  }, []);
+
   return (
     <>
       <div className="space_between right_padding">
@@ -21,7 +29,6 @@ const TagPage = ({
           <Tag
             key={idx}
             t={t}
-            getQuestionCountByTag={getQuestionCountByTag}
             clickTag={clickTag}
           />
         ))}

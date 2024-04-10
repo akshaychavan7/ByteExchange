@@ -21,7 +21,7 @@ const authenticateCredentials = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { userId: user._id, username: user.username },
+      { userId: user._id, username: user.username, userRole: user.userRole },
       SECRET_KEY,
       { expiresIn: "1d" }
     );
