@@ -1,14 +1,7 @@
 export const imageDataToImage = (dataURL) => {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => {
-      resolve(image);
-    };
-    image.onerror = (error) => {
-      reject(error);
-    };
-    image.src = dataURL;
-  });
+  const image = new Image();
+  image.src = dataURL;
+  return image;
 };
 
 export const isValidEmail = (email) => {

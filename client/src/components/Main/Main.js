@@ -1,6 +1,6 @@
 import "./index.css";
 import { useState } from "react";
-import SideBarNav from "./sideBarNav";
+import SideBarNav from "./sideBarNav/Sidebar";
 import QuestionPage from "./questionPage";
 import AnswerPage from "./answerPage";
 import NewAnswer from "./newAnswer";
@@ -21,7 +21,6 @@ const Main = ({
   const [qid, setQid] = useState("");
   const [selected, setSelected] = useState("q");
   let content = null;
-
 
   const clickTag = (tagName) => {
     setSearch(`[${tagName}]`);
@@ -59,8 +58,7 @@ const Main = ({
   const handleAddAnswer = async (qid, answer) => {
     await addAnswer(qid, answer);
     handleAnswer(qid);
-  }
-
+  };
 
   const getQuestionPage = (order, search) => {
     return (
@@ -93,27 +91,23 @@ const Main = ({
     }
     case "newAnswer": {
       content = (
-        <NewAnswer
-          handleAddAnswer={(answer) => handleAddAnswer(qid, answer)}
-        />
+        <NewAnswer handleAddAnswer={(answer) => handleAddAnswer(qid, answer)} />
       );
       break;
     }
     case "newQuestion": {
       content = (
-        <NewQuestion
-          addQuestion={(question) => handleAddQuestion(question)}
-        />
+        <NewQuestion addQuestion={(question) => handleAddQuestion(question)} />
       );
       break;
     }
     case "tag": {
       content = (
-          <TagPage
-            getTagsWithQuestionNumber={getTagsWithQuestionNumber}
-            clickTag={clickTag}
-            handleNewQuestion={handleNewQuestion}
-          />
+        <TagPage
+          getTagsWithQuestionNumber={getTagsWithQuestionNumber}
+          clickTag={clickTag}
+          handleNewQuestion={handleNewQuestion}
+        />
       );
       break;
     }
@@ -128,6 +122,7 @@ const Main = ({
         selected={selected}
         handleQuestions={handleQuestions}
         handleTags={handleTags}
+        setQuestionPage={setQuestionPage}
       />
       <div id="right_main" className="right_main">
         {content}

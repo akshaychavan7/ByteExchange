@@ -6,6 +6,7 @@ import isAuthenticated from "../services/authenticationService";
 
 export default function useIsAuthenticated() {
   const applicationCtx = useContext(ApplicationContext);
+
   useEffect(() => {
     (async () => {
       const response = await isAuthenticated();
