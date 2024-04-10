@@ -3,10 +3,15 @@ const Answer = require("../models/answers");
 const Question = require("../models/questions");
 
 const router = express.Router();
+const authorization = require("../middleware/authorization");
 
 // Adding answer
 const addAnswer = async (req, res) => {
-  let answer = await Answer.create(req.body.ans);
+  let answer = await Answer.create({
+    ...req.body.ans,
+    ans_by: req.userId,
+    ans_date_time: new Date(),
+  });
   res.status(200);
   let qid = req.body.qid;
   await Question.findOneAndUpdate(
@@ -18,6 +23,6 @@ const addAnswer = async (req, res) => {
 };
 
 // add appropriate HTTP verbs and their endpoints to the router.
-router.post("/addAnswer", addAnswer);
+router.post("/addAnswer", authorization, addAnswer);
 
 module.exports = router;

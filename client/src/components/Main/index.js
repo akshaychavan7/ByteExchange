@@ -7,11 +7,12 @@ import NewAnswer from "./newAnswer";
 import NewQuestion from "./newQuestion";
 import TagPage from "./tagPage";
 import { addQuestion } from "../../services/questionService";
+import { addAnswer } from "../../services/answerService";
+import { getTagsWithQuestionNumber } from "../../services/tagService";
 
 const Main = ({
   search = "",
   setSearch = () => {},
-  app,
   title,
   setQuestionPage,
 }) => {
@@ -20,6 +21,7 @@ const Main = ({
   const [qid, setQid] = useState("");
   const [selected, setSelected] = useState("q");
   let content = null;
+
 
   const clickTag = (tagName) => {
     setSearch(`[${tagName}]`);
@@ -49,6 +51,17 @@ const Main = ({
     setPage("newAnswer");
   };
 
+  const handleAddQuestion = async (question) => {
+    await addQuestion(question);
+    handleQuestions();
+  };
+
+  const handleAddAnswer = async (qid, answer) => {
+    await addAnswer(qid, answer);
+    handleAnswer(qid);
+  }
+
+
   const getQuestionPage = (order, search) => {
     return (
       <QuestionPage
@@ -65,7 +78,6 @@ const Main = ({
 
   switch (page) {
     case "home": {
-      // setSelected("q");
       content = getQuestionPage(questionOrder.toLowerCase(), search);
       break;
     }
@@ -80,39 +92,33 @@ const Main = ({
       break;
     }
     case "newAnswer": {
-      // setSelected("");
       content = (
         <NewAnswer
-          qid={qid}
-          addAnswer={app.addAnswer}
-          handleAnswer={handleAnswer}
+          handleAddAnswer={(answer) => handleAddAnswer(qid, answer)}
         />
       );
       break;
     }
     case "newQuestion": {
-      // setSelected("");
       content = (
         <NewQuestion
-          addQuestion={(question) => addQuestion(question)}
-          handleQuestions={handleQuestions}
+          addQuestion={(question) => handleAddQuestion(question)}
         />
       );
       break;
     }
     case "tag": {
       content = (
-        <TagPage
-          tlist={app.getTags()}
-          getQuestionCountByTag={app.getQuestionCountByTag}
-          clickTag={clickTag}
-          handleNewQuestion={handleNewQuestion}
-        />
+          <TagPage
+            getTagsWithQuestionNumber={getTagsWithQuestionNumber}
+            clickTag={clickTag}
+            handleNewQuestion={handleNewQuestion}
+          />
       );
       break;
     }
     default:
-      content = <QuestionPage app={app} />;
+      content = getQuestionPage(questionOrder.toLowerCase(), search);
       break;
   }
 

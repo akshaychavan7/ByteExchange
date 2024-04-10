@@ -4,16 +4,14 @@ import Input from "../baseComponents/input";
 import Textarea from "../baseComponents/textarea";
 import "./index.css";
 
-const NewQuestion = ({ addQuestion, handleQuestions }) => {
+const NewQuestion = ({ addQuestion }) => {
   const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  const [description, setDescription] = useState("");
   const [tag, setTag] = useState("");
-  const [usrn, setUsrn] = useState("");
 
   const [titleErr, setTitleErr] = useState("");
-  const [textErr, setTextErr] = useState("");
+  const [descriptionErr, setTextErr] = useState("");
   const [tagErr, setTagErr] = useState("");
-  const [usrnErr, setUsrnErr] = useState("");
 
   const postQuestion = () => {
     let errFlag = false;
@@ -37,7 +35,7 @@ const NewQuestion = ({ addQuestion, handleQuestions }) => {
       setTitleErr("Title cannot be more than 100 characters");
       errFlag = true;
     }
-    if (text.length === 0) {
+    if (description.length === 0) {
       setTextErr("Question text cannot be empty");
       errFlag = true;
     }
@@ -45,22 +43,16 @@ const NewQuestion = ({ addQuestion, handleQuestions }) => {
       setTagErr("Cannot have more than 5 tags");
       errFlag = true;
     }
-    if (usrn.length === 0) {
-      setUsrnErr("Username cannot be empty");
-      errFlag = true;
-    }
 
     if (errFlag) return;
 
     let question = {
       title: title,
-      text: text,
+      description: description,
       tags: [...new Set(tags)],
-      askedBy: usrn,
     };
 
     addQuestion(question);
-    handleQuestions();
   };
 
   return (
@@ -77,9 +69,9 @@ const NewQuestion = ({ addQuestion, handleQuestions }) => {
         title={"Question Text"}
         hint={"Add details"}
         id={"formTextInput"}
-        val={text}
-        setState={setText}
-        err={textErr}
+        val={description}
+        setState={setDescription}
+        err={descriptionErr}
       />
       <Input
         title={"Tags"}
@@ -88,13 +80,6 @@ const NewQuestion = ({ addQuestion, handleQuestions }) => {
         val={tag}
         setState={setTag}
         err={tagErr}
-      />
-      <Input
-        title={"Username"}
-        id={"formUsernameInput"}
-        val={usrn}
-        setState={setUsrn}
-        err={usrnErr}
       />
       <div className="btn_indicator_container">
         <button

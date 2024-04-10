@@ -5,7 +5,7 @@ import { ApplicationContext } from "../context/ApplicationContext";
 import UnauthorizedAccess from "./Login/UnauthorizedAccess";
 import useIsAuthenticated from "../hooks/useIsAuthenticated";
 
-export default function fakeStackOverflow({ app }) {
+export default function fakeStackOverflow() {
   const applicationCtx = useContext(ApplicationContext);
   const [search, setSearch] = useState("");
   const [mainTitle, setMainTitle] = useState("All Questions");
@@ -22,7 +22,6 @@ export default function fakeStackOverflow({ app }) {
       <Main
         search={search}
         setSearch={setSearch}
-        app={app}
         title={mainTitle}
         setQuestionPage={setQuestionPage}
       />
