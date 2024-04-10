@@ -33,7 +33,16 @@ const authenticateCredentials = async (req, res) => {
         expires: new Date(Date.now() + 900000),
       })
       .status(200)
-      .json({ status: 200, message: "Logged In Successfully" });
+      .json({
+        status: 200,
+        message: "Logged In Successfully",
+        user: {
+          firstname: user.firstname,
+          lastname: user.lastname,
+          username: user.username,
+          profilePic: user.profilePic,
+        },
+      });
   } catch (error) {
     console.error(`Error while calling authenticate API: ${error}`);
     res.status(500).json({ message: "Internal Server Error" });

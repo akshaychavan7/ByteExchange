@@ -17,6 +17,7 @@ import { ApplicationContext } from "../../context/ApplicationContext";
 import login from "../../services/loginService";
 import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from "../../hooks/useIsAuthenticated";
+import { useAlert } from "../../context/AlertContext";
 function Copyright(props) {
   return (
     <Typography
@@ -45,6 +46,7 @@ export default function Login() {
   useIsAuthenticated();
   let navigate = useNavigate();
   const applicationCtx = React.useContext(ApplicationContext);
+  const alert = useAlert();
 
   // if user is already logged in then redirect to home page
   if (applicationCtx.isAuthenticated) {
@@ -65,6 +67,7 @@ export default function Login() {
           type: "SET_IS_AUTHENTICATED",
           payload: true,
         });
+        localStorage.setItem("user_details", JSON.stringify(response.user));
         navigate("/home");
       } else {
         alert.showAlert("Invalid credentials", "error");
