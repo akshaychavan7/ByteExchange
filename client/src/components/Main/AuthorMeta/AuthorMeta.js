@@ -1,5 +1,5 @@
 import { Stack } from "@mui/material";
-import ProfileAvatar from "../Avatar/Avatar";
+import ProfileAvatar from "../Avatar/AltAvatar";
 
 export default function AuthorMeta({ name, profilePic }) {
   return (
