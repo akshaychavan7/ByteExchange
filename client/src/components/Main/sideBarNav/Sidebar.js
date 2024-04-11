@@ -27,6 +27,7 @@ import { useNavigate } from "react-router";
 import logout from "../../../services/logoutService";
 import { useAlert } from "../../../context/AlertContext";
 import ProfileAvatar from "../Avatar/Avatar";
+import Tooltip from "@mui/material/Tooltip";
 
 const drawerWidth = 240;
 
@@ -156,13 +157,17 @@ export default function Sidebar({
             type="text"
             onKeyUp={handleSearch}
           />
-          <div className="header-avatar">
-            {console.log(user)}
-            <ProfileAvatar
-              name={user?.firstname + " " + user?.lastname}
-              image={user?.profilePic}
-            />
-          </div>
+          <Tooltip
+            title={`${user.firstname} ${user.lastname}`}
+            placement="bottom"
+          >
+            <div className="header-avatar">
+              <ProfileAvatar
+                name={user?.firstname + " " + user?.lastname}
+                image={user?.profilePic}
+              />
+            </div>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
