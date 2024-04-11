@@ -191,6 +191,26 @@ const init = async () => {
       technologies: ["Ruby", "Go"],
       location: "Sunnyvale, CA",
     },
+    {
+      username: "sudhanva",
+      password: "password",
+      firstName: "Sudhanva",
+      lastName: "Paturkar",
+      role: "general",
+      profilePic: null,
+      technologies: ["Spring", "Java"],
+      location: "Nagpur, India",
+    },
+    {
+      username: "aditya",
+      password: "password",
+      firstName: "Aditya",
+      lastName: "Deshpande",
+      role: "general",
+      profilePic: null,
+      technologies: ["Typescript", "React"],
+      location: "Pune, India",
+    },
   ];
 
   let t1 = await tagCreate("react");
