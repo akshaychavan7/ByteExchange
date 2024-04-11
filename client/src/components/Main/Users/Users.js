@@ -12,9 +12,8 @@ const Users = ({ users }) => {
   };
 
   const filteredUsers = users.filter((user) => {
-    const name = user.firstname + " " + user.lastname;
     return (
-      name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
@@ -44,12 +43,10 @@ const Users = ({ users }) => {
         )}
         {filteredUsers.map((user, index) => (
           <Grid key={index} item xs={"auto"}>
-            {" "}
-            {/* Set xs={6} to occupy half of the row */}
             <Paper
               className="user-card"
               elevation={3}
-              sx={{ maxWidth: 300, padding: "13px" }}
+              sx={{ minWidth: 280, padding: "13px" }}
             >
               <Grid container alignItems="center" sx={{ flexGrow: 1 }}>
                 <Grid item>
