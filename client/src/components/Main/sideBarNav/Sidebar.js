@@ -128,6 +128,7 @@ export default function Sidebar({
 
   const handleSearch = (e) => {
     if (e.keyCode === 13) {
+      handleQuestions();
       const pageTitle = searchText === "" ? "All Questions" : `Search Results`;
       setQuestionPage(searchText, pageTitle);
     }
