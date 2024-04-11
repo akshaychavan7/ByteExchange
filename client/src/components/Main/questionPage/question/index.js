@@ -1,5 +1,5 @@
 import { getMetaData } from "../../../../tool";
-import ProfileAvatar from "../../Avatar/Avatar";
+import AuthorMeta from "../../AuthorMeta/AuthorMeta";
 import "./index.css";
 import { Stack } from "@mui/material";
 
@@ -37,18 +37,10 @@ const Question = ({ q, clickTag, handleAnswer }) => {
       </div>
       <div className="lastActivity">
         <Stack direction="column" spacing={1}>
-          <Stack direction="row" spacing={1}>
-            <ProfileAvatar
-              name={q.asked_by?.firstname + " " + q.asked_by?.lastname}
-              image={q.asked_by?.profilePic}
-              width={30}
-              height={30}
-            />
-            <div className="question_author">
-              {q.asked_by.firstname + " " + q.asked_by.lastname}
-            </div>
-          </Stack>
-
+          <AuthorMeta
+            name={q.asked_by.firstname + " " + q.asked_by.lastname}
+            profilePic={q.asked_by.profilePic}
+          />
           <div className="question_meta">
             asked {getMetaData(new Date(q.ask_date_time))}
           </div>
