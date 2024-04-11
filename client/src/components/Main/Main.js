@@ -1,5 +1,5 @@
 import "./index.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SideBarNav from "./sideBarNav/Sidebar";
 import QuestionPage from "./questionPage";
 import AnswerPage from "./answerPage";
@@ -9,6 +9,9 @@ import TagPage from "./tagPage";
 import { addQuestion } from "../../services/questionService";
 import { addAnswer } from "../../services/answerService";
 import { getTagsWithQuestionNumber } from "../../services/tagService";
+import Users from "./Users/Users";
+import getUsersList from "../../services/userService";
+import { useAlert } from "../../context/AlertContext";
 
 const Main = ({
   search = "",
@@ -16,11 +19,27 @@ const Main = ({
   title,
   setQuestionPage,
 }) => {
+  const alert = useAlert();
+  const [users, setUsers] = useState([]);
   const [page, setPage] = useState("home");
   const [questionOrder, setQuestionOrder] = useState("newest");
   const [qid, setQid] = useState("");
   const [selected, setSelected] = useState("q");
   let content = null;
+
+  useEffect(() => {
+    async function fetchUsersList() {
+      let res = await getUsersList();
+      setUsers(res || []);
+    }
+    fetchUsersList().catch((e) => {
+      console.error(e);
+      alert.showAlert(
+        "Could not fetch users list. Please contact admin if the issue persists.",
+        "error"
+      );
+    });
+  }, []);
 
   const clickTag = (tagName) => {
     setSearch(`[${tagName}]`);
@@ -35,6 +54,11 @@ const Main = ({
   const handleTags = () => {
     setSelected("t");
     setPage("tag");
+  };
+
+  const handleUsers = () => {
+    setSelected("u");
+    setPage("user");
   };
 
   const handleNewQuestion = () => {
@@ -111,6 +135,9 @@ const Main = ({
       );
       break;
     }
+    case "user":
+      content = <Users users={users} />;
+      break;
     default:
       content = getQuestionPage(questionOrder.toLowerCase(), search);
       break;
@@ -122,6 +149,7 @@ const Main = ({
         selected={selected}
         handleQuestions={handleQuestions}
         handleTags={handleTags}
+        handleUsers={handleUsers}
         setQuestionPage={setQuestionPage}
       />
       <div id="right_main" className="right_main">

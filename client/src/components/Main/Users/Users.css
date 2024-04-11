@@ -1,0 +1,11 @@
+.user-card {
+  margin-bottom: "16px";
+  border-bottom: "1px solid #ccc";
+  padding-bottom: "16px";
+}
+
+.search-user {
+  width: 500px;
+  max-width: 500px;
+  padding: 8px 12px;
+}

@@ -26,7 +26,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 import logout from "../../../services/logoutService";
 import { useAlert } from "../../../context/AlertContext";
-import ProfileAvatar from "../Avatar/Avatar";
+import ProfileAvatar from "../Avatar/AltAvatar";
 import Tooltip from "@mui/material/Tooltip";
 
 const drawerWidth = 240;
@@ -100,6 +100,7 @@ export default function Sidebar({
   selected = "",
   handleQuestions,
   handleTags,
+  handleUsers,
   setQuestionPage,
   search,
 }) {
@@ -259,7 +260,13 @@ export default function Sidebar({
               <ListItemText primary={"Tags"} sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
+          {/* Users */}
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleUsers()}
+            selected={selected == "u" ? true : false}
+          >
             <ListItemButton
               sx={{
                 minHeight: 48,
