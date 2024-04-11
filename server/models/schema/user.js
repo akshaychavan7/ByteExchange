@@ -15,6 +15,8 @@ const userSchema = mongoose.Schema(
       required: true,
       default: "general",
     },
+    technologies: { type: Array, required: true, default: ["React"] },
+    location: { type: String, required: true, default: "Boston, MA" },
   },
   { collection: "User" }
 );
