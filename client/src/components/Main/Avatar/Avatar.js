@@ -1,5 +1,6 @@
 import * as React from "react";
 import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
 
 function stringToColor(string) {
   let hash = 0;
@@ -19,16 +20,26 @@ function stringToColor(string) {
   return color;
 }
 
-function stringAvatar(name) {
-  console.log("name", name);
+function stringAvatar(name, width, height) {
   return {
     sx: {
       bgcolor: stringToColor(name),
+      width: width,
+      height: height,
     },
     children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
   };
 }
 
-export default function ProfileAvatar({ name, image }) {
-  return <Avatar alt={name} {...stringAvatar(name)} src={image} />;
+export default function ProfileAvatar({
+  name,
+  image,
+  width = null,
+  height = null,
+}) {
+  return (
+    <Tooltip title={name}>
+      <Avatar alt={name} {...stringAvatar(name, width, height)} src={image} />
+    </Tooltip>
+  );
 }
