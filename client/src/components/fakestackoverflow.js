@@ -23,7 +23,6 @@ export default function fakeStackOverflow() {
 
   return applicationCtx.isAuthenticated ? (
     <>
-      <Header setQuestionPage={setQuestionPage} search={search} />
       <Main
         search={search}
         setSearch={setSearch}
