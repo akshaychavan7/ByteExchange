@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import SendIcon from "@mui/icons-material/Send";
-import Button from "@mui/material/Button";
 import "./TagPage.css";
 import Tag from "./tag/Tag";
 import { Grid, TextField } from "@mui/material";
+import AskAQuestionButton from "../AskAQuestionButton/AskAQuestionButton";
 
 const TagPage = ({
   getTagsWithQuestionNumber,
@@ -31,14 +30,7 @@ const TagPage = ({
       <div className="space_between right_padding">
         <div className="bold_title">{tlist.length} Tags</div>
         <div className="bold_title">All Tags</div>
-        <Button
-          variant="contained"
-          endIcon={<SendIcon />}
-          onClick={handleNewQuestion}
-        >
-          Ask A Question
-        </Button>
-        {/* <AskAQuestionButton handleNewQuestion={handleNewQuestion} /> */}
+        <AskAQuestionButton handleNewQuestion={handleNewQuestion} />
       </div>
       <TextField
         label="Search Tag"
