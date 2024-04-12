@@ -4,7 +4,7 @@ export default function AskAQuestionButton({ handleNewQuestion }) {
   return (
     <Button
       variant="contained"
-      endIcon={<SendIcon />}
+      startIcon={<SendIcon />}
       onClick={handleNewQuestion}
     >
       Ask A Question
