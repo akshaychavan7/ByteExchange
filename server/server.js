@@ -47,6 +47,8 @@ const tagController = require("./controller/tag");
 const answerController = require("./controller/answer");
 const loginController = require("./controller/login");
 const userController = require("./controller/user");
+const commentController = require("./controller/comment");
+const voteController = require("./controller/vote");
 
 app.use("/question", questionController);
 app.use("/tag", tagController);
@@ -54,6 +56,8 @@ app.use("/answer", answerController);
 app.use("/login", loginController);
 app.use("/register", loginController);
 app.use("/user", userController);
+app.use("/comment", commentController);
+app.use("/vote", voteController);
 
 let server = app.listen(port, () => {
   console.log(`Server starts at http://localhost:${port}`);

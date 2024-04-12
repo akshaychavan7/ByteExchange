@@ -37,7 +37,18 @@ const getQuestionById = async (req, res) => {
           select: "username firstname lastname profilePic",
         },
       })
-      .populate("asked_by");
+      .populate({
+        path: "answers",
+        populate: {
+          path: "comments",
+          populate: {
+            path: "commented_by",
+            select: "username firstname lastname profilePic",
+          },
+        },
+      })
+      .populate("asked_by")
+      .populate("comments");
     res.status(200);
     res.json(question);
   } catch (err) {
