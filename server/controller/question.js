@@ -78,7 +78,7 @@ const addQuestion = async (req, res) => {
 // add appropriate HTTP verbs and their endpoints to the router
 
 router.get("/getQuestion", authorization, getQuestionsByFilter);
-router.get("/getQuestionById/:questionId", getQuestionById);
+router.get("/getQuestionById/:questionId", authorization, getQuestionById);
 router.post("/addQuestion", authorization, addQuestion);
 
 module.exports = router;
