@@ -9,17 +9,16 @@ const {
 const router = express.Router();
 const authorization = require("../middleware/authorization");
 
-
 // To get Questions by Filter
 const getQuestionsByFilter = async (req, res) => {
   try {
-      let questions = await getQuestionsByOrder(req.query.order);
-      questions = filterQuestionsBySearch(questions, req.query.search);
-      
-      res.status(200).json(questions); 
+    let questions = await getQuestionsByOrder(req.query.order);
+    questions = filterQuestionsBySearch(questions, req.query.search);
+
+    res.status(200).json(questions);
   } catch (error) {
-      console.error("Error:", error);
-      res.status(500).send("Internal Server Error"); 
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
 
@@ -31,14 +30,14 @@ const getQuestionById = async (req, res) => {
       { $inc: { views: 1 } },
       { new: true }
     )
-    .populate({
-      path: 'answers',
-      populate: {
-        path: 'ans_by',
-        select: 'username firstname lastname'
-      }
-    })
-    .populate("asked_by")
+      .populate({
+        path: "answers",
+        populate: {
+          path: "ans_by",
+          select: "username firstname lastname profilePic",
+        },
+      })
+      .populate("asked_by");
     res.status(200);
     res.json(question);
   } catch (err) {
@@ -71,4 +70,4 @@ router.get("/getQuestion", authorization, getQuestionsByFilter);
 router.get("/getQuestionById/:questionId", getQuestionById);
 router.post("/addQuestion", authorization, addQuestion);
 
-module.exports = router; 
+module.exports = router;

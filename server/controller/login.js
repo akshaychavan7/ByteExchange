@@ -30,7 +30,7 @@ const authenticateCredentials = async (req, res) => {
       .cookie("access_token", token, {
         httpOnly: true,
         secure: true,
-        expires: new Date(Date.now() + 900000),
+        expires: new Date(Date.now() + 90000000), // expires after 1 day
       })
       .status(200)
       .json({
@@ -51,7 +51,8 @@ const authenticateCredentials = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { username, password, firstname, lastname, profilePic } = req.body;
+    const { username, password, firstname, lastname, profilePic, location } =
+      req.body;
     // check if user already exists
     const existing = await User.findOne({ username });
     if (existing) {
@@ -65,6 +66,7 @@ const registerUser = async (req, res) => {
         firstname,
         lastname,
         profilePic,
+        location,
       });
       await user.save();
       res

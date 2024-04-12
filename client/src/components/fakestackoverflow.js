@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import Header from "./Header/Header";
 import Main from "./Main/Main";
 import { ApplicationContext } from "../context/ApplicationContext";
 import UnauthorizedAccess from "./Login/UnauthorizedAccess";
@@ -23,7 +22,6 @@ export default function fakeStackOverflow() {
 
   return applicationCtx.isAuthenticated ? (
     <>
-      <Header setQuestionPage={setQuestionPage} search={search} />
       <Main
         search={search}
         setSearch={setSearch}

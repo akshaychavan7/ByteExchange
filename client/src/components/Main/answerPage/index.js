@@ -1,9 +1,11 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import { getQuestionById } from "../../../services/questionService";
 import { getMetaData } from "../../../tool";
 import AnswerHeader from "./header";
 import Answer from "./answer";
 import "./index.css";
+import { Stack } from "@mui/material";
+import AuthorMeta from "../AuthorMeta/AuthorMeta";
 
 const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
   const [question, setQuestion] = useState({});
@@ -13,8 +15,7 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
       setQuestion(res || {});
     };
     fetchData().catch((e) => console.log(e));
-  },[])
-
+  }, []);
   return (
     <>
       <AnswerHeader
@@ -30,10 +31,17 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
           <div>{question.description}</div>
         </div>
         <div className="answer_question_right">
-          <div className="question_author">{question.asked_by?.firstname + ' ' + question.asked_by?.lastname}</div>
-          <div className="answer_question_meta">
-            {getMetaData(new Date(question.ask_date_time))}
-          </div>
+          <Stack direction="column" spacing={1}>
+            <AuthorMeta
+              name={
+                question.asked_by?.firstname + " " + question.asked_by?.lastname
+              }
+              profilePic={question?.asked_by?.profilePic}
+            />
+            <div className="answer_question_meta">
+              {getMetaData(new Date(question.ask_date_time))}
+            </div>
+          </Stack>
         </div>
       </div>
       <div>
@@ -42,8 +50,9 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer }) => {
             <Answer
               key={answer._id}
               text={answer.description}
-              ansBy={answer.ans_by.firstname + ' ' + answer.ans_by.lastname}
+              ansBy={answer.ans_by.firstname + " " + answer.ans_by.lastname}
               meta={getMetaData(new Date(answer.ans_date_time))}
+              profilePic={answer?.ans_by?.profilePic}
             />
           );
         })}

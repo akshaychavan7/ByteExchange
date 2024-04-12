@@ -1,5 +1,5 @@
-import AskAQuestionButton from "../../askAQuestionButton";
 import "./index.css";
+import AskAQuestionButton from "../../AskAQuestionButton/AskAQuestionButton";
 
 const AnswerHeader = ({ ansCount, title, handleNewQuestion }) => {
   return (

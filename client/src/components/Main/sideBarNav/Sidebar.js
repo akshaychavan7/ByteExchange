@@ -26,7 +26,8 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router";
 import logout from "../../../services/logoutService";
 import { useAlert } from "../../../context/AlertContext";
-import ProfileAvatar from "../Avatar/Avatar";
+import ProfileAvatar from "../Avatar/AltAvatar";
+import Tooltip from "@mui/material/Tooltip";
 
 const drawerWidth = 240;
 
@@ -99,6 +100,7 @@ export default function Sidebar({
   selected = "",
   handleQuestions,
   handleTags,
+  handleUsers,
   setQuestionPage,
   search,
 }) {
@@ -126,6 +128,7 @@ export default function Sidebar({
 
   const handleSearch = (e) => {
     if (e.keyCode === 13) {
+      handleQuestions();
       const pageTitle = searchText === "" ? "All Questions" : `Search Results`;
       setQuestionPage(searchText, pageTitle);
     }
@@ -156,13 +159,17 @@ export default function Sidebar({
             type="text"
             onKeyUp={handleSearch}
           />
-          <div className="header-avatar">
-            {console.log(user)}
-            <ProfileAvatar
-              name={user?.firstname + " " + user?.lastname}
-              image={user?.profilePic}
-            />
-          </div>
+          <Tooltip
+            title={`${user.firstname} ${user.lastname}`}
+            placement="bottom"
+          >
+            <div className="header-avatar">
+              <ProfileAvatar
+                name={user?.firstname + " " + user?.lastname}
+                image={user?.profilePic}
+              />
+            </div>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -254,7 +261,13 @@ export default function Sidebar({
               <ListItemText primary={"Tags"} sx={{ opacity: open ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
+          {/* Users */}
+          <ListItem
+            disablePadding
+            sx={{ display: "block" }}
+            onClick={() => handleUsers()}
+            selected={selected == "u" ? true : false}
+          >
             <ListItemButton
               sx={{
                 minHeight: 48,

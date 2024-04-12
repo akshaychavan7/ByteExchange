@@ -1,13 +1,14 @@
 .question {
   display: flex;
   flex-direction: row;
-  border-top: #000000 1px dashed;
+  border-top: #e7e7e7 1px solid;
 }
 
 .postStats {
   color: #bbbbbb;
   text-align: center;
   width: 10%;
+  font-size: 16px;
 }
 
 .question_mid {
@@ -23,12 +24,13 @@
 }
 
 .question_tag_button {
-  color: #ffffff;
-  background: gray;
+  color: #7793ff;
+  background: #e4ecff;
   border-width: 0;
   border-radius: 8px;
   margin-left: 2%;
-  padding: 1% 3% 1% 3%;
+  padding: 10px 15px 10px 15px;
+  border: 1px solid #e7e7e7;
 }
 
 .question_tag_button:first-child {
@@ -47,4 +49,5 @@
 
 .question_meta {
   color: #bbbbbb;
+  font-size: 16px;
 }

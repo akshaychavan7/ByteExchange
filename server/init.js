@@ -78,17 +78,20 @@ function questionCreate(
   return question.save();
 }
 
-function userCreate(username, password, firstname, lastname, userRole) {
+function userCreate(user) {
   let userdetail = {
-    username: username,
-    password: password,
-    firstname: firstname,
-    lastname: lastname,
-    userRole: userRole,
+    username: user.username,
+    password: user.password,
+    firstname: user.firstName,
+    lastname: user.lastName,
+    userRole: user.role,
+    profilePic: user.profilePic,
+    technologies: user.technologies,
+    location: user.location,
   };
 
-  let user = new User(userdetail);
-  return user.save();
+  let userObj = new User(userdetail);
+  return userObj.save();
 }
 
 function commentCreate(
@@ -113,37 +116,126 @@ function commentCreate(
 }
 
 const init = async () => {
+  const users = [
+    {
+      username: "akshay",
+      password: "$2b$10$ai5DvtSJZ9v8N7flii2f4unKMUHROUaiMoEgufocl/jnkD7MEQ/tS",
+      firstName: "Akshay",
+      lastName: "Chavan",
+      role: "moderator",
+      profilePic:
+        "https://media.licdn.com/dms/image/D4D03AQF9WmGdmqrJMQ/profile-displayphoto-shrink_800_800/0/1692618347676?e=1718236800&v=beta&t=hVfMg8BIwFp429SB8_fKtBGMsw4pppqNpoJQRPnUBVI",
+      technologies: ["JavaScript", "React", "TypeScript"],
+      location: "Boston, MA",
+    },
+    {
+      username: "hamkalo",
+      password: "password",
+      firstName: "John",
+      lastName: "Doe",
+      role: "general",
+      profilePic: null,
+      technologies: ["Java", "Python"],
+      location: "Stony Brook, NY",
+    },
+    {
+      username: "shawn",
+      password: "password",
+      firstName: "Shiu",
+      lastName: "Chen",
+      role: "general",
+      profilePic:
+        "https://media.licdn.com/dms/image/D5635AQF6RnnnfLnHKg/profile-framedphoto-shrink_800_800/0/1704817671459?e=1713466800&v=beta&t=4JeVmgx6iTPpVXl9XklrUZMybK8xrFO7K_v8PU0DFdM",
+      technologies: ["Angular", "Android", "Swift"],
+      location: "Boston, MA",
+    },
+    {
+      username: "vedant",
+      password: "password",
+      firstName: "Vedant Rishi",
+      lastName: "Das",
+      role: "general",
+      profilePic:
+        "https://media.licdn.com/dms/image/D4E35AQG8Yfomd408IA/profile-framedphoto-shrink_800_800/0/1704981593017?e=1713466800&v=beta&t=BQSjkAoBNo-AY8OeH17e3sxfLMiotPI076sXouEFask",
+      technologies: ["Machine Learning", "Python"],
+      location: "Boston, MA",
+    },
+    {
+      username: "sam",
+      password: "password",
+      firstName: "Sameer",
+      lastName: "Ahire",
+      role: "general",
+      profilePic:
+        "https://media.licdn.com/dms/image/D4D03AQEuWmah1ZwmqQ/profile-displayphoto-shrink_800_800/0/1702163845668?e=1718236800&v=beta&t=jmnYmqQXxwOt9CJxdDIL-Br8yPt_fk67M64XT2Q9mTo",
+      technologies: ["SQL", "Flutter"],
+      location: "San Francisco, CA",
+    },
+    {
+      username: "jane",
+      password: "password",
+      firstName: "Jane",
+      lastName: "Doe",
+      role: "general",
+      profilePic: null,
+      technologies: ["Android", "Flutter"],
+      location: "Chicago, IL",
+    },
+    {
+      username: "john",
+      password: "password",
+      firstName: "John",
+      lastName: "Doe",
+      role: "general",
+      profilePic: null,
+      technologies: ["Ruby", "Go"],
+      location: "Sunnyvale, CA",
+    },
+    {
+      username: "sudhanva",
+      password: "password",
+      firstName: "Sudhanva",
+      lastName: "Paturkar",
+      role: "general",
+      profilePic: null,
+      technologies: ["Spring", "Java"],
+      location: "Nagpur, India",
+    },
+    {
+      username: "aditya",
+      password: "password",
+      firstName: "Aditya",
+      lastName: "Deshpande",
+      role: "general",
+      profilePic: null,
+      technologies: ["Typescript", "React"],
+      location: "Pune, India",
+    },
+  ];
+
   let t1 = await tagCreate("react");
   let t2 = await tagCreate("javascript");
   let t3 = await tagCreate("android-studio");
   let t4 = await tagCreate("shared-preferences");
   let t5 = await tagCreate("storage");
   let t6 = await tagCreate("website");
-  let t7 = await tagCreate("Flutter");
-  let user1 = await userCreate("hamkalo", "password", "john", "doe", "general");
-  let user2 = await userCreate(
-    "akshay",
-    "$2b$10$UdvIwdWB1y1BWLknpmgeDelPx1OIsGCjrg0ciLIMGFpqfaXdAA3JK",
-    "Akshay",
-    "Chavan",
-    "moderator"
-  );
-  let user3 = await userCreate("shawn", "password", "Shiu", "Chen", "general");
-  let user4 = await userCreate(
-    "vedant",
-    "password",
-    "Vedant Rishi",
-    "Das",
-    "general"
-  );
-  let user5 = await userCreate("sam", "password", "Sameer", "Ahire", "general");
+
+  let user1 = await userCreate(users[0]);
+  let user2 = await userCreate(users[1]);
+  let user3 = await userCreate(users[2]);
+  let user4 = await userCreate(users[3]);
+  let user5 = await userCreate(users[4]);
+  let user6 = await userCreate(users[5]);
+  let user7 = await userCreate(users[6]);
+
   let comment1 = await commentCreate(
     "Nice!",
     user1,
     new Date("2023-11-23T08:24:00"),
     0,
     [],
-    false
+    false,
+    "https://media.licdn.com/dms/image/D4D03AQEuWmah1ZwmqQ/profile-displayphoto-shrink_800_800/0/1702163845668?e=1718236800&v=beta&t=jmnYmqQXxwOt9CJxdDIL-Br8yPt_fk67M64XT2Q9mTo"
   );
   let comment2 = await commentCreate(
     "This is very helpful",
@@ -176,7 +268,7 @@ const init = async () => {
     new Date("2023-11-23T01:02:00"),
     [comment2, comment3],
     2,
-    [user2, user3, user4],
+    [user2, user3, user4, user5],
     [user5],
     false
   );
@@ -186,7 +278,7 @@ const init = async () => {
     new Date("2023-11-23T01:02:00"),
     [comment1],
     3,
-    [user1, user3, user4],
+    [user1, user3, user4, user6],
     [],
     false
   );

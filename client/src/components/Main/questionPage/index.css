@@ -3,5 +3,9 @@
 }
 
 .question_list:last-child {
-  border-bottom: #000000 1px dashed;
+  border-bottom: #e7e7e7 1px solid;
+}
+
+.center {
+  text-align: center;
 }

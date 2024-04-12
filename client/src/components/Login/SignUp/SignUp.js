@@ -18,7 +18,8 @@ import register from "../../../services/registerService";
 import { useNavigate } from "react-router";
 import { isValidEmail } from "../../../util/utils";
 import { useAlert } from "../../../context/AlertContext";
-
+import AutoComplete from "../../AutoComplete/AutoComplete";
+import citiesList from "../../../assets/images/citiesList";
 const defaultTheme = createTheme();
 
 const VisuallyHiddenInput = styled("input")({
@@ -36,6 +37,7 @@ const VisuallyHiddenInput = styled("input")({
 export default function SignUp() {
   let navigate = useNavigate();
   const [image, setImage] = React.useState(null);
+  const [location, setLocation] = React.useState(null);
   const alert = useAlert();
 
   const validateEmail = (email) => {
@@ -54,13 +56,12 @@ export default function SignUp() {
       password: data.get("password"),
       firstname: data.get("firstName"),
       lastname: data.get("lastName"),
+      location: location,
     };
 
     if (image) {
       payload.profilePic = image;
     }
-
-    if (!validateEmail(payload.username)) return;
 
     const fiedlsMissing =
       !payload.firstname ||
@@ -69,9 +70,12 @@ export default function SignUp() {
       !payload.password;
 
     if (fiedlsMissing) {
-      alert.showAlert("All fields are required", "error");
+      alert.showAlert("Make sure you fill all the required fields!", "error");
       return;
     }
+
+    if (!validateEmail(payload.username)) return;
+
     const response = await register(payload);
     switch (response.status) {
       case 200:
@@ -183,6 +187,14 @@ export default function SignUp() {
                     type="password"
                     id="password"
                     autoComplete="new-password"
+                  />
+                </Grid>
+                {/* Location */}
+                <Grid item xs={12}>
+                  <AutoComplete
+                    options={citiesList}
+                    value={location}
+                    setValue={(value) => setLocation(value)}
                   />
                 </Grid>
                 <Grid item xs={12}>
