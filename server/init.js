@@ -225,6 +225,8 @@ const init = async () => {
   let user3 = await userCreate(users[2]);
   let user4 = await userCreate(users[3]);
   let user5 = await userCreate(users[4]);
+  let user6 = await userCreate(users[5]);
+  let user7 = await userCreate(users[6]);
 
   let comment1 = await commentCreate(
     "Nice!",
@@ -266,7 +268,7 @@ const init = async () => {
     new Date("2023-11-23T01:02:00"),
     [comment2, comment3],
     2,
-    [user2, user3, user4],
+    [user2, user3, user4, user5],
     [user5],
     false
   );
@@ -276,7 +278,7 @@ const init = async () => {
     new Date("2023-11-23T01:02:00"),
     [comment1],
     3,
-    [user1, user3, user4],
+    [user1, user3, user4, user6],
     [],
     false
   );
