@@ -30,7 +30,7 @@ const authenticateCredentials = async (req, res) => {
       .cookie("access_token", token, {
         httpOnly: true,
         secure: true,
-        expires: new Date(Date.now() + 900000),
+        expires: new Date(Date.now() + 90000000), // expires after 1 day
       })
       .status(200)
       .json({

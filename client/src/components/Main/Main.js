@@ -5,7 +5,7 @@ import QuestionPage from "./questionPage";
 import AnswerPage from "./answerPage";
 import NewAnswer from "./newAnswer";
 import NewQuestion from "./newQuestion";
-import TagPage from "./tagPage";
+import TagPage from "./tagPage/TagPage";
 import { addQuestion } from "../../services/questionService";
 import { addAnswer } from "../../services/answerService";
 import { getTagsWithQuestionNumber } from "../../services/tagService";
