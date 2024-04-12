@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import AskAQuestionButton from "../askAQuestionButton";
+import SendIcon from "@mui/icons-material/Send";
+import Button from "@mui/material/Button";
 import "./TagPage.css";
 import Tag from "./tag/Tag";
 import { Grid, TextField } from "@mui/material";
@@ -30,7 +31,14 @@ const TagPage = ({
       <div className="space_between right_padding">
         <div className="bold_title">{tlist.length} Tags</div>
         <div className="bold_title">All Tags</div>
-        <AskAQuestionButton handleNewQuestion={handleNewQuestion} />
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={handleNewQuestion}
+        >
+          Ask A Question
+        </Button>
+        {/* <AskAQuestionButton handleNewQuestion={handleNewQuestion} /> */}
       </div>
       <TextField
         label="Search Tag"

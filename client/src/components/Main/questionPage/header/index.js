@@ -1,5 +1,6 @@
 import { useState } from "react";
-import AskAQuestionButton from "../../askAQuestionButton";
+import SendIcon from "@mui/icons-material/Send";
+import Button from "@mui/material/Button";
 import "./index.css";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -19,7 +20,13 @@ const QuestionHeader = ({
     <div>
       <div className="space_between right_padding">
         <div className="bold_title">{title_text}</div>
-        <AskAQuestionButton handleNewQuestion={handleNewQuestion} />
+        <Button
+          variant="contained"
+          endIcon={<SendIcon />}
+          onClick={handleNewQuestion}
+        >
+          Ask A Question
+        </Button>
       </div>
       <div className="space_between right_padding">
         <div id="question_count">{qcnt} questions</div>
