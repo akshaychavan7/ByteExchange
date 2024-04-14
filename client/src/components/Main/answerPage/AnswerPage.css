@@ -6,14 +6,6 @@
   margin: 2% 0 2% 2%;
 }
 
-.questionBody {
-  display: flex;
-  flex-direction: row;
-  /* justify-content: space-between; */
-  margin-top: 5%;
-  border-bottom: #000000 1px dashed;
-}
-
 .answer {
   display: flex;
   flex-direction: row;
@@ -47,4 +39,16 @@
 .answer_question_title {
   max-width: 60%;
   /* margin: 0px 20px 0px 20px; */
+}
+
+.answers-count {
+  margin-left: 1%;
+  color: #4c4c4c;
+  margin-top: 2%;
+}
+
+.answer-question-btn {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  margin-left: 20px;
 }

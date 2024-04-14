@@ -1,0 +1,18 @@
+.user-response-body {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-top: 2%;
+}
+
+.response-description {
+  width: 60%;
+  margin-left: 1%;
+}
+
+.user-response-meta {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5%;
+  margin-top: 2px;
+}

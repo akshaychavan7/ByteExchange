@@ -1,5 +1,6 @@
 import { getMetaData } from "../../../../tool";
 import AuthorMeta from "../../AuthorMeta/AuthorMeta";
+import TagChip from "../../TagChip/TagChip";
 import "./index.css";
 import { Stack } from "@mui/material";
 
@@ -20,18 +21,7 @@ const Question = ({ q, clickTag, handleAnswer }) => {
         <div className="postTitle">{q.title}</div>
         <div className="question_tags">
           {q.tags.map((tag, idx) => {
-            return (
-              <button
-                key={idx}
-                className="question_tag_button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  clickTag(tag.name);
-                }}
-              >
-                {tag.name}
-              </button>
-            );
+            return <TagChip key={idx} tag={tag} clickTag={clickTag} />;
           })}
         </div>
       </div>
