@@ -44,7 +44,6 @@ const getQuestionById = async (req, res) => {
       .populate({
         path: "answers",
         populate: { path: "comments" },
-        select: "-_id",
       })
       .populate({ path: "asked_by", select: "-password" })
       .populate("tags")

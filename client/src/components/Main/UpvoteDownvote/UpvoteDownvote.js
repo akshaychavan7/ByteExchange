@@ -7,9 +7,17 @@ import {
 } from "@mui/icons-material";
 import "./UpvoteDownvote.css";
 import { useAlert } from "../../../context/AlertContext";
+import { downvote, upvote } from "../../../services/voteService";
 
 // TODO: handle upvote and downvote functionality
-const UpvoteDownvote = ({ voteCount, isUpvoted, isDownvoted, isFlagged }) => {
+const UpvoteDownvote = ({
+  voteCount,
+  isUpvoted,
+  isDownvoted,
+  isFlagged,
+  postType,
+  id,
+}) => {
   const alert = useAlert();
   const [votes, setVotes] = useState(voteCount || 0);
   const [voted, setVoted] = useState(null);
@@ -33,12 +41,29 @@ const UpvoteDownvote = ({ voteCount, isUpvoted, isDownvoted, isFlagged }) => {
       alert.showAlert("You have already voted", "error");
     } else {
       // Upvote or downvote accordingly
-      if (type === "up") {
-        setVotes(votes + 1);
+      const reqObj = {
+        id: id,
+        type: postType,
+      };
+      if (voted === null) {
+        if (type === "up") {
+          setVotes(votes + 1);
+          upvote(reqObj);
+        } else {
+          setVotes(votes - 1);
+          downvote(reqObj);
+        }
+        setVoted(type);
       } else {
-        setVotes(votes - 1);
+        if (type === "up") {
+          setVotes(votes + 2);
+          upvote(reqObj);
+        } else {
+          setVotes(votes - 2);
+          downvote(reqObj);
+        }
+        setVoted(type);
       }
-      setVoted(type);
     }
   };
 

@@ -14,6 +14,8 @@ export default function UserResponse({
   isUpvoted,
   isDownvoted,
   isFlagged,
+  postType,
+  id,
 }) {
   return (
     <div className="user-response-body right_padding pt-0">
@@ -23,6 +25,8 @@ export default function UserResponse({
           isUpvoted={isUpvoted}
           isDownvoted={isDownvoted}
           isFlagged={isFlagged}
+          postType={postType}
+          id={id}
         />
       </div>
       <div className="response-description">

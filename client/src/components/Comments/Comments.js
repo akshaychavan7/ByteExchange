@@ -44,6 +44,8 @@ export default function Comments({ commentsList }) {
               voteCount={comment?.vote_count}
               isUpvoted={comment?.upvote}
               isDownvoted={comment?.downvote}
+              postType={"comment"}
+              id={comment?._id}
             />
           );
         })}
