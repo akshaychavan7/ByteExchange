@@ -30,6 +30,7 @@ export default function Comments({ commentsList }) {
       </AccordionSummary>
       <AccordionDetails>
         {commentsList?.map((comment, idx) => {
+          console.log(comment._id);
           return (
             <UserResponse
               key={idx}

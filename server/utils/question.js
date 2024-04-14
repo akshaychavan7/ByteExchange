@@ -249,8 +249,15 @@ const showCommentUpDown = (uid, comments) => {
     let com_upvoteBy = comments[comment]["upvoted_by"].map((objectId) =>
       objectId.toString()
     );
+
+    let com_downvoteBy = comments[comment]["downvoted_by"].map((objectId) =>
+      objectId.toString()
+    );
     if (com_upvoteBy.includes(uid)) {
       comments[comment].upvote = true;
+    }
+    if (com_downvoteBy.includes(uid)) {
+      comments[comment].downvote = true;
     }
   }
   return comments;

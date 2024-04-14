@@ -100,6 +100,7 @@ function commentCreate(
   comment_date_time,
   vote_count,
   upvoted_by,
+  downvoted_by,
   flag
 ) {
   let commentdetail = {
@@ -234,14 +235,15 @@ const init = async () => {
     new Date("2023-11-23T08:24:00"),
     0,
     [],
-    false,
-    "https://media.licdn.com/dms/image/D4D03AQEuWmah1ZwmqQ/profile-displayphoto-shrink_800_800/0/1702163845668?e=1718236800&v=beta&t=jmnYmqQXxwOt9CJxdDIL-Br8yPt_fk67M64XT2Q9mTo"
+    [],
+    false
   );
   let comment2 = await commentCreate(
     "This is very helpful",
     user2,
     new Date("2023-11-23T08:24:00"),
     0,
+    [],
     [],
     false
   );
@@ -251,6 +253,7 @@ const init = async () => {
     new Date("2023-11-23T08:24:00"),
     0,
     [],
+    [],
     false
   );
   let comment4 = await commentCreate(
@@ -258,6 +261,7 @@ const init = async () => {
     user4,
     new Date("2023-11-23T08:24:00"),
     0,
+    [],
     [],
     false
   );
