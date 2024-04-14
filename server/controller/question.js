@@ -45,7 +45,13 @@ const getQuestionById = async (req, res) => {
       })
       .populate({ path: "asked_by", select: "-password" })
       .populate("tags")
-      .populate("comments")
+      .populate({
+        path: "comments",
+        populate: {
+          path: "commented_by",
+          select: "username firstname lastname profilePic",
+        },
+      })
       .exec();
     let jsonQuestion = question.toJSON();
     jsonQuestion = showQuesUpDown(req.userId, jsonQuestion);
