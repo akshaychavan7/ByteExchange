@@ -7,4 +7,10 @@ const reportComment = async (cid) => {
   return res.data;
 };
 
-export { reportComment };
+const postComment = async (data) => {
+  const res = await api.post(`${COMMENT_API_URL}/addComment`, data);
+
+  return res.data;
+};
+
+export { reportComment, postComment };
