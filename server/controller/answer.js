@@ -3,7 +3,7 @@ const Answer = require("../models/answers");
 const Question = require("../models/questions");
 
 const router = express.Router();
-const authorization = require("../middleware/authorization");
+const { authorization, adminAuthorization } = require("../middleware/authorization");
 
 // Adding answer
 const addAnswer = async (req, res) => {
@@ -22,7 +22,55 @@ const addAnswer = async (req, res) => {
   res.json(answer);
 };
 
+const reportAnswer = async (req, res) => {
+  try {
+    let answer = await Answer.exists({ _id: req.params.answerId });
+    if (!answer) {
+      return res.status(404).send("Answer not found");
+    }
+
+    await Answer.findByIdAndUpdate(
+      req.params.answerId,
+      { flag: true },
+      { new: true }
+    );
+    res.status(200).send("Answer reported successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+const getReportedAnswers = async (req, res) => {
+  try {
+    let answers = await Answer.find({ flag: true });
+    res.status(200).json(answers);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+const deleteAnswer = async (req, res) => {
+  try {
+    let answer = await Answer.exists({ _id: req.params.answerId });
+    if (!answer) {
+      return res.status(404).send("Answer not found");
+    }
+
+    await Answer.findByIdAndDelete(req.params.answerId);
+    res.status(200).send("Answer deleted successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+}
+
+
 // add appropriate HTTP verbs and their endpoints to the router.
+router.get("/getReportedAnswers", adminAuthorization, getReportedAnswers);
 router.post("/addAnswer", authorization, addAnswer);
+router.post("/reportAnswer/:answerId", authorization, reportAnswer);
+router.delete("/deleteAnswer/:answerId", adminAuthorization, deleteAnswer);
 
 module.exports = router;

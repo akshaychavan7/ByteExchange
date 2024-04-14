@@ -3,8 +3,9 @@ const Comment = require("../models/comments");
 const Question = require("../models/questions");
 const Answer = require("../models/answers");
 const router = express.Router();
-const authorization = require("../middleware/authorization");
 const { validateId } = require("../utils/validator");
+const { authorization, adminAuthorization } = require("../middleware/authorization");
+
 
 const addComment = async (req, res) => {
     try {
@@ -46,6 +47,55 @@ const addComment = async (req, res) => {
     }
 }
 
+const reportComment = async (req, res) => {
+    try {
+        let comment = await Comment.exists({ _id: req.params.commentId });
+        if (!comment) {
+            return res.status(404).send('Comment not found');
+        }
+
+        await Comment.findByIdAndUpdate(
+            req.params.commentId,
+            { flag: true },
+            { new: true }
+        );
+        res.status(200).send('Comment reported successfully');
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+const getReportedComments = async (req, res) => {
+    try {
+        let comments = await Comment.find({ flag: true });
+        res.status(200).json(comments);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+const deleteComment = async (req, res) => {
+    try {
+        let comment = await Comment.exists({ _id: req.params.commentId });
+        if (!comment) {
+            return res.status(404).send('Comment not found');
+        }
+
+        await Comment.findByIdAndDelete(req.params.commentId);
+        res.status(200).send('Comment deleted successfully');
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
+
+router.get("/getReportedComments", authorization, getReportedComments);
 router.post("/addComment", authorization, addComment);
+router.post("/reportComment/:commentId", adminAuthorization, reportComment);
+router.delete("/deleteComment/:commentId", adminAuthorization, deleteComment);
 
 module.exports = router;

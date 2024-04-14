@@ -3,7 +3,7 @@ const Comment = require("../models/comments");
 const Question = require("../models/questions");
 const Answer = require("../models/answers");
 const router = express.Router();
-const authorization = require("../middleware/authorization");
+const { authorization } = require("../middleware/authorization");
 const { validateId } = require("../utils/validator");
 
 
