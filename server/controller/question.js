@@ -4,6 +4,7 @@ const {
   addTag,
   getQuestionsByOrder,
   filterQuestionsBySearch,
+  showQuesUpDown,
 } = require("../utils/question");
 
 const router = express.Router();
@@ -37,23 +38,17 @@ const getQuestionById = async (req, res) => {
           select: "username firstname lastname profilePic",
         },
       })
-      .populate({
-        path: "answers",
-        populate: {
-          path: "comments",
-          populate: {
-            path: "commented_by",
-            select: "username firstname lastname profilePic",
-          },
-        },
-      })
-      .populate("asked_by")
-      .populate("comments");
-    res.status(200);
-    res.json(question);
+      .populate({ path: "answers", populate: { path: "comments" } })
+      .populate({ path: "asked_by", select: "-password" })
+      .populate("tags")
+      .populate("comments")
+      .exec();
+    let jsonQuestion = question.toJSON();
+    jsonQuestion = showQuesUpDown(req.userId, jsonQuestion);
+    res.status(200).json(jsonQuestion);
   } catch (err) {
     res.status(500);
-    res.json({});
+    res.json({ error: "Something went wrong", details: err.message });
   }
 };
 
