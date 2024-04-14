@@ -19,4 +19,26 @@ const authorization = (req, res, next) => {
   }
 };
 
-module.exports = authorization;
+const adminAuthorization = (req, res, next) => {
+  const token = req.cookies.access_token;
+  if (!token) {
+    return res.sendStatus(403);
+  }
+  try {
+    const data = jwt.verify(token, SECRET_KEY);
+    if (data.userRole !== "moderator") {
+      return res.sendStatus(403);
+    }
+    req.userId = data.userId;
+    req.userRole = data.userRole;
+    next();
+  } catch (e) {
+    console.error(`Error while verifying token: ${e}`);
+    return res.sendStatus(403);
+  }
+}
+
+
+// module.exports = authorization;
+
+module.exports = { authorization, adminAuthorization };

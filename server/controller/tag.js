@@ -3,6 +3,7 @@ const Tag = require("../models/tags");
 const Question = require("../models/questions");
 
 const router = express.Router();
+const { authorization } = require("../middleware/authorization");
 
 const getTagsWithQuestionNumber = async (req, res) => {
   let questions = await Question.find({}).populate("tags");
@@ -26,6 +27,6 @@ const getTagsWithQuestionNumber = async (req, res) => {
 };
 
 // add appropriate HTTP verbs and their endpoints to the router.
-router.get("/getTagsWithQuestionNumber", getTagsWithQuestionNumber);
+router.get("/getTagsWithQuestionNumber", authorization, getTagsWithQuestionNumber);
 
 module.exports = router;
