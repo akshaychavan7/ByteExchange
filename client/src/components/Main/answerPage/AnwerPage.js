@@ -41,6 +41,7 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, clickTag }) => {
                 isUpvoted={answer.upvote}
                 isDownvoted={answer.downvote}
                 postType={"answer"}
+                isFlagged={answer.flag}
                 id={answer._id}
               />
             </div>

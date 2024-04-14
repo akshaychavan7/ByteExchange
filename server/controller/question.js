@@ -1,10 +1,12 @@
 const express = require("express");
 const Question = require("../models/questions");
+const { updateReputation } = require("../utils/user");
 const {
   addTag,
   getQuestionsByOrder,
   filterQuestionsBySearch,
   showQuesUpDown,
+  getTop10Questions,
 } = require("../utils/question");
 
 const router = express.Router();
@@ -84,20 +86,23 @@ const addQuestion = async (req, res) => {
 
 const reportQuestion = async (req, res) => {
   try {
-    let question = await Question.exists({ _id: req.params.questionId });
+    console.log(req.body);
+    let question = await Question.exists({ _id: req.body.qid });
     if (!question) {
       return res.status(404).send("Question not found");
     }
 
     await Question.findByIdAndUpdate(
-      req.params.questionId,
+      req.body.qid,
       { flag: true },
       { new: true }
     );
-    res.status(200).send("Question reported successfully");
+    res
+      .status(200)
+      .send({ status: 200, message: "Question reported successfully" });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
 
@@ -107,7 +112,7 @@ const getReportedQuestions = async (req, res) => {
     res.status(200).json(questions);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
 
@@ -126,6 +131,15 @@ const deleteQuestion = async (req, res) => {
   }
 };
 
+const getTrendingQuestions = async (req, res) => {
+  try {
+    let questions = await getTop10Questions();
+    res.status(200).json({ questions: questions });
+  } catch (err) {
+    res.status(500).json({ error: `Cannot fetch treding questions: ${err}` });
+  }
+};
+
 // add appropriate HTTP verbs and their endpoints to the router
 
 router.get("/getQuestion", authorization, getQuestionsByFilter);
@@ -137,7 +151,8 @@ router.get(
 );
 router.get("/getReportedQuestions", adminAuthorization, getReportedQuestions);
 router.post("/addQuestion", authorization, addQuestion);
-router.post("/reportQuestion/:questionId", authorization, reportQuestion);
+router.post("/reportQuestion/", authorization, reportQuestion);
 router.delete("/deleteQuestion/:questionId", authorization, deleteQuestion);
+router.get("/getTrendingQuestions", getTrendingQuestions);
 
 module.exports = router;

@@ -46,6 +46,7 @@ export default function Comments({ commentsList }) {
               isUpvoted={comment?.upvote}
               isDownvoted={comment?.downvote}
               postType={"comment"}
+              isFlagged={comment?.flag}
               id={comment?._id}
             />
           );

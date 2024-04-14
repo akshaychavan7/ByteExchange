@@ -8,6 +8,9 @@ import {
 import "./UpvoteDownvote.css";
 import { useAlert } from "../../../context/AlertContext";
 import { downvote, upvote } from "../../../services/voteService";
+import { reportQuestion } from "../../../services/questionService";
+import { reportAnswer } from "../../../services/answerService";
+import { reportComment } from "../../../services/commentService";
 
 // TODO: handle upvote and downvote functionality
 const UpvoteDownvote = ({
@@ -72,6 +75,21 @@ const UpvoteDownvote = ({
       alert.showAlert("This post/comment has already been flagged", "error");
       return;
     } else {
+      let response;
+      switch (postType) {
+        case "question":
+          response = reportQuestion(id);
+          break;
+        case "answer":
+          response = reportAnswer(id);
+          break;
+        case "comment":
+          response = reportComment(id);
+          break;
+        default:
+          break;
+      }
+      console.log(response);
       setFlagged(true);
       alert.showAlert("Post has been flagged for review", "info");
     }

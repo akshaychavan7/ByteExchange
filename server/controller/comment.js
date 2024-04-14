@@ -54,20 +54,24 @@ const addComment = async (req, res) => {
 
 const reportComment = async (req, res) => {
   try {
-    let comment = await Comment.exists({ _id: req.params.commentId });
+    let comment = await Comment.exists({ _id: req.body.cid });
     if (!comment) {
-      return res.status(404).send("Comment not found");
+      return res
+        .status(404)
+        .send({ status: 404, message: "Comment not found" });
     }
 
     await Comment.findByIdAndUpdate(
-      req.params.commentId,
+      req.body.cid,
       { flag: true },
       { new: true }
     );
-    res.status(200).send("Comment reported successfully");
+    res
+      .status(200)
+      .send({ status: 200, message: "Comment reported successfully" });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
 
@@ -98,7 +102,7 @@ const deleteComment = async (req, res) => {
 
 router.get("/getReportedComments", authorization, getReportedComments);
 router.post("/addComment", authorization, addComment);
-router.post("/reportComment/:commentId", adminAuthorization, reportComment);
-router.delete("/deleteComment/:commentId", adminAuthorization, deleteComment);
+router.post("/reportComment", authorization, reportComment);
+router.delete("/deleteComment/:commentId", authorization, deleteComment);
 
 module.exports = router;

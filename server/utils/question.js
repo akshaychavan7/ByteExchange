@@ -1,6 +1,5 @@
 const Tag = require("../models/tags");
 const Question = require("../models/questions");
-const question = require("../models/schema/question");
 
 const parseTags = (search) => {
   return (search.match(/\[([^\]]+)\]/g) || []).map((word) => word.slice(1, -1));
