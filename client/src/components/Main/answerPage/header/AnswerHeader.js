@@ -14,7 +14,7 @@ const AnswerHeader = ({
     <div className="header-container">
       <div
         id="answersHeader"
-        className="space_between right_padding bottom-padding-1"
+        className="question-head right_padding bottom-padding-1"
       >
         <Typography variant="h4" className="answer_question_title">
           {" "}
