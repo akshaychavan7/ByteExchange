@@ -13,6 +13,7 @@ export default function UserResponse({
   voteCount,
   isUpvoted,
   isDownvoted,
+  isFlagged,
 }) {
   return (
     <div className="user-response-body right_padding pt-0">
@@ -21,6 +22,7 @@ export default function UserResponse({
           voteCount={voteCount}
           isUpvoted={isUpvoted}
           isDownvoted={isDownvoted}
+          isFlagged={isFlagged}
         />
       </div>
       <div className="response-description">

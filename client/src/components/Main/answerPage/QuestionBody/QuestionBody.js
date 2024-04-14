@@ -18,6 +18,7 @@ const QuestionBody = ({ question, clickTag }) => {
         voteCount={question?.vote_count}
         isUpvoted={question?.upvote}
         isDownvoted={question?.downvote}
+        isFlagged={question?.flag}
       />
       <div id="question-tags">
         {question?.tags?.map((tag, idx) => {
