@@ -1,97 +1,100 @@
 const express = require("express");
-const Comment = require("../models/comments");
 const Question = require("../models/questions");
 const Answer = require("../models/answers");
+const Comment = require("../models/comments");
 const router = express.Router();
-const { validateId } = require("../utils/validator");
-const { authorization, adminAuthorization } = require("../middleware/authorization");
 
+const {
+  authorization,
+  adminAuthorization,
+} = require("../middleware/authorization");
+const { validateId } = require("../utils/validator");
 
 const addComment = async (req, res) => {
-    try {
-        let comment = await Comment.create({
-            description: req.body.description,
-            commented_by: req.userId,
-            comment_date_time: new Date(),
-        });
+  try {
+    let comment = await Comment.create({
+      description: req.body.description,
+      commented_by: req.userId,
+      comment_date_time: new Date(),
+    });
 
+    let parentId = req.body.parentId;
+    let parentType = req.body.parentType;
 
-        let parentId = req.body.parentId;
-        let parentType = req.body.parentType; 
-
-        if (!validateId(parentId)) {
-            return res.status(400).send('Invalid parent id');
-        }
-
-        let parentModel;
-        if (parentType === 'question') {
-            parentModel = Question;
-        } else if (parentType === 'answer') {
-            parentModel = Answer;
-        } else {
-            return res.status(400).send('Invalid parent type');
-        }
-
-        let parentObject = await parentModel.exists({ _id: parentId });
-        if (!parentObject) {
-            return res.status(404).send('Parent object not found');
-        }
-
-        await parentModel.findByIdAndUpdate(parentId, { $push: { comments: comment._id } }, { new: true });
-        
-        res.status(200).json(comment);
-
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).send("Internal Server Error");
+    if (!validateId(parentId)) {
+      return res.status(400).send("Invalid parent id");
     }
-}
+
+    let parentModel;
+    if (parentType === "question") {
+      parentModel = Question;
+    } else if (parentType === "answer") {
+      parentModel = Answer;
+    } else {
+      return res.status(400).send("Invalid parent type");
+    }
+
+    let parentObject = await parentModel.exists({ _id: parentId });
+    if (!parentObject) {
+      return res.status(404).send("Parent object not found");
+    }
+
+    await parentModel.findByIdAndUpdate(
+      parentId,
+      { $push: { comments: comment._id } },
+      { new: true }
+    );
+
+    res.status(200).json(comment);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 const reportComment = async (req, res) => {
-    try {
-        let comment = await Comment.exists({ _id: req.params.commentId });
-        if (!comment) {
-            return res.status(404).send('Comment not found');
-        }
-
-        await Comment.findByIdAndUpdate(
-            req.params.commentId,
-            { flag: true },
-            { new: true }
-        );
-        res.status(200).send('Comment reported successfully');
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
+  try {
+    let comment = await Comment.exists({ _id: req.params.commentId });
+    if (!comment) {
+      return res.status(404).send("Comment not found");
     }
-}
 
+    await Comment.findByIdAndUpdate(
+      req.params.commentId,
+      { flag: true },
+      { new: true }
+    );
+    res.status(200).send("Comment reported successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 const getReportedComments = async (req, res) => {
-    try {
-        let comments = await Comment.find({ flag: true });
-        res.status(200).json(comments);
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
-    }
-}
+  try {
+    let comments = await Comment.find({ flag: true });
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 const deleteComment = async (req, res) => {
-    try {
-        let comment = await Comment.exists({ _id: req.params.commentId });
-        if (!comment) {
-            return res.status(404).send('Comment not found');
-        }
-
-        await Comment.findByIdAndDelete(req.params.commentId);
-        res.status(200).send('Comment deleted successfully');
-    } catch (error) {
-        console.error('Error:', error);
-        res.status(500).send('Internal Server Error');
+  try {
+    let comment = await Comment.exists({ _id: req.params.commentId });
+    if (!comment) {
+      return res.status(404).send("Comment not found");
     }
-}
 
+    await Comment.findByIdAndDelete(req.params.commentId);
+    res.status(200).send("Comment deleted successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 
 router.get("/getReportedComments", authorization, getReportedComments);
 router.post("/addComment", authorization, addComment);

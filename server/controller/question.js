@@ -4,10 +4,14 @@ const {
   addTag,
   getQuestionsByOrder,
   filterQuestionsBySearch,
+  showQuesUpDown,
 } = require("../utils/question");
 
 const router = express.Router();
-const { authorization, adminAuthorization } = require("../middleware/authorization");
+const {
+  authorization,
+  adminAuthorization,
+} = require("../middleware/authorization");
 
 // To get Questions by Filter
 const getQuestionsByFilter = async (req, res) => {
@@ -39,21 +43,24 @@ const getQuestionById = async (req, res) => {
       })
       .populate({
         path: "answers",
+        populate: { path: "comments" },
+      })
+      .populate({ path: "asked_by", select: "-password" })
+      .populate("tags")
+      .populate({
+        path: "comments",
         populate: {
-          path: "comments",
-          populate: {
-            path: "commented_by",
-            select: "username firstname lastname profilePic",
-          },
+          path: "commented_by",
+          select: "username firstname lastname profilePic",
         },
       })
-      .populate("asked_by")
-      .populate("comments");
-    res.status(200);
-    res.json(question);
+      .exec();
+    let jsonQuestion = question.toJSON();
+    jsonQuestion = showQuesUpDown(req.userId, jsonQuestion);
+    res.status(200).json(jsonQuestion);
   } catch (err) {
     res.status(500);
-    res.json({});
+    res.json({ error: "Something went wrong", details: err.message });
   }
 };
 
@@ -81,18 +88,18 @@ const reportQuestion = async (req, res) => {
     if (!question) {
       return res.status(404).send("Question not found");
     }
-  
+
     await Question.findByIdAndUpdate(
       req.params.questionId,
       { flag: true },
       { new: true }
-    ); 
+    );
     res.status(200).send("Question reported successfully");
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
-}
+};
 
 const getReportedQuestions = async (req, res) => {
   try {
@@ -110,19 +117,24 @@ const deleteQuestion = async (req, res) => {
     if (!question) {
       return res.status(404).send("Question not found");
     }
-    
+
     await Question.findByIdAndDelete(req.params.questionId);
     res.status(200).send("Question deleted successfully");
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
-}
+};
 
 // add appropriate HTTP verbs and their endpoints to the router
 
 router.get("/getQuestion", authorization, getQuestionsByFilter);
-router.get("/getQuestionById/:questionId", authorization, getQuestionById);
+router.get(
+  "/getQuestionById/:questionId",
+  authorization,
+  authorization,
+  getQuestionById
+);
 router.get("/getReportedQuestions", adminAuthorization, getReportedQuestions);
 router.post("/addQuestion", authorization, addQuestion);
 router.post("/reportQuestion/:questionId", authorization, reportQuestion);

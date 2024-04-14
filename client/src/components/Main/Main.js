@@ -2,7 +2,7 @@ import "./index.css";
 import { useEffect, useState } from "react";
 import SideBarNav from "./sideBarNav/Sidebar";
 import QuestionPage from "./questionPage";
-import AnswerPage from "./answerPage";
+import AnswerPage from "./answerPage/AnwerPage";
 import NewAnswer from "./newAnswer";
 import NewQuestion from "./newQuestion";
 import TagPage from "./tagPage/TagPage";
@@ -107,6 +107,7 @@ const Main = ({
       content = (
         <AnswerPage
           qid={qid}
+          clickTag={clickTag}
           handleNewQuestion={handleNewQuestion}
           handleNewAnswer={handleNewAnswer}
         />

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { Alert, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
+import "./AlertContext.css";
 const AlertContext = createContext();
 
 export const useAlert = () => useContext(AlertContext);
@@ -23,23 +23,25 @@ export const AlertContextProvider = ({ children }) => {
   return (
     <AlertContext.Provider value={{ showAlert }}>
       {open && (
-        <Alert
-          severity={severity}
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          {message}
-        </Alert>
+        <div className="alert-container">
+          <Alert
+            severity={severity}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {message}
+          </Alert>
+        </div>
       )}
 
       {children}

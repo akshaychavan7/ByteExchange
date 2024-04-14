@@ -1,0 +1,9 @@
+.alert-container {
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1300;
+  width: fit-content;
+  /* to make alert sticky */
+  position: sticky;
+}

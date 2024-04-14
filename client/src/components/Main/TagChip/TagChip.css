@@ -1,0 +1,9 @@
+.question_tag_button {
+  color: #7793ff;
+  background: #e4ecff;
+  border-width: 0;
+  border-radius: 8px;
+  margin-left: 2%;
+  padding: 10px 15px 10px 15px;
+  border: 1px solid #e7e7e7;
+}
