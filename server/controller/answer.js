@@ -63,12 +63,34 @@ const deleteAnswer = async (req, res) => {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
+}
+
+const resolveAnswer = async (req, res) => {
+  try {
+    let answer = await Answer.exists({ _id: req.params.answerId });
+    if (!answer) {
+      return res.status(404).send("Answer not found");
+    }
+
+    await Answer.findByIdAndUpdate(
+      req.params.answerId,
+      { flag: false },
+      { new: true }
+    );
+    res.status(200).send("Answer resolved successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 };
+
+
 
 // add appropriate HTTP verbs and their endpoints to the router.
 router.get("/getReportedAnswers", adminAuthorization, getReportedAnswers);
 router.post("/addAnswer", authorization, addAnswer);
 router.post("/reportAnswer/", authorization, reportAnswer);
+router.post("/resolveAnswer/:answerId", adminAuthorization, resolveAnswer);
 router.delete("/deleteAnswer/:answerId", adminAuthorization, deleteAnswer);
 
 module.exports = router;

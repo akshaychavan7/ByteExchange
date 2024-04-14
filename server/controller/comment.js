@@ -4,7 +4,7 @@ const Answer = require("../models/answers");
 const Comment = require("../models/comments");
 const router = express.Router();
 
-const { authorization } = require("../middleware/authorization");
+const { authorization, adminAuthorization } = require("../middleware/authorization");
 const { validateId } = require("../utils/validator");
 
 const addComment = async (req, res) => {
@@ -99,9 +99,29 @@ const deleteComment = async (req, res) => {
   }
 };
 
+const resolveComment = async (req, res) => {
+  try {
+    let comment = await Comment.exists({ _id: req.params.commentId });
+    if (!comment) {
+      return res.status(404).send("Comment not found");
+    }
+
+    await Comment.findByIdAndUpdate(
+      req.params.commentId,
+      { flag: false },
+      { new: true }
+    );
+    res.status(200).send("Comment resolved successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 router.get("/getReportedComments", authorization, getReportedComments);
 router.post("/addComment", authorization, addComment);
 router.post("/reportComment", authorization, reportComment);
 router.delete("/deleteComment/:commentId", authorization, deleteComment);
+router.post("/resolveComment/:commentId", adminAuthorization, resolveComment);
 
 module.exports = router;

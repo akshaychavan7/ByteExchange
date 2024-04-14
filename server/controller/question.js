@@ -150,6 +150,25 @@ const getTrendingQuestions = async (req, res) => {
   }
 };
 
+const resolveQuestion = async (req, res) => {
+  try {
+    let question = await Question.exists({ _id: req.params.questionId });
+    if (!question) {
+      return res.status(404).send("Question not found");
+    }
+
+    await Question.findByIdAndUpdate(
+      req.params.questionId,
+      { flag: false },
+      { new: true }
+    );
+    res.status(200).send("Question resolved successfully");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
 // add appropriate HTTP verbs and their endpoints to the router
 
 router.get("/getQuestion", authorization, getQuestionsByFilter);
@@ -162,6 +181,7 @@ router.get(
 router.get("/getReportedQuestions", adminAuthorization, getReportedQuestions);
 router.post("/addQuestion", authorization, addQuestion);
 router.post("/reportQuestion/", authorization, reportQuestion);
+router.post("/resolveQuestion/:questionId", adminAuthorization, resolveQuestion);
 router.delete("/deleteQuestion/:questionId", authorization, deleteQuestion);
 router.get("/getTrendingQuestions", getTrendingQuestions);
 
