@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../models/users");
 const router = express.Router();
-const authorization = require("../middleware/authorization");
+const { authorization } = require("../middleware/authorization");
 
 // Adding answer
 const getUsersList = async (req, res) => {

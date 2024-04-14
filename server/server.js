@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const authorization = require("./middleware/authorization"); // custom middleware defined for user authorization
+const { authorization } = require("./middleware/authorization"); // custom middleware defined for user authorization
 
 const { MONGO_URL, port, CLIENT_URL } = require("./config");
 
