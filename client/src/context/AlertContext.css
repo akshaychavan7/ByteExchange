@@ -1,9 +1,11 @@
 .alert-container {
+  position: fixed;
   top: 10%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 1300;
-  width: fit-content;
-  /* to make alert sticky */
-  position: sticky;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
 }

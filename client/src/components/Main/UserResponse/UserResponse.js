@@ -18,7 +18,7 @@ export default function UserResponse({
   id,
 }) {
   return (
-    <div className="user-response-body right_padding pt-0">
+    <div className="user-response-body right_padding pt-0 pb-0">
       <div style={{ marginTop: "-8px" }}>
         <UpvoteDownvote
           voteCount={voteCount}

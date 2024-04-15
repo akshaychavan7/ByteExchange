@@ -4,7 +4,7 @@ import TagChip from "../../TagChip/TagChip";
 import UserResponse from "../../UserResponse/UserResponse";
 import Comments from "../../../Comments/Comments";
 
-const QuestionBody = ({ question, clickTag }) => {
+const QuestionBody = ({ question, clickTag, setUpdateState }) => {
   return (
     <div className="pl-30 pr-30">
       <UserResponse
@@ -28,7 +28,12 @@ const QuestionBody = ({ question, clickTag }) => {
         })}
       </div>
       <div id="question-comments" className="mt-30">
-        <Comments commentsList={question?.comments} />
+        <Comments
+          commentsList={question?.comments}
+          parentId={question?._id}
+          parentType={"question"}
+          setUpdateState={setUpdateState}
+        />
       </div>
     </div>
   );
