@@ -52,6 +52,8 @@ const getQuestionById = async (req, res) => {
             select: "username firstname lastname profilePic",
           },
         },
+        // sort by votes
+        options: { sort: { vote_count: -1 } },
       })
       .populate({ path: "asked_by", select: "-password" })
       .populate("tags")
@@ -61,6 +63,8 @@ const getQuestionById = async (req, res) => {
           path: "commented_by",
           select: "username firstname lastname profilePic",
         },
+        //sort by votes
+        options: { sort: { vote_count: -1 } },
       })
       .exec();
     let jsonQuestion = question.toJSON();
