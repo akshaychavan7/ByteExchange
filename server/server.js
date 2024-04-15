@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { authorization } = require("./middleware/authorization"); // custom middleware defined for user authorization
+const { authorization, adminAuthorization } = require("./middleware/authorization"); // custom middleware defined for user authorization
 
 const { MONGO_URL, port, CLIENT_URL } = require("./config");
 
@@ -65,6 +65,10 @@ let server = app.listen(port, () => {
 
 // route to check if user is authenticated
 app.get("/isUserAuthenticated", authorization, (req, res) => {
+  res.status(200).json({ message: "User is authenticated" });
+});
+
+app.get("/isUserModeratorAuthenticated", adminAuthorization, (req, res) => {
   res.status(200).json({ message: "User is authenticated" });
 });
 

@@ -5,12 +5,15 @@ export const ApplicationContext = createContext();
 
 const initialState = {
   isAuthenticated: "",
+  isModerator: "",
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "SET_IS_AUTHENTICATED":
       return { ...state, isAuthenticated: action.payload };
+    case "SET_IS_MODERATOR":
+      return { ...state, isModerator: action.payload };
     default:
       return state;
   }

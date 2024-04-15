@@ -15,4 +15,22 @@ const reportAnswer = async (aid) => {
   return res.data;
 };
 
-export { addAnswer, reportAnswer };
+const getReportedAnswers = async () => {
+    const res = await api.get(`${ANSWER_API_URL}/getReportedAnswers`);
+
+    return res.data;
+};
+
+const deleteAnswer = async (aid) => {
+    const res = await api.delete(`${ANSWER_API_URL}/deleteAnswer/${aid}`);
+
+    return res.data;
+}
+
+const resolveAnswer = async (aid) => {
+    const res = await api.post(`${ANSWER_API_URL}/resolveAnswer/${aid}`);
+
+    return res.data;
+}
+
+export { addAnswer, reportAnswer, getReportedAnswers, deleteAnswer, resolveAnswer };

@@ -4,6 +4,7 @@ import { ApplicationContext } from "../context/ApplicationContext";
 import UnauthorizedAccess from "./Login/UnauthorizedAccess";
 import useIsAuthenticated from "../hooks/useIsAuthenticated";
 import Loader from "./Utility/Loader/Loader";
+import Moderator from "./Moderator/Moderator";
 
 export default function fakeStackOverflow() {
   const applicationCtx = useContext(ApplicationContext);
@@ -20,16 +21,36 @@ export default function fakeStackOverflow() {
     return <Loader />;
   }
 
-  return applicationCtx.isAuthenticated ? (
-    <>
-      <Main
-        search={search}
-        setSearch={setSearch}
-        title={mainTitle}
-        setQuestionPage={setQuestionPage}
-      />
-    </>
-  ) : (
-    <UnauthorizedAccess />
-  );
+  
+  // return applicationCtx.isAuthenticated ? (
+  //   <Main
+  //     search={search}
+  //     setSearch={setSearch}
+  //     title={mainTitle}
+  //     setQuestionPage={setQuestionPage}
+  //   />
+  // ) : (
+  //   <UnauthorizedAccess />
+  // );
+  
+  if (applicationCtx.isAuthenticated && !applicationCtx.isModerator) {
+    return (
+      <>
+        <Main
+          search={search}
+          setSearch={setSearch}
+          title={mainTitle}
+          setQuestionPage={setQuestionPage}
+        />
+      </>
+    );
+  } else if (applicationCtx.isAuthenticated && applicationCtx.isModerator) {
+    return (
+      <>
+        <Moderator />
+      </>
+    );
+  } else {
+    return <UnauthorizedAccess />;
+  }
 }

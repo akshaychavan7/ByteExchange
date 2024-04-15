@@ -3,7 +3,7 @@
 import { useContext, useEffect } from "react";
 import { ApplicationContext } from "../context/ApplicationContext";
 import isAuthenticated from "../services/authenticationService";
-
+import isModeratorAuthenticated from "../services/authenticationModeratorService";
 export default function useIsAuthenticated() {
   const applicationCtx = useContext(ApplicationContext);
 
@@ -13,6 +13,12 @@ export default function useIsAuthenticated() {
       applicationCtx.dispatch({
         type: "SET_IS_AUTHENTICATED",
         payload: response,
+      });
+
+      const moderatorResponse = await isModeratorAuthenticated();
+      applicationCtx.dispatch({
+        type: "SET_IS_MODERATOR",
+        payload: moderatorResponse,
       });
     })();
   }, []);

@@ -13,4 +13,25 @@ const postComment = async (data) => {
   return res.data;
 };
 
-export { reportComment, postComment };
+const ANSWER_API_URL = `${REACT_APP_API_URL}/comment`;
+
+
+const getReportedComments = async () => {
+    const res = await api.get(`${ANSWER_API_URL}/getReportedComments`);
+
+    return res.data;
+}
+
+const deleteComment = async (cid) => {
+    const res = await api.delete(`${ANSWER_API_URL}/deleteComment/${cid}`);
+
+    return res.data;
+}
+
+const resolveComment = async (cid) => {
+    const res = await api.post(`${ANSWER_API_URL}/resolveComment/${cid}`);
+
+    return res.data;
+}
+
+export {reportComment, postComment, getReportedComments, deleteComment, resolveComment }

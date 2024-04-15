@@ -30,4 +30,22 @@ const reportQuestion = async (qid) => {
   return res.data;
 };
 
-export { getQuestionsByFilter, getQuestionById, addQuestion, reportQuestion };
+const getReportedQuestions = async () => {
+    const res = await api.get(`${QUESTION_API_URL}/getReportedQuestions`);
+
+    return res.data;
+};
+
+const deleteQuestion = async (qid) => {
+    const res = await api.delete(`${QUESTION_API_URL}/deleteQuestion/${qid}`);
+
+    return res.data;
+};
+
+const resolveQuestion = async (qid) => {
+    const res = await api.post(`${QUESTION_API_URL}/resolveQuestion/${qid}`);
+
+    return res.data;
+}
+
+export { getQuestionsByFilter, reportQuestion, getQuestionById, addQuestion, getReportedQuestions, deleteQuestion, resolveQuestion };
