@@ -42,7 +42,10 @@ const reportAnswer = async (req, res) => {
 
 const getReportedAnswers = async (req, res) => {
   try {
-    let answers = await Answer.find({ flag: true });
+    let answers = await Answer.find({ flag: true }).populate({
+      path: "ans_by",
+      select: "username firstname lastname profilePic",
+    });
     res.status(200).json(answers);
   } catch (error) {
     console.error("Error:", error);
@@ -63,7 +66,7 @@ const deleteAnswer = async (req, res) => {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
-}
+};
 
 const resolveAnswer = async (req, res) => {
   try {
@@ -83,8 +86,6 @@ const resolveAnswer = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
-
 
 // add appropriate HTTP verbs and their endpoints to the router.
 router.get("/getReportedAnswers", adminAuthorization, getReportedAnswers);

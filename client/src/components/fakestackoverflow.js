@@ -21,18 +21,6 @@ export default function fakeStackOverflow() {
     return <Loader />;
   }
 
-  
-  // return applicationCtx.isAuthenticated ? (
-  //   <Main
-  //     search={search}
-  //     setSearch={setSearch}
-  //     title={mainTitle}
-  //     setQuestionPage={setQuestionPage}
-  //   />
-  // ) : (
-  //   <UnauthorizedAccess />
-  // );
-  
   if (applicationCtx.isAuthenticated && !applicationCtx.isModerator) {
     return (
       <>
