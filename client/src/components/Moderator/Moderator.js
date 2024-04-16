@@ -233,16 +233,16 @@ export default function Moderator() {
                 value={"question"}
                 onClick={() => setType("question")}
               >
-                Question
+                Questions
               </ToggleButton>
               <ToggleButton value={"answer"} onClick={() => setType("answer")}>
-                Answer
+                Answers
               </ToggleButton>
               <ToggleButton
                 value={"comment"}
                 onClick={() => setType("comment")}
               >
-                Comment
+                Comments
               </ToggleButton>
             </ToggleButtonGroup>
           </div>
