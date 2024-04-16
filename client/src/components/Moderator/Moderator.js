@@ -1,6 +1,7 @@
 import "./Moderator.css";
 import {
   AppBar,
+  Divider,
   IconButton,
   Popover,
   Stack,
@@ -31,7 +32,7 @@ import logout from "../../services/logoutService";
 import { useAlert } from "../../context/AlertContext";
 import ProfileAvatar from "../Main/Avatar/AltAvatar";
 import Logout from "@mui/icons-material/Logout";
-import { Check, Close } from "@mui/icons-material";
+import { Check, Close, Person2 } from "@mui/icons-material";
 import AuthorMeta from "../Main/AuthorMeta/AuthorMeta";
 import { getMetaData } from "../../tool";
 import Loader from "../Utility/Loader/Loader";
@@ -222,9 +223,19 @@ export default function Moderator() {
             horizontal: "left",
           }}
         >
-          <Typography className="profile-popover" onClick={handleSignOut}>
-            <Logout /> &nbsp; Sign Out
-          </Typography>
+          <Stack direction="column">
+            <Typography className="name">
+              {user?.firstname + " " + user?.lastname}
+            </Typography>
+            <Divider />
+            <Typography className="profile-popover" onClick={handleSignOut}>
+              <Person2 fontSize="18px" /> &nbsp; View Profile
+            </Typography>
+            <Divider />
+            <Typography className="profile-popover" onClick={handleSignOut}>
+              <Logout fontSize="18px" /> &nbsp; Sign Out
+            </Typography>
+          </Stack>
         </Popover>
       </AppBar>
 
