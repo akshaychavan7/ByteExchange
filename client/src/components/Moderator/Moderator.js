@@ -4,6 +4,7 @@ import {
   IconButton,
   Popover,
   Stack,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Tooltip,
@@ -42,6 +43,7 @@ export default function Moderator() {
   const [type, setType] = useState("question");
   const [reportedData, setReportedData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
   const handleChange = (event, newOrder) => {
     if (newOrder !== null) setType(newOrder);
   };
@@ -141,6 +143,14 @@ export default function Moderator() {
     }
   }, [type]);
 
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredData = reportedData.filter((data) => {
+    return data.description.toLowerCase().includes(searchTerm.toLowerCase());
+  });
+
   function getPostDetails(data) {
     let author = "",
       profilePic = "",
@@ -176,10 +186,12 @@ export default function Moderator() {
     );
   }
 
+  //   If page is still loading, display a loader
   if (loading) {
     return <Loader />;
   }
 
+  //  If page is not loading, display the moderator page
   return (
     <>
       <AppBar position="fixed" className="header-moderator">
@@ -218,8 +230,19 @@ export default function Moderator() {
 
       <div id="body" className="moderator-container">
         <div className="controls">
+          <TextField
+            label={`Search ${type} by description`}
+            size="small"
+            autoFocus={true}
+            className="search-moderated-post"
+            color="primary"
+            variant="outlined"
+            margin="normal"
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
           <h4 style={{ color: "#303030" }}>
-            {reportedData.length} reported {type}s
+            {filteredData.length} reported {type}s
           </h4>
           <div>
             <ToggleButtonGroup
@@ -249,11 +272,11 @@ export default function Moderator() {
         </div>
 
         <div className="moderated-list">
-          {reportedData.length === 0 && (
+          {filteredData.length === 0 && (
             <h4 style={{ textAlign: "center" }}>No reported {type}s found</h4>
           )}
 
-          {reportedData?.map((data, idx) => (
+          {filteredData?.map((data, idx) => (
             <div key={idx} className="content-row">
               {getPostDetails(data)}
 
