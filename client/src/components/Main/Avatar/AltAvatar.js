@@ -20,6 +20,15 @@ function stringToColor(string) {
   return color;
 }
 
+function initials(name) {
+  const nameSplit = name.split(" ");
+  const initials =
+    nameSplit.length > 1
+      ? nameSplit[0].charAt(0) + nameSplit[1].charAt(0)
+      : nameSplit[0].charAt(0);
+  return initials.toUpperCase() || "NA";
+}
+
 function stringAvatar(name, width, height) {
   return {
     sx: {
@@ -27,7 +36,7 @@ function stringAvatar(name, width, height) {
       width: width,
       height: height,
     },
-    children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+    children: initials(name),
   };
 }
 

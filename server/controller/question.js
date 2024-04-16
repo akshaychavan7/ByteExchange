@@ -118,7 +118,11 @@ const reportQuestion = async (req, res) => {
 
 const getReportedQuestions = async (req, res) => {
   try {
-    let questions = await Question.find({ flag: true });
+    let questions = await Question.find({ flag: true })
+    .populate({
+      path: "asked_by",
+      select: "username firstname lastname profilePic",
+    });
     res.status(200).json(questions);
   } catch (error) {
     console.error("Error:", error);
@@ -181,7 +185,11 @@ router.get(
 router.get("/getReportedQuestions", adminAuthorization, getReportedQuestions);
 router.post("/addQuestion", authorization, addQuestion);
 router.post("/reportQuestion/", authorization, reportQuestion);
-router.post("/resolveQuestion/:questionId", adminAuthorization, resolveQuestion);
+router.post(
+  "/resolveQuestion/:questionId",
+  adminAuthorization,
+  resolveQuestion
+);
 router.delete("/deleteQuestion/:questionId", authorization, deleteQuestion);
 router.get("/getTrendingQuestions", getTrendingQuestions);
 

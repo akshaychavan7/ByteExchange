@@ -4,7 +4,10 @@ const Answer = require("../models/answers");
 const Comment = require("../models/comments");
 const router = express.Router();
 
-const { authorization, adminAuthorization } = require("../middleware/authorization");
+const {
+  authorization,
+  adminAuthorization,
+} = require("../middleware/authorization");
 const { validateId } = require("../utils/validator");
 
 const addComment = async (req, res) => {
@@ -76,7 +79,10 @@ const reportComment = async (req, res) => {
 
 const getReportedComments = async (req, res) => {
   try {
-    let comments = await Comment.find({ flag: true });
+    let comments = await Comment.find({ flag: true }).populate({
+      path: "commented_by",
+      select: "username firstname lastname profilePic",
+    });
     res.status(200).json(comments);
   } catch (error) {
     console.error("Error:", error);
