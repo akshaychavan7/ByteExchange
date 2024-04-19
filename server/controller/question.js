@@ -69,6 +69,7 @@ const getQuestionById = async (req, res) => {
         },
       ])
       .exec();
+    // move this line inside showQuesUpDown function
     let jsonQuestion = question.toJSON();
     jsonQuestion = showQuesUpDown(req.userId, jsonQuestion);
     res.status(200).json(jsonQuestion);
@@ -101,7 +102,7 @@ const reportQuestion = async (req, res) => {
     console.log(req.body);
     let question = await Question.exists({ _id: req.body.qid });
     if (!question) {
-      return res.status(404).send("Question not found");
+      return res.status(404).send({ message: "Question not found" });
     }
 
     await Question.findByIdAndUpdate(
@@ -111,7 +112,7 @@ const reportQuestion = async (req, res) => {
     );
     res
       .status(200)
-      .send({ status: 200, message: "Question reported successfully" });
+      .send({ message: "Question reported successfully" });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
@@ -135,11 +136,14 @@ const deleteQuestion = async (req, res) => {
   try {
     let question = await Question.exists({ _id: req.params.questionId });
     if (!question) {
-      return res.status(404).send("Question not found");
+      return res.status(404).send({ message: "Question not found" });
     }
 
+
     await Question.findByIdAndDelete(req.params.questionId);
-    res.status(200).send("Question deleted successfully");
+    res.status(200).send({
+      message: "Question deleted successfully",
+    });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
@@ -159,7 +163,7 @@ const resolveQuestion = async (req, res) => {
   try {
     let question = await Question.exists({ _id: req.params.questionId });
     if (!question) {
-      return res.status(404).send("Question not found");
+      return res.status(404).send({ message: "Question not found" });
     }
 
     await Question.findByIdAndUpdate(
@@ -167,7 +171,7 @@ const resolveQuestion = async (req, res) => {
       { flag: false },
       { new: true }
     );
-    res.status(200).send("Question resolved successfully");
+    res.status(200).send({ message: "Question resolved successfully" });
   } catch (error) {
     console.error("Error:", error);
     res.status(500).send("Internal Server Error");
