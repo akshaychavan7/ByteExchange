@@ -140,7 +140,7 @@ const NewQuestion = ({ addQuestion }) => {
             placeholder="Limit title to 100 characters or less"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", mt: "10px" }}
             required
           />
           <TextField
@@ -150,7 +150,7 @@ const NewQuestion = ({ addQuestion }) => {
             placeholder="Add a good question description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            sx={{ width: "100%" }}
+            sx={{ width: "100%", mt: "10px" }}
             multiline
             rows={3}
             required
