@@ -224,15 +224,21 @@ export default function Moderator() {
           }}
         >
           <Stack direction="column">
-            <Typography className="name">
+            <Typography className="name popover-list-item">
               {user?.firstname + " " + user?.lastname}
             </Typography>
             <Divider />
-            <Typography className="profile-popover" onClick={handleSignOut}>
+            <Typography
+              className="profile-popover popover-list-item"
+              onClick={handleSignOut}
+            >
               <Person2 fontSize="18px" /> &nbsp; View Profile
             </Typography>
             <Divider />
-            <Typography className="profile-popover" onClick={handleSignOut}>
+            <Typography
+              className="profile-popover popover-list-item"
+              onClick={handleSignOut}
+            >
               <Logout fontSize="18px" /> &nbsp; Sign Out
             </Typography>
           </Stack>

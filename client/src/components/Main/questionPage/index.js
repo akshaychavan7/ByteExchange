@@ -13,6 +13,9 @@ const QuestionPage = ({
   clickTag,
   handleAnswer,
   handleNewQuestion,
+  setViewUserProfile,
+  setSelected,
+  handleUsers,
 }) => {
   const [qlist, setQlist] = useState([]);
   useEffect(() => {
@@ -38,6 +41,9 @@ const QuestionPage = ({
             key={idx}
             clickTag={clickTag}
             handleAnswer={handleAnswer}
+            setViewUserProfile={setViewUserProfile}
+            setSelected={setSelected}
+            handleUsers={handleUsers}
           />
         ))}
         {qlist.length === 0 && <h2 className="center">No questions found</h2>}

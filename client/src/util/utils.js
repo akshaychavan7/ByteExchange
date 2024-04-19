@@ -35,3 +35,34 @@ export const getDurationPassed = (date) => {
   }
   return Math.floor(diff / 12) + " years ago";
 };
+
+export const memberSince = (date) => {
+  let duration = getDurationPassed(date);
+  duration = duration.slice(0, duration.length - 4);
+  return duration;
+};
+
+export const sortByActiveOrder = (qList) => {
+  // sort each questions answers so that newest answer is at 0th position
+  qList = qList.map((question) => {
+    question.answers.sort((a, b) => {
+      const dateA = new Date(a.ans_date_time);
+      const dateB = new Date(b.ans_date_time);
+      return dateB - dateA;
+    });
+    return question;
+  });
+
+  // finally sort based on most recent answer
+  qList.sort((a, b) => {
+    if (a.answers.length == 0) return 1;
+    if (b.answers.length == 0) return -1;
+    const dateA = new Date(a.answers[0]?.ans_date_time);
+    const dateB = new Date(b.answers[0]?.ans_date_time);
+    return dateB - dateA;
+  });
+
+  console.log("qList after sorting", qList);
+
+  return qList;
+};

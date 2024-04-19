@@ -73,3 +73,8 @@
   padding: 10px;
   text-align: center;
 }
+
+.popover-list-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}

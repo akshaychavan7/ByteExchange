@@ -31,21 +31,35 @@ const reportQuestion = async (qid) => {
 };
 
 const getReportedQuestions = async () => {
-    const res = await api.get(`${QUESTION_API_URL}/getReportedQuestions`);
+  const res = await api.get(`${QUESTION_API_URL}/getReportedQuestions`);
 
-    return res.data;
+  return res.data;
 };
 
 const deleteQuestion = async (qid) => {
-    const res = await api.delete(`${QUESTION_API_URL}/deleteQuestion/${qid}`);
+  const res = await api.delete(`${QUESTION_API_URL}/deleteQuestion/${qid}`);
 
-    return res.data;
+  return res.data;
 };
 
 const resolveQuestion = async (qid) => {
-    const res = await api.post(`${QUESTION_API_URL}/resolveQuestion/${qid}`);
+  const res = await api.post(`${QUESTION_API_URL}/resolveQuestion/${qid}`);
 
-    return res.data;
-}
+  return res.data;
+};
 
-export { getQuestionsByFilter, reportQuestion, getQuestionById, addQuestion, getReportedQuestions, deleteQuestion, resolveQuestion };
+const getTrendingQuestions = async () => {
+  const res = await api.get(`${QUESTION_API_URL}/getTrendingQuestions`);
+  return res.data;
+};
+
+export {
+  getQuestionsByFilter,
+  reportQuestion,
+  getQuestionById,
+  addQuestion,
+  getReportedQuestions,
+  deleteQuestion,
+  resolveQuestion,
+  getTrendingQuestions,
+};
