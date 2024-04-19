@@ -3,3 +3,12 @@
   justify-content: center;
   margin-top: 10px;
 }
+
+.expand-more-icon-color {
+  color: #6399ff;
+}
+
+.comments-accordion-summary {
+  color: #6399ff !important;
+  font-weight: 500;
+}

@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from "react";
+import { constants } from "../config";
 
 // Create a context object
 export const ApplicationContext = createContext();
@@ -10,9 +11,9 @@ const initialState = {
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "SET_IS_AUTHENTICATED":
+    case constants.SET_IS_AUTHENTICATED:
       return { ...state, isAuthenticated: action.payload };
-    case "SET_IS_MODERATOR":
+    case constants.SET_IS_MODERATOR:
       return { ...state, isModerator: action.payload };
     default:
       return state;

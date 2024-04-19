@@ -1,4 +1,4 @@
-import config from "../config";
+import { config } from "../config";
 export default async function login(requestObject) {
   try {
     const myHeaders = new Headers();

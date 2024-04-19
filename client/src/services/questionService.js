@@ -1,9 +1,13 @@
+import { constants } from "../config";
 import { REACT_APP_API_URL, api } from "./config";
 
 const QUESTION_API_URL = `${REACT_APP_API_URL}/question`;
 
 // To get Questions by Filter
-const getQuestionsByFilter = async (order = "newest", search = "") => {
+const getQuestionsByFilter = async (
+  order = constants.ORDER_NEWEST,
+  search = ""
+) => {
   const res = await api.get(
     `${QUESTION_API_URL}/getQuestion?order=${order}&search=${search}`
   );

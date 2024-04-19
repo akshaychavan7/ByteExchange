@@ -1,6 +1,7 @@
 import Question from "./question.js";
 import Tag from "./tag.js";
 import Answer from "./answer.js";
+import { constants } from "../config.js";
 
 export default class Application {
   constructor({ questions, tags, answers }) {
@@ -87,7 +88,7 @@ export default class Application {
     return cnt;
   };
 
-  getQuestionsByFilter = (order = "newest", search = "") => {
+  getQuestionsByFilter = (order = constants.ORDER_NEWEST, search = "") => {
     search = search.toLocaleLowerCase();
     let qlist = [];
     if (order == "active") {

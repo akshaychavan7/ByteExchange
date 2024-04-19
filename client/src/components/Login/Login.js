@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import useIsAuthenticated from "../../hooks/useIsAuthenticated";
 
 import { useAlert } from "../../context/AlertContext";
+import { constants } from "../../config";
 function Copyright(props) {
   return (
     <Typography
@@ -65,7 +66,7 @@ export default function Login() {
       const response = await login(payload);
       if (response.status === 200) {
         applicationCtx.dispatch({
-          type: "SET_IS_AUTHENTICATED",
+          type: constants.SET_IS_AUTHENTICATED,
           payload: true,
         });
         localStorage.setItem("user_details", JSON.stringify(response.user));

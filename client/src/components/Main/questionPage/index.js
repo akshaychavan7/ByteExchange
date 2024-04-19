@@ -26,6 +26,24 @@ const QuestionPage = ({
 
     fetchData().catch((e) => console.log(e));
   }, [order, search]);
+
+  const getQuestionsList = () => {
+    if (qlist.length === 0)
+      return <h2 className="center">No questions found</h2>;
+
+    return qlist.map((q, idx) => (
+      <Question
+        q={q}
+        key={idx}
+        clickTag={clickTag}
+        handleAnswer={handleAnswer}
+        setViewUserProfile={setViewUserProfile}
+        setSelected={setSelected}
+        handleUsers={handleUsers}
+      />
+    ));
+  };
+
   return (
     <>
       <QuestionHeader
@@ -35,22 +53,8 @@ const QuestionPage = ({
         handleNewQuestion={handleNewQuestion}
       />
       <div id="question_list" className="question_list">
-        {qlist.map((q, idx) => (
-          <Question
-            q={q}
-            key={idx}
-            clickTag={clickTag}
-            handleAnswer={handleAnswer}
-            setViewUserProfile={setViewUserProfile}
-            setSelected={setSelected}
-            handleUsers={handleUsers}
-          />
-        ))}
-        {qlist.length === 0 && <h2 className="center">No questions found</h2>}
+        {getQuestionsList()}
       </div>
-      {title_text === "Search Results" && !qlist.length && (
-        <div className="bold_title right_padding">No Questions Found</div>
-      )}
     </>
   );
 };
