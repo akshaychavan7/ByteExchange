@@ -19,10 +19,29 @@ const mockQuestions = [
 ];
 
 let server;
+let cookie;
+
+
 describe("GET /getTagsWithQuestionNumber", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
+    await mongoose.connect('mongodb://localhost:27017/fake_so', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+  
     server = require("../server");
+
+    const loginResponse = await supertest(server)
+      .post("/login/authenticate")
+      .send({
+        username: "test@gmail.com",
+        password: "test"
+      });
+      
+    // Extract the cookie from the response headers
+    cookie = loginResponse.headers['set-cookie'];
   });
+
   afterEach(async () => {
     server.close();
     await mongoose.disconnect();
@@ -39,7 +58,8 @@ describe("GET /getTagsWithQuestionNumber", () => {
     // Making the request
     const response = await supertest(server).get(
       "/tag/getTagsWithQuestionNumber"
-    );
+    )
+    .set('Cookie', cookie);
 
     // Asserting the response
     expect(response.status).toBe(200);

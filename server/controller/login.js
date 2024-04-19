@@ -7,6 +7,7 @@ const { SECRET_KEY } = require("../config");
 
 const router = express.Router();
 
+
 // validate crentials of the user - LOGIN
 const authenticateCredentials = async (req, res) => {
   try {
@@ -40,6 +41,7 @@ const authenticateCredentials = async (req, res) => {
           firstname: user.firstname,
           lastname: user.lastname,
           username: user.username,
+          userId: user._id,
           profilePic: user.profilePic,
         },
       });

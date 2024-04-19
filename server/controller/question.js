@@ -91,7 +91,6 @@ const addQuestion = async (req, res) => {
     title: req.body.title,
     description: req.body.description,
     asked_by: req.userId,
-    ask_date_time: new Date(),
     tags: tags,
   });
   res.json(question);

@@ -21,6 +21,7 @@ jest.mock("../utils/question", () => ({
 
 let server;
 let cookie;
+let userId;
 
 const tag1 = {
   _id: "507f191e810c19729de860ea",
@@ -130,6 +131,7 @@ describe("GET /getQuestion", () => {
       
     // Extract the cookie from the response headers
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -175,6 +177,7 @@ describe("GET /getQuestionById/:qid", () => {
       });
 
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -245,6 +248,7 @@ describe("POST /addQuestion", () => {
       });
 
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -255,17 +259,15 @@ describe("POST /addQuestion", () => {
   it("should add a new question", async () => {
     // Mock request body
 
-    const mockTags = [tag1, tag2];
 
     const mockQuestion = {
       _id: "65e9b58910afe6e94fc6e6fe",
       title: "Question 3 Title",
       description: "Question 3 Text",
-      tags: [tag1, tag2],
-      answers: [ans1],
+      tags: [tag1],
     };
 
-    addTag.mockResolvedValueOnce(mockTags);
+    addTag.mockResolvedValue(tag1);
     Question.create.mockResolvedValueOnce(mockQuestion);
 
     // Making the request
@@ -275,8 +277,18 @@ describe("POST /addQuestion", () => {
       .set('Cookie', cookie);
 
     // Asserting the response
+    
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockQuestion);
+    
+    expect(Question.create).toHaveBeenCalledWith(
+      {
+        title: mockQuestion.title,
+        description: mockQuestion.description,
+        asked_by: userId,
+        tags: [tag1],
+      }
+    );
   });
 });
 
@@ -298,6 +310,7 @@ describe("GET /getReportedQuestions", () => {
       });
 
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -342,6 +355,7 @@ describe("POST /reportQuestion", () => {
       });
 
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -404,6 +418,7 @@ describe("POST /resolveQuestion", () => {
       });
 
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -465,6 +480,7 @@ describe("DELETE /deleteQuestion", () => {
       });
 
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -529,6 +545,7 @@ describe("Test general user authentication", () => {
       });
 
     cookie = loginResponse.headers['set-cookie'];
+    userId = loginResponse.body.user.userId;
   });
 
 
