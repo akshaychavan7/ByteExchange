@@ -36,7 +36,7 @@ const upvote = async (req, res) => {
     }
 
     if (obj.upvoted_by.includes(req.userId)) {
-      return res.status(200).send("User already upvoted");
+      return res.status(200).send({ message: "User already upvoted" });
     } else if (obj.downvoted_by.includes(req.userId)) {
       await voteObject.findByIdAndUpdate(id, {
         $pull: { downvoted_by: req.userId },
@@ -87,7 +87,7 @@ const downvote = async (req, res) => {
     }
 
     if (obj.downvoted_by.includes(req.userId)) {
-      return res.status(200).send("User already downvoted");
+      return res.status(200).send({ message: "User already downvoted" });
     } else if (obj.upvoted_by.includes(req.userId)) {
       await voteObject.findByIdAndUpdate(id, {
         $pull: { upvoted_by: req.userId },
