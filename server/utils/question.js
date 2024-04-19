@@ -71,7 +71,7 @@ const sortByActiveOrder = (qList) => {
   return qList;
 };
 
-const getQuestionsByOrder = async (order) => {
+const getQuestionsByOrder = async (order = "active") => {
   try {
     let query = Question.find({})
       .populate("answers")
@@ -106,7 +106,7 @@ const getQuestionsByOrder = async (order) => {
   }
 };
 
-const filterQuestionsBySearch = (qlist, search) => {
+const filterQuestionsBySearch = (qlist = [], search = "") => {
   let searchTags = parseTags(search);
   let searchKeyword = parseKeyword(search);
   const res = qlist.filter((q) => {
@@ -128,7 +128,13 @@ const filterQuestionsBySearch = (qlist, search) => {
 };
 
 const getTop10Questions = async () => {
-  return await Question.find().sort({ views: -1 }).limit(10).exec();
+  return await Question.find()
+    .populate("tags")
+    .populate("asked_by")
+    .populate("answers")
+    .sort({ views: -1 })
+    .limit(10)
+    .exec();
 };
 
 const showQuesUpDown = (uid, question) => {
@@ -180,15 +186,8 @@ const showCommentUpDown = (uid, comments) => {
     let com_upvoteBy = comments[comment]["upvoted_by"].map((objectId) =>
       objectId.toString()
     );
-
-    let com_downvoteBy = comments[comment]["downvoted_by"].map((objectId) =>
-      objectId.toString()
-    );
     if (com_upvoteBy.includes(uid)) {
       comments[comment].upvote = true;
-    }
-    if (com_downvoteBy.includes(uid)) {
-      comments[comment].downvote = true;
     }
   }
   return comments;

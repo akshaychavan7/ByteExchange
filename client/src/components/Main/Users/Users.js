@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import { Grid, TextField } from "@mui/material";
 
 import UserCard from "./UserCard";
+import ProfilePage from "../../ProfilePage/ProfilePage";
 
-const Users = ({ users }) => {
+const Users = ({ users, viewUserProfile, setViewUserProfile }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearchChange = (event) => {
@@ -18,6 +19,15 @@ const Users = ({ users }) => {
       user.username.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
+
+  if (viewUserProfile.view) {
+    return (
+      <ProfilePage
+        username={viewUserProfile.username}
+        setViewUserProfile={setViewUserProfile}
+      />
+    );
+  }
 
   return (
     <>
@@ -43,7 +53,11 @@ const Users = ({ users }) => {
           <h2 style={{ width: "100%", textAlign: "center" }}>User not found</h2>
         )}
         {filteredUsers.map((user, index) => (
-          <UserCard key={index} user={user} />
+          <UserCard
+            key={index}
+            user={user}
+            setViewUserProfile={setViewUserProfile}
+          />
         ))}
       </Grid>
     </>

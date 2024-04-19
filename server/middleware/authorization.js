@@ -14,7 +14,6 @@ const authorization = (req, res, next) => {
     req.userRole = data.userRole;
     next();
   } catch (e) {
-    console.error(`Error while verifying token: ${e}`);
     return res.sendStatus(403);
   }
 };
@@ -33,11 +32,9 @@ const adminAuthorization = (req, res, next) => {
     req.userRole = data.userRole;
     next();
   } catch (e) {
-    console.error(`Error while verifying token: ${e}`);
     return res.sendStatus(403);
   }
-}
-
+};
 
 // module.exports = authorization;
 

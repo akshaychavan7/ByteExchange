@@ -14,6 +14,7 @@ const {
   authorization,
   adminAuthorization,
 } = require("../middleware/authorization");
+const { preprocessing } = require("../utils/textpreprocess");
 
 // To get Questions by Filter
 const getQuestionsByFilter = async (req, res) => {
@@ -31,41 +32,42 @@ const getQuestionsByFilter = async (req, res) => {
 // To get Questions by Id
 const getQuestionById = async (req, res) => {
   try {
+    let qid = preprocessing(req.params.questionId);
     let question = await Question.findOneAndUpdate(
-      { _id: req.params.questionId },
+      { _id: qid },
       { $inc: { views: 1 } },
       { new: true }
     )
-      .populate({
-        path: "answers",
-        populate: {
-          path: "ans_by",
-          select: "username firstname lastname profilePic",
+      .populate([
+        {
+          path: "answers",
+          populate: [
+            {
+              path: "ans_by",
+              select: "username firstname lastname profilePic",
+            },
+            {
+              path: "comments",
+              populate: {
+                path: "commented_by",
+                select: "username firstname lastname profilePic",
+              },
+            },
+          ],
+          options: { sort: { vote_count: -1 } },
         },
-      })
-      .populate({
-        path: "answers",
-        populate: {
+        { path: "asked_by", select: "-password" },
+        { path: "tags" },
+        {
           path: "comments",
           populate: {
             path: "commented_by",
             select: "username firstname lastname profilePic",
           },
+          //sort by votes
+          options: { sort: { vote_count: -1 } },
         },
-        // sort by votes
-        options: { sort: { vote_count: -1 } },
-      })
-      .populate({ path: "asked_by", select: "-password" })
-      .populate("tags")
-      .populate({
-        path: "comments",
-        populate: {
-          path: "commented_by",
-          select: "username firstname lastname profilePic",
-        },
-        //sort by votes
-        options: { sort: { vote_count: -1 } },
-      })
+      ])
       .exec();
     let jsonQuestion = question.toJSON();
     jsonQuestion = showQuesUpDown(req.userId, jsonQuestion);
@@ -118,8 +120,7 @@ const reportQuestion = async (req, res) => {
 
 const getReportedQuestions = async (req, res) => {
   try {
-    let questions = await Question.find({ flag: true })
-    .populate({
+    let questions = await Question.find({ flag: true }).populate({
       path: "asked_by",
       select: "username firstname lastname profilePic",
     });
@@ -148,7 +149,7 @@ const deleteQuestion = async (req, res) => {
 const getTrendingQuestions = async (req, res) => {
   try {
     let questions = await getTop10Questions();
-    res.status(200).json({ questions: questions });
+    res.status(200).json(questions);
   } catch (err) {
     res.status(500).json({ error: `Cannot fetch treding questions: ${err}` });
   }

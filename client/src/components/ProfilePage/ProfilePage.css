@@ -1,0 +1,37 @@
+.mt-2 {
+  margin-top: 2%;
+}
+
+.field-name {
+  color: rgb(108, 108, 108);
+}
+
+.list-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+}
+
+.list-item {
+  line-height: 3;
+  padding: 5px;
+  border-bottom: 1px solid lightgray;
+}
+
+.txt {
+  margin-left: 20px !important;
+  margin-right: 20px !important;
+  color: cornflowerblue;
+}
+
+.vote-count-box {
+  text-align: center;
+  border: 1px solid lightgray;
+  padding: 5px;
+  border-radius: 5px;
+  min-width: 45px;
+}

@@ -1,98 +1,199 @@
-import { useState } from "react";
-import Form from "../baseComponents/form";
-import Input from "../baseComponents/input";
-import Textarea from "../baseComponents/textarea";
+import { useEffect, useState } from "react";
+
 import "./index.css";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Chip,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import { useAlert } from "../../../context/AlertContext";
+import {
+  getSuggestedTags,
+  getTagsWithQuestionNumber,
+} from "../../../services/tagService";
+import AssistantRoundedIcon from "@mui/icons-material/AssistantRounded";
 
 const NewQuestion = ({ addQuestion }) => {
+  const alert = useAlert();
+  const [tagsList, setTagsList] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [tag, setTag] = useState("");
+  const [tags, setTags] = useState([]);
 
-  const [titleErr, setTitleErr] = useState("");
-  const [descriptionErr, setTextErr] = useState("");
-  const [tagErr, setTagErr] = useState("");
+  useEffect(() => {
+    const fetchTags = async () => {
+      let res = await getTagsWithQuestionNumber();
+      res = res.map((tag) => tag.name);
+      setTagsList(res || []);
+    };
+    fetchTags().catch((e) => console.log(e));
+  }, []);
+
+  const handleSuggestTagsClick = async () => {
+    const res = await getSuggestedTags({ title, description });
+    if (res) {
+      setTags(res.data);
+    }
+  };
 
   const postQuestion = () => {
-    let errFlag = false;
-    if (tag.length === 0) {
-      setTagErr("Should have at least 1 tag");
-      errFlag = true;
-    }
-    let tags = tag.split(" ").filter((tag) => {
-      if (tag.trim().length > 20) {
-        setTagErr("New tag length cannot be more than 20");
-        errFlag = true;
-      }
-      return tag.trim() !== "";
-    });
-
     if (title.length === 0) {
-      setTitleErr("Title cannot be empty");
-      errFlag = true;
-    }
-    if (title.length > 100) {
-      setTitleErr("Title cannot be more than 100 characters");
-      errFlag = true;
-    }
-    if (description.length === 0) {
-      setTextErr("Question text cannot be empty");
-      errFlag = true;
-    }
-    if (tags.length > 5) {
-      setTagErr("Cannot have more than 5 tags");
-      errFlag = true;
+      alert.showAlert("Question Title cannot be empty", "error");
+      return;
     }
 
-    if (errFlag) return;
+    if (description.length === 0) {
+      alert.showAlert("Question Description cannot be empty", "error");
+      return;
+    }
+
+    if (tags.length === 0) {
+      alert.showAlert("Please add atleast one tag", "error");
+      return;
+    }
+
+    if (title.length > 100) {
+      alert.showAlert(
+        "Question Title should be less than 100 characters",
+        "error"
+      );
+      return;
+    }
+
+    if (description.length > 500) {
+      alert.showAlert(
+        "Question Description should be less than 500 characters",
+        "error"
+      );
+      return;
+    }
+
+    if (tags.length > 5) {
+      alert.showAlert("Question Tags should be less than 5", "error");
+      return;
+    }
 
     let question = {
       title: title,
       description: description,
-      tags: [...new Set(tags)],
+      tags: tags,
     };
 
     addQuestion(question);
   };
 
+  const handleTagsChange = (event, value) => {
+    setTags(value);
+  };
+
+  const handleTagsRenderInput = (params) => (
+    <TextField {...params} label="Tags" placeholder="Tags" />
+  );
+
+  const handleRenderTags = (value, getTagProps) =>
+    value.map((option, index) => (
+      <Chip
+        key={index}
+        color="primary"
+        variant="outlined"
+        label={option}
+        {...getTagProps({ index })}
+      />
+    ));
+
   return (
-    <Form>
-      <Input
-        title={"Question Title"}
-        hint={"Limit title to 100 characters or less"}
-        id={"formTitleInput"}
-        val={title}
-        setState={setTitle}
-        err={titleErr}
-      />
-      <Textarea
-        title={"Question Text"}
-        hint={"Add details"}
-        id={"formTextInput"}
-        val={description}
-        setState={setDescription}
-        err={descriptionErr}
-      />
-      <Input
-        title={"Tags"}
-        hint={"Add keywords separated by whitespace"}
-        id={"formTagInput"}
-        val={tag}
-        setState={setTag}
-        err={tagErr}
-      />
-      <div className="btn_indicator_container">
-        <button
-          className="form_postBtn"
-          onClick={() => {
-            postQuestion();
-          }}
-        >
-          Post Question
-        </button>
-        <div className="mandatory_indicator">* indicates mandatory fields</div>
-      </div>
-    </Form>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        "& > :not(style)": {
+          m: 1,
+          mt: 5,
+        },
+      }}
+    >
+      <Paper
+        sx={{
+          width: "50%",
+          borderRadius: "10px",
+          paddingLeft: 5,
+          paddingRight: 5,
+          paddingTop: 1,
+          paddingBottom: 3,
+          height: "fit-content",
+        }}
+      >
+        <Typography variant="h5" sx={{ textAlign: "center", mb: 2, mt: 2 }}>
+          Add New Question
+        </Typography>
+        <div className="flex-spaced">
+          <TextField
+            id="title"
+            label="Question Title"
+            variant="outlined"
+            placeholder="Limit title to 100 characters or less"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            sx={{ width: "100%", mt: "10px" }}
+            required
+          />
+          <TextField
+            id="description"
+            label="Question Description"
+            variant="outlined"
+            placeholder="Add a good question description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            sx={{ width: "100%", mt: "10px" }}
+            multiline
+            rows={3}
+            required
+          />
+          <div className="tags-div">
+            <Autocomplete
+              multiple
+              freeSolo
+              required
+              value={tags}
+              limitTags={5}
+              onChange={handleTagsChange}
+              filterSelectedOptions
+              id="tags"
+              options={tagsList}
+              getOptionLabel={(option) => option}
+              renderTags={handleRenderTags}
+              renderInput={handleTagsRenderInput}
+              sx={{ width: "100%" }}
+            />
+            <IconButton
+              onClick={handleSuggestTagsClick}
+              title="Suggest AI Generated Tags"
+            >
+              <AssistantRoundedIcon color="primary" sx={{ fontSize: "36px" }} />
+            </IconButton>
+          </div>
+        </div>
+        <div className="btn_indicator_container">
+          <Button
+            variant="contained"
+            onClick={() => {
+              postQuestion();
+            }}
+          >
+            Post Question
+          </Button>
+          <div className="mandatory_indicator">
+            * indicates mandatory fields
+          </div>
+        </div>
+      </Paper>
+    </Box>
   );
 };
 

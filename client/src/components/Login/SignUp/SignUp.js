@@ -95,6 +95,11 @@ export default function SignUp() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
+        // if image size is greater than 2mb then return
+        if (reader.result.length > 1048576 * 2) {
+          alert.showAlert("Image size should be less than 1MB", "error");
+          return;
+        }
         setImage(reader.result);
         alert.showAlert("Image uploaded successfully", "success");
       };
