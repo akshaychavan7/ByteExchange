@@ -10,11 +10,6 @@ let server;
 
 describe("POST /register", () => {
 beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    });
-
     server = require("../server");
 });
 

@@ -10,27 +10,15 @@ jest.mock("../models/answers");
 jest.mock("../models/comments");
 
 let server;
-let cookie;
-let userId;
+let moderatorCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjQ5MDJiNDVjNGEwNjk3NWM4MmEiLCJ1c2VybmFtZSI6Im1vZGVyYXRvciIsInVzZXJSb2xlIjoibW9kZXJhdG9yIiwiaWF0IjoxNzEzNTY2ODkxLCJleHAiOjE3MTM2NTMyOTF9.dEr4tqgNoZYl02PFv7KGQMoq2PmNEty9r7jCIcp-v48; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/; Secure; HttpOnly"
+let moderatorUserId = "6622f4902b45c4a06975c82a"
+let generalCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjVkMjhiNTM0ODYxYjhmZTcyNzIiLCJ1c2VybmFtZSI6ImdlbmVyYWwiLCJ1c2VyUm9sZSI6ImdlbmVyYWwiLCJpYXQiOjE3MTM1Njc0NzMsImV4cCI6MTcxMzY1Mzg3M30.0CVom301AncKsC6GdaOuVf_aoppdhksWUcAgBXgNJ9w; Expires=Sat, 20 Apr 2024 23:57:53 GMT; Path=/; Secure; HttpOnly"
+let generalUserId = "6622f5d28b534861b8fe7272"
+
 
 describe("POST /upvote", () => {
     beforeEach(async () => {
-        await mongoose.connect('mongodb://localhost:27017/fake_so', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        });
-
         server = require("../server");
-
-        const loginResponse = await supertest(server)
-        .post("/login/authenticate")
-        .send({
-            username: "test@gmail.com",
-            password: "test"
-        });
-
-        cookie = loginResponse.headers['set-cookie'];
-        userId = loginResponse.body.user.userId;
     });
 
     afterEach(async () => {
@@ -49,13 +37,13 @@ describe("POST /upvote", () => {
         Question.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockQuestion, 
             vote_count: mockQuestion.vote_count + 1,
-            upvoted_by: [userId]
+            upvoted_by: [moderatorUserId]
         }); 
 
         // Making the request to upvote the question
         const response = await supertest(server)
           .post("/vote/upvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: mockQuestion._id, type: "question" });
     
         // Check the response
@@ -66,7 +54,7 @@ describe("POST /upvote", () => {
         // Check if the upvote was recorded
         expect(Question.findById).toBeCalledWith(mockQuestion._id);
         expect(Question.findByIdAndUpdate).toBeCalledWith(mockQuestion._id, {
-            $addToSet: { upvoted_by: userId },
+            $addToSet: { upvoted_by: moderatorUserId },
             $inc: { vote_count: 1 },
         });
     });
@@ -75,7 +63,7 @@ describe("POST /upvote", () => {
         // Mock the findById method of the Question model
         const mockQuestion = {
           _id: "65e9a5c2b26199dbcc3e6dc8",
-          upvoted_by: [userId],
+          upvoted_by: [moderatorUserId],
           downvoted_by: [],
           vote_count: 1
         };
@@ -84,7 +72,7 @@ describe("POST /upvote", () => {
         // Making the request to upvote the question
         const response = await supertest(server)
           .post("/vote/upvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: mockQuestion._id, type: "question" });
     
         // Check the response
@@ -101,21 +89,21 @@ describe("POST /upvote", () => {
         const mockQuestion = {
           _id: "65e9a5c2b26199dbcc3e6dc8",
           upvoted_by: [],
-          downvoted_by: [userId],
+          downvoted_by: [moderatorUserId],
           vote_count: -1
         };
         Question.findById = jest.fn().mockResolvedValue(mockQuestion);
         Question.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockQuestion, 
             vote_count: mockQuestion.vote_count + 2,
-            upvoted_by: [userId],
+            upvoted_by: [moderatorUserId],
             downvoted_by: []
         }); 
 
         // Making the request to upvote the question
         const response = await supertest(server)
           .post("/vote/upvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: mockQuestion._id, type: "question" });
     
         // Check the response
@@ -126,8 +114,8 @@ describe("POST /upvote", () => {
         // Check if the upvote was recorded
         expect(Question.findById).toBeCalledWith(mockQuestion._id);
         expect(Question.findByIdAndUpdate).toBeCalledWith(mockQuestion._id, {
-            $pull: { downvoted_by: userId },
-            $addToSet: { upvoted_by: userId },
+            $pull: { downvoted_by: moderatorUserId },
+            $addToSet: { upvoted_by: moderatorUserId },
             $inc: { vote_count: 2 },
         });
     });
@@ -139,7 +127,7 @@ describe("POST /upvote", () => {
         // Making the request to upvote the question
         const response = await supertest(server)
           .post("/vote/upvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "question" });
         
         // Check the response
@@ -159,13 +147,13 @@ describe("POST /upvote", () => {
         Answer.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockAnswer,
             vote_count: mockAnswer.vote_count + 1,
-            upvoted_by: [userId]
+            upvoted_by: [moderatorUserId]
         });
 
         // Making the request to upvote the answer
         const response = await supertest(server)
             .post("/vote/upvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockAnswer._id, type: "answer" });
 
         // Check the response
@@ -175,7 +163,7 @@ describe("POST /upvote", () => {
         // Check if the upvote was recorded
         expect(Answer.findById).toBeCalledWith(mockAnswer._id);
         expect(Answer.findByIdAndUpdate).toBeCalledWith(mockAnswer._id, {
-            $addToSet: { upvoted_by: userId },
+            $addToSet: { upvoted_by: moderatorUserId },
             $inc: { vote_count: 1 },
         });
     });
@@ -184,7 +172,7 @@ describe("POST /upvote", () => {
         // Mock the findById method of the Answer model
         const mockAnswer = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
-            upvoted_by: [userId],
+            upvoted_by: [moderatorUserId],
             downvoted_by: [],
             vote_count: 1
         };
@@ -193,7 +181,7 @@ describe("POST /upvote", () => {
         // Making the request to upvote the answer
         const response = await supertest(server)
             .post("/vote/upvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockAnswer._id, type: "answer" });
 
         // Check the response
@@ -209,21 +197,21 @@ describe("POST /upvote", () => {
         const mockAnswer = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
             upvoted_by: [],
-            downvoted_by: [userId],
+            downvoted_by: [moderatorUserId],
             vote_count: -1
         };
         Answer.findById = jest.fn().mockResolvedValue(mockAnswer);
         Answer.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockAnswer,
             vote_count: mockAnswer.vote_count + 2,
-            upvoted_by: [userId],
+            upvoted_by: [moderatorUserId],
             downvoted_by: []
         });
 
         // Making the request to upvote the answer
         const response = await supertest(server)
             .post("/vote/upvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockAnswer._id, type: "answer" });
 
         // Check the response
@@ -233,8 +221,8 @@ describe("POST /upvote", () => {
         // Check if the upvote was recorded
         expect(Answer.findById).toBeCalledWith(mockAnswer._id);
         expect(Answer.findByIdAndUpdate).toBeCalledWith(mockAnswer._id, {
-            $pull: { downvoted_by: userId },
-            $addToSet: { upvoted_by: userId },
+            $pull: { downvoted_by: moderatorUserId },
+            $addToSet: { upvoted_by: moderatorUserId },
             $inc: { vote_count: 2 },
         });
     });
@@ -246,7 +234,7 @@ describe("POST /upvote", () => {
         // Making the request to upvote the answer
         const response = await supertest(server)
             .post("/vote/upvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "answer" });
 
         // Check the response
@@ -266,13 +254,13 @@ describe("POST /upvote", () => {
         Comment.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockComment,
             vote_count: mockComment.vote_count + 1,
-            upvoted_by: [userId]
+            upvoted_by: [moderatorUserId]
         });
 
         // Making the request to upvote the comment
         const response = await supertest(server)
             .post("/vote/upvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockComment._id, type: "comment" });
 
         // Check the response
@@ -282,7 +270,7 @@ describe("POST /upvote", () => {
         // Check if the upvote was recorded
         expect(Comment.findById).toBeCalledWith(mockComment._id);
         expect(Comment.findByIdAndUpdate).toBeCalledWith(mockComment._id, {
-            $addToSet: { upvoted_by: userId },
+            $addToSet: { upvoted_by: moderatorUserId },
             $inc: { vote_count: 1 },
         });
     });
@@ -291,7 +279,7 @@ describe("POST /upvote", () => {
         // Mock the findById method of the Comment model
         const mockComment = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
-            upvoted_by: [userId],
+            upvoted_by: [moderatorUserId],
             downvoted_by: [],
             vote_count: 1
         };
@@ -300,7 +288,7 @@ describe("POST /upvote", () => {
         // Making the request to upvote the comment
         const response = await supertest(server)
             .post("/vote/upvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockComment._id, type: "comment" });
 
         // Check the response
@@ -316,7 +304,7 @@ describe("POST /upvote", () => {
         const mockComment = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
             upvoted_by: [],
-            downvoted_by: [userId],
+            downvoted_by: [moderatorUserId],
             vote_count: -1
         };
 
@@ -324,14 +312,14 @@ describe("POST /upvote", () => {
         Comment.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockComment,
             vote_count: mockComment.vote_count + 2,
-            upvoted_by: [userId],
+            upvoted_by: [moderatorUserId],
             downvoted_by: []
         });
 
         // Making the request to upvote the comment
         const response = await supertest(server)
             .post("/vote/upvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockComment._id, type: "comment" });
 
         // Check the response
@@ -341,8 +329,8 @@ describe("POST /upvote", () => {
         // Check if the upvote was recorded
         expect(Comment.findById).toBeCalledWith(mockComment._id);
         expect(Comment.findByIdAndUpdate).toBeCalledWith(mockComment._id, {
-            $pull: { downvoted_by: userId },
-            $addToSet: { upvoted_by: userId },
+            $pull: { downvoted_by: moderatorUserId },
+            $addToSet: { upvoted_by: moderatorUserId },
             $inc: { vote_count: 2 },
         });
     });
@@ -351,7 +339,7 @@ describe("POST /upvote", () => {
         // Making the request to upvote the question
         const response = await supertest(server)
           .post("/vote/upvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "invalid" });
         
         // Check the response
@@ -363,22 +351,7 @@ describe("POST /upvote", () => {
 
 describe("POST /downvote", () => {
     beforeEach(async () => {
-        await mongoose.connect('mongodb://localhost:27017/fake_so', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        });
-
         server = require("../server");
-
-        const loginResponse = await supertest(server)
-        .post("/login/authenticate")
-        .send({
-            username: "test@gmail.com",
-            password: "test"
-        });
-
-        cookie = loginResponse.headers['set-cookie'];
-        userId = loginResponse.body.user.userId;
     });
 
     afterEach(async () => {
@@ -398,13 +371,13 @@ describe("POST /downvote", () => {
         Question.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockQuestion, 
             vote_count: mockQuestion.vote_count - 1,
-            downvoted_by: [userId]
+            downvoted_by: [moderatorUserId]
         }); 
 
         // Making the request to downvote the question
         const response = await supertest(server)
           .post("/vote/downvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: mockQuestion._id, type: "question" });
     
         // Check the response
@@ -415,7 +388,7 @@ describe("POST /downvote", () => {
         // Check if the downvote was recorded
         expect(Question.findById).toBeCalledWith(mockQuestion._id);
         expect(Question.findByIdAndUpdate).toBeCalledWith(mockQuestion._id, {
-            $addToSet: { downvoted_by: userId },
+            $addToSet: { downvoted_by: moderatorUserId },
             $inc: { vote_count: -1 },
         });
     });
@@ -425,7 +398,7 @@ describe("POST /downvote", () => {
         const mockQuestion = {
           _id: "65e9a5c2b26199dbcc3e6dc8",
           upvoted_by: [],
-          downvoted_by: [userId],
+          downvoted_by: [moderatorUserId],
           vote_count: -1
         };
         Question.findById = jest.fn().mockResolvedValue(mockQuestion);
@@ -433,7 +406,7 @@ describe("POST /downvote", () => {
         // Making the request to downvote the question
         const response = await supertest(server)
           .post("/vote/downvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: mockQuestion._id, type: "question" });
     
         // Check the response
@@ -449,7 +422,7 @@ describe("POST /downvote", () => {
         // Mock the findById method of the Question model
         const mockQuestion = {
           _id: "65e9a5c2b26199dbcc3e6dc8",
-          upvoted_by: [userId],
+          upvoted_by: [moderatorUserId],
           downvoted_by: [],
           vote_count: 1
         };
@@ -458,13 +431,13 @@ describe("POST /downvote", () => {
             ...mockQuestion, 
             vote_count: mockQuestion.vote_count - 2,
             upvoted_by: [],
-            downvoted_by: [userId]
+            downvoted_by: [moderatorUserId]
         }); 
 
         // Making the request to downvote the question
         const response = await supertest(server)
           .post("/vote/downvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: mockQuestion._id, type: "question" });
     
         // Check the response
@@ -475,8 +448,8 @@ describe("POST /downvote", () => {
         // Check if the downvote was recorded
         expect(Question.findById).toBeCalledWith(mockQuestion._id);
         expect(Question.findByIdAndUpdate).toBeCalledWith(mockQuestion._id, {
-            $pull: { upvoted_by: userId },
-            $addToSet: { downvoted_by: userId },
+            $pull: { upvoted_by: moderatorUserId },
+            $addToSet: { downvoted_by: moderatorUserId },
             $inc: { vote_count: -2 },
         });
     });
@@ -489,7 +462,7 @@ describe("POST /downvote", () => {
         // Making the request to downvote the question
         const response = await supertest(server)
           .post("/vote/downvote")
-          .set("Cookie", cookie)
+          .set("Cookie", moderatorCookie)
           .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "question" });
 
         // Check the response
@@ -509,13 +482,13 @@ describe("POST /downvote", () => {
         Answer.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockAnswer,
             vote_count: mockAnswer.vote_count - 1,
-            downvoted_by: [userId]
+            downvoted_by: [moderatorUserId]
         });
 
         // Making the request to downvote the answer
         const response = await supertest(server)
             .post("/vote/downvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockAnswer._id, type: "answer" });
 
         // Check the response
@@ -525,7 +498,7 @@ describe("POST /downvote", () => {
         // Check if the downvote was recorded
         expect(Answer.findById).toBeCalledWith(mockAnswer._id);
         expect(Answer.findByIdAndUpdate).toBeCalledWith(mockAnswer._id, {
-            $addToSet: { downvoted_by: userId },
+            $addToSet: { downvoted_by: moderatorUserId },
             $inc: { vote_count: -1 },
         });
     });
@@ -535,7 +508,7 @@ describe("POST /downvote", () => {
         const mockAnswer = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
             upvoted_by: [],
-            downvoted_by: [userId],
+            downvoted_by: [moderatorUserId],
             vote_count: -1
         };
         Answer.findById = jest.fn().mockResolvedValue(mockAnswer);
@@ -543,7 +516,7 @@ describe("POST /downvote", () => {
         // Making the request to downvote the answer
         const response = await supertest(server)
             .post("/vote/downvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockAnswer._id, type: "answer" });
 
         // Check the response
@@ -558,7 +531,7 @@ describe("POST /downvote", () => {
         // Mock the findById method of the Answer model
         const mockAnswer = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
-            upvoted_by: [userId],
+            upvoted_by: [moderatorUserId],
             downvoted_by: [],
             vote_count: 1
         };
@@ -567,13 +540,13 @@ describe("POST /downvote", () => {
             ...mockAnswer,
             vote_count: mockAnswer.vote_count - 2,
             upvoted_by: [],
-            downvoted_by: [userId]
+            downvoted_by: [moderatorUserId]
         });
 
         // Making the request to downvote the answer
         const response = await supertest(server)
             .post("/vote/downvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockAnswer._id, type: "answer" });
 
         // Check the response
@@ -583,8 +556,8 @@ describe("POST /downvote", () => {
         // Check if the downvote was recorded
         expect(Answer.findById).toBeCalledWith(mockAnswer._id);
         expect(Answer.findByIdAndUpdate).toBeCalledWith(mockAnswer._id, {
-            $pull: { upvoted_by: userId },
-            $addToSet: { downvoted_by: userId },
+            $pull: { upvoted_by: moderatorUserId },
+            $addToSet: { downvoted_by: moderatorUserId },
             $inc: { vote_count: -2 },
         });
     });
@@ -596,7 +569,7 @@ describe("POST /downvote", () => {
         // Making the request to downvote the answer
         const response = await supertest(server)
             .post("/vote/downvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "answer" });
 
         // Check the response
@@ -616,13 +589,13 @@ describe("POST /downvote", () => {
         Comment.findByIdAndUpdate = jest.fn().mockResolvedValueOnce({
             ...mockComment,
             vote_count: mockComment.vote_count - 1,
-            downvoted_by: [userId]
+            downvoted_by: [moderatorUserId]
         });
 
         // Making the request to downvote the comment
         const response = await supertest(server)
             .post("/vote/downvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockComment._id, type: "comment" });
 
         // Check the response
@@ -632,7 +605,7 @@ describe("POST /downvote", () => {
         // Check if the downvote was recorded
         expect(Comment.findById).toBeCalledWith(mockComment._id);
         expect(Comment.findByIdAndUpdate).toBeCalledWith(mockComment._id, {
-            $addToSet: { downvoted_by: userId },
+            $addToSet: { downvoted_by: moderatorUserId },
             $inc: { vote_count: -1 },
         });
     });
@@ -642,7 +615,7 @@ describe("POST /downvote", () => {
         const mockComment = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
             upvoted_by: [],
-            downvoted_by: [userId],
+            downvoted_by: [moderatorUserId],
             vote_count: -1
         };
         Comment.findById = jest.fn().mockResolvedValue(mockComment);
@@ -650,7 +623,7 @@ describe("POST /downvote", () => {
         // Making the request to downvote the comment
         const response = await supertest(server)
             .post("/vote/downvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockComment._id, type: "comment" });
 
         // Check the response
@@ -665,7 +638,7 @@ describe("POST /downvote", () => {
         // Mock the findById method of the Comment model
         const mockComment = {
             _id: "65e9a5c2b26199dbcc3e6dc8",
-            upvoted_by: [userId],
+            upvoted_by: [moderatorUserId],
             downvoted_by: [],
             vote_count: 1
         };
@@ -674,13 +647,13 @@ describe("POST /downvote", () => {
             ...mockComment,
             vote_count: mockComment.vote_count - 2,
             upvoted_by: [],
-            downvoted_by: [userId]
+            downvoted_by: [moderatorUserId]
         });
 
         // Making the request to downvote the comment
         const response = await supertest(server)
             .post("/vote/downvote")
-            .set("Cookie", cookie)
+            .set("Cookie", moderatorCookie)
             .send({ id: mockComment._id, type: "comment" });
 
         // Check the response
@@ -690,8 +663,8 @@ describe("POST /downvote", () => {
         // Check if the downvote was recorded
         expect(Comment.findById).toBeCalledWith(mockComment._id);
         expect(Comment.findByIdAndUpdate).toBeCalledWith(mockComment._id, {
-            $pull: { upvoted_by: userId },
-            $addToSet: { downvoted_by: userId },
+            $pull: { upvoted_by: moderatorUserId },
+            $addToSet: { downvoted_by: moderatorUserId },
             $inc: { vote_count: -2 },
         });
     });

@@ -20,8 +20,12 @@ jest.mock("../utils/question", () => ({
 }));
 
 let server;
-let cookie;
-let userId;
+let moderatorCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjQ5MDJiNDVjNGEwNjk3NWM4MmEiLCJ1c2VybmFtZSI6Im1vZGVyYXRvciIsInVzZXJSb2xlIjoibW9kZXJhdG9yIiwiaWF0IjoxNzEzNTY2ODkxLCJleHAiOjE3MTM2NTMyOTF9.dEr4tqgNoZYl02PFv7KGQMoq2PmNEty9r7jCIcp-v48; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/; Secure; HttpOnly"
+let moderatorUserId = "6622f4902b45c4a06975c82a"
+let generalCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjVkMjhiNTM0ODYxYjhmZTcyNzIiLCJ1c2VybmFtZSI6ImdlbmVyYWwiLCJ1c2VyUm9sZSI6ImdlbmVyYWwiLCJpYXQiOjE3MTM1Njc0NzMsImV4cCI6MTcxMzY1Mzg3M30.0CVom301AncKsC6GdaOuVf_aoppdhksWUcAgBXgNJ9w; Expires=Sat, 20 Apr 2024 23:57:53 GMT; Path=/; Secure; HttpOnly"
+let generalUserId = "6622f5d28b534861b8fe7272"
+
+
 
 const tag1 = {
   _id: "507f191e810c19729de860ea",
@@ -115,23 +119,9 @@ const mockQuestions = [
 
 describe("GET /getQuestion", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
       
-    // Extract the cookie from the response headers
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
+    // Extract the moderatorCookie from the response heade
   });
 
   afterEach(async () => {
@@ -152,7 +142,7 @@ describe("GET /getQuestion", () => {
     const response = await supertest(server)
       .get("/question/getQuestion")
       .query(mockReqQuery)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);
@@ -162,22 +152,7 @@ describe("GET /getQuestion", () => {
 
 describe("GET /getQuestionById/:qid", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -202,7 +177,7 @@ describe("GET /getQuestionById/:qid", () => {
     const response = await supertest(server).get(
       `/question/getQuestionById/${mockReqParams.qid}`
     )
-    .set('Cookie', cookie);
+    .set('Cookie', moderatorCookie);
     // Asserting the response
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockPopulatedQuestion);
@@ -223,7 +198,7 @@ describe("GET /getQuestionById/:qid", () => {
     const response = await supertest(server).get(
       `/question/getQuestionById/${mockReqParams.qid}`
     )
-    .set('Cookie', cookie);
+    .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(500);
@@ -233,22 +208,7 @@ describe("GET /getQuestionById/:qid", () => {
 
 describe("POST /addQuestion", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -274,7 +234,7 @@ describe("POST /addQuestion", () => {
     const response = await supertest(server)
       .post("/question/addQuestion")
       .send(mockQuestion)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     
@@ -285,7 +245,7 @@ describe("POST /addQuestion", () => {
       {
         title: mockQuestion.title,
         description: mockQuestion.description,
-        asked_by: userId,
+        asked_by: moderatorUserId,
         tags: [tag1],
       }
     );
@@ -295,22 +255,7 @@ describe("POST /addQuestion", () => {
 
 describe("GET /getReportedQuestions", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -329,7 +274,7 @@ describe("GET /getReportedQuestions", () => {
     // Making the request
     const response = await supertest(server)
       .get("/question/getReportedQuestions")
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);
@@ -340,22 +285,7 @@ describe("GET /getReportedQuestions", () => {
 
 describe("POST /reportQuestion", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -375,7 +305,7 @@ describe("POST /reportQuestion", () => {
     const response = await supertest(server)
       .post("/question/reportQuestion")
       .send(mockReqBody)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);
@@ -393,7 +323,7 @@ describe("POST /reportQuestion", () => {
     const response = await supertest(server)
       .post("/question/reportQuestion")
       .send(mockReqBody)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(404);
@@ -403,22 +333,7 @@ describe("POST /reportQuestion", () => {
 
 describe("POST /resolveQuestion", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -437,7 +352,7 @@ describe("POST /resolveQuestion", () => {
     // Making the request
     const response = await supertest(server)
       .post(`/question/resolveQuestion/${mockReqBody.qid}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);
@@ -454,7 +369,7 @@ describe("POST /resolveQuestion", () => {
     // Making the request
     const response = await supertest(server)
       .post(`/question/resolveQuestion/${mockReqBody.qid}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(404);
@@ -465,22 +380,7 @@ describe("POST /resolveQuestion", () => {
 
 describe("DELETE /deleteQuestion", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -499,7 +399,7 @@ describe("DELETE /deleteQuestion", () => {
     // Making the request
     const response = await supertest(server)
       .delete(`/question/deleteQuestion/${mockReqParams.questionId}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);
@@ -518,7 +418,7 @@ describe("DELETE /deleteQuestion", () => {
     // Making the request
     const response = await supertest(server)
       .delete(`/question/deleteQuestion/${mockReqParams.questionId}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(404);
@@ -530,22 +430,7 @@ describe("DELETE /deleteQuestion", () => {
 
 describe("Test general user authentication", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test2@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
 
@@ -557,7 +442,7 @@ describe("Test general user authentication", () => {
   it("GET /getReportedQuestions should return status 403", async () => {
     const response = await supertest(server)
       .get("/question/getReportedQuestions")
-      .set('Cookie', cookie);
+      .set('Cookie', generalCookie);
 
     expect(response.status).toBe(403);
   })
@@ -565,7 +450,7 @@ describe("Test general user authentication", () => {
   it("POST /resolveQuestion should return status 403", async () => {
     const response = await supertest(server)
       .post("/question/resolveQuestion/65e9b58910afe6e94fc6e6dc")
-      .set('Cookie', cookie);
+      .set('Cookie', generalCookie);
 
     expect(response.status).toBe(403);
   })
@@ -573,7 +458,7 @@ describe("Test general user authentication", () => {
   it("DELETE /deleteQuestion should return status 403", async () => {
     const response = await supertest(server)
       .delete("/question/deleteQuestion/65e9b58910afe6e94fc6e6dc")
-      .set('Cookie', cookie);
+      .set('Cookie', generalCookie);
 
     expect(response.status).toBe(403);
   })

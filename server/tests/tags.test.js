@@ -19,27 +19,11 @@ const mockQuestions = [
 ];
 
 let server;
-let cookie;
-
+let moderatorCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjQ5MDJiNDVjNGEwNjk3NWM4MmEiLCJ1c2VybmFtZSI6Im1vZGVyYXRvciIsInVzZXJSb2xlIjoibW9kZXJhdG9yIiwiaWF0IjoxNzEzNTY2ODkxLCJleHAiOjE3MTM2NTMyOTF9.dEr4tqgNoZYl02PFv7KGQMoq2PmNEty9r7jCIcp-v48; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/; Secure; HttpOnly"
 
 describe("GET /getTagsWithQuestionNumber", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-      
-    // Extract the cookie from the response headers
-    cookie = loginResponse.headers['set-cookie'];
   });
 
   afterEach(async () => {
@@ -59,7 +43,7 @@ describe("GET /getTagsWithQuestionNumber", () => {
     const response = await supertest(server).get(
       "/tag/getTagsWithQuestionNumber"
     )
-    .set('Cookie', cookie);
+    .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);

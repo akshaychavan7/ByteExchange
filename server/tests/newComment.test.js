@@ -8,27 +8,15 @@ const Answer = require("../models/answers");
 jest.mock("../models/comments");
 
 let server;
-let cookie;
-let userId;
+let moderatorCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjQ5MDJiNDVjNGEwNjk3NWM4MmEiLCJ1c2VybmFtZSI6Im1vZGVyYXRvciIsInVzZXJSb2xlIjoibW9kZXJhdG9yIiwiaWF0IjoxNzEzNTY2ODkxLCJleHAiOjE3MTM2NTMyOTF9.dEr4tqgNoZYl02PFv7KGQMoq2PmNEty9r7jCIcp-v48; Expires=Tue, 19 Jan 2038 03:14:07 GMT; Path=/; Secure; HttpOnly"
+let moderatorUserId = "6622f4902b45c4a06975c82a"
+let generalCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjVkMjhiNTM0ODYxYjhmZTcyNzIiLCJ1c2VybmFtZSI6ImdlbmVyYWwiLCJ1c2VyUm9sZSI6ImdlbmVyYWwiLCJpYXQiOjE3MTM1Njc0NzMsImV4cCI6MTcxMzY1Mzg3M30.0CVom301AncKsC6GdaOuVf_aoppdhksWUcAgBXgNJ9w; Expires=Sat, 20 Apr 2024 23:57:53 GMT; Path=/; Secure; HttpOnly"
+let generalUserId = "6622f5d28b534861b8fe7272"
+
 
 describe("GET /getReportedComments", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -47,7 +35,7 @@ describe("GET /getReportedComments", () => {
     // Making the request
     const response = await supertest(server)
       .get("/comment/getReportedComments")
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);
@@ -57,22 +45,7 @@ describe("GET /getReportedComments", () => {
 
 describe("POST /addComment", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -100,13 +73,13 @@ describe("POST /addComment", () => {
     const response = await supertest(server)
       .post("/comment/addComment")
       .send(mockReqBody)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     // expect(response.status).toBe(200);
     expect(response.body).toEqual(mockComment);
     expect(Comment.create).toHaveBeenCalledWith({
       description: "This is a test comment",
-      commented_by: userId
+      commented_by: moderatorUserId
     });
   });
 
@@ -129,12 +102,12 @@ describe("POST /addComment", () => {
     const response = await supertest(server)
         .post("/comment/addComment")
         .send(mockReqBody)
-        .set('Cookie', cookie);
+        .set('Cookie', moderatorCookie);
 
     expect(response.body).toEqual(mockComment);
     expect(Comment.create).toHaveBeenCalledWith({
         description: "This is a test comment",
-        commented_by: userId
+        commented_by: moderatorUserId
     });
     });
 
@@ -148,7 +121,7 @@ describe("POST /addComment", () => {
     const response = await supertest(server)
         .post("/comment/addComment")
         .send(mockReqBody)
-        .set('Cookie', cookie);
+        .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: "Invalid parent" });
@@ -167,7 +140,7 @@ describe("POST /addComment", () => {
     const response = await supertest(server)
       .post("/comment/addComment")
       .send(mockReqBody)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: "Invalid parent id" });
@@ -176,22 +149,7 @@ describe("POST /addComment", () => {
 
 describe("POST /reportComment", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -210,7 +168,7 @@ describe("POST /reportComment", () => {
     const response = await supertest(server)
       .post("/comment/reportComment")
       .send(mockReqBody)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Comment reported successfully" });
@@ -226,7 +184,7 @@ describe("POST /reportComment", () => {
     const response = await supertest(server)
       .post("/comment/reportComment")
       .send(mockReqBody)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Comment not found" });
@@ -235,22 +193,7 @@ describe("POST /reportComment", () => {
 
 describe("DELETE /deleteComment/:commentId", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -268,7 +211,7 @@ describe("DELETE /deleteComment/:commentId", () => {
 
     const response = await supertest(server)
       .delete(`/comment/deleteComment/${mockReqParams.commentId}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Comment deleted successfully" });
@@ -283,7 +226,7 @@ describe("DELETE /deleteComment/:commentId", () => {
 
     const response = await supertest(server)
       .delete(`/comment/deleteComment/${mockReqParams.commentId}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Comment not found" });
@@ -292,22 +235,7 @@ describe("DELETE /deleteComment/:commentId", () => {
 
 describe("POST /resolveComment/:commentId", () => {
   beforeEach(async () => {
-    await mongoose.connect('mongodb://localhost:27017/fake_so', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  
     server = require("../server");
-  
-    const loginResponse = await supertest(server)
-      .post("/login/authenticate")
-      .send({
-        username: "test@gmail.com",
-        password: "test"
-      });
-
-    cookie = loginResponse.headers['set-cookie'];
-    userId = loginResponse.body.user.userId;
   });
 
   afterEach(async () => {
@@ -325,7 +253,7 @@ describe("POST /resolveComment/:commentId", () => {
 
     const response = await supertest(server)
       .post(`/comment/resolveComment/${mockReqParams.commentId}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual({ message: "Comment resolved successfully" });
@@ -340,7 +268,7 @@ describe("POST /resolveComment/:commentId", () => {
 
     const response = await supertest(server)
       .post(`/comment/resolveComment/${mockReqParams.commentId}`)
-      .set('Cookie', cookie);
+      .set('Cookie', moderatorCookie);
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Comment not found" });
@@ -349,23 +277,9 @@ describe("POST /resolveComment/:commentId", () => {
 
 
 describe("Test general user authentication", () => {
-    beforeEach(async () => {
-        await mongoose.connect('mongodb://localhost:27017/fake_so', {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        });
-    
+    beforeEach(async () => {    
         server = require("../server");
-    
-        const loginResponse = await supertest(server)
-        .post("/login/authenticate")
-        .send({
-            username: "test2@gmail.com",
-            password: "test"
-        });
-    
-        cookie = loginResponse.headers['set-cookie'];
-        userId = loginResponse.body.user.userId;
+
     });
     
     afterEach(async () => {
@@ -376,7 +290,7 @@ describe("Test general user authentication", () => {
     it("GET /getReportedComments should return status 403", async () => {
         const response = await supertest(server)
         .get("/comment/getReportedComments")
-        .set('Cookie', cookie);
+        .set('Cookie', generalCookie);
     
         expect(response.status).toBe(403);
     });
@@ -384,7 +298,7 @@ describe("Test general user authentication", () => {
     it("DELETE /deleteComment should return status 403", async () => {
         const response = await supertest(server)
         .delete("/comment/deleteComment/65e9b58910afe6e94fc6e6dc")
-        .set('Cookie', cookie);
+        .set('Cookie', generalCookie);
 
         expect(response.status).toBe(403);
     });
@@ -392,7 +306,7 @@ describe("Test general user authentication", () => {
     it("POST /resolveComment should return status 403", async () => {
         const response = await supertest(server)
         .post("/comment/resolveComment/65e9b58910afe6e94fc6e6dc")
-        .set('Cookie', cookie);
+        .set('Cookie', generalCookie);
 
         expect(response.status).toBe(403);
     });
