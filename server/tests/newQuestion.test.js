@@ -9,6 +9,7 @@ const {
   getQuestionsByOrder,
   filterQuestionsBySearch,
   showQuesUpDown,
+  getTop10Questions
 } = require("../utils/question");
 
 jest.mock("../models/questions");
@@ -16,7 +17,8 @@ jest.mock("../utils/question", () => ({
   addTag: jest.fn(),
   getQuestionsByOrder: jest.fn(),
   filterQuestionsBySearch: jest.fn(),
-  showQuesUpDown: jest.fn()
+  showQuesUpDown: jest.fn(),
+  getTop10Questions: jest.fn(),
 }));
 
 let server;
@@ -147,6 +149,28 @@ describe("GET /getQuestion", () => {
     // Asserting the response
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockQuestions);
+  });
+
+  it("should return status as 500 and empty object in the response", async () => {
+    // Mock request query parameters
+    const mockReqQuery = {
+      order: "someOrder",
+      search: "someSearch",
+    };
+
+    getQuestionsByOrder.mockImplementation(() => {
+      throw new Error("Random!");
+    });
+
+    // Making the request
+    const response = await supertest(server)
+      .get("/question/getQuestion")
+      .query(mockReqQuery)
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: 'Internal Server Error', details: 'Random!' });
   });
 });
 
@@ -283,6 +307,21 @@ describe("GET /getReportedQuestions", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual(mockReportedQuestions);
   })
+
+  it("should return status 500 with an error message", async () => {
+    Question.find = jest.fn().mockImplementation(() => {
+      throw new Error("Random!");
+    });
+
+    // Making the request
+    const response = await supertest(server)
+      .get("/question/getReportedQuestions")
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
+  });
 });
 
 
@@ -332,6 +371,26 @@ describe("POST /reportQuestion", () => {
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Question not found" });
   });
+
+  it("should return status 500 with an error message", async () => {
+    const mockReqBody = {
+      qid: "65e9b58910afe6e94fc6e6dc",
+    };
+
+    Question.exists.mockImplementation(() => {
+      throw new Error("Random!");
+    });
+
+    // Making the request
+    const response = await supertest(server)
+      .post("/question/reportQuestion")
+      .send(mockReqBody)
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
+  });
 });
 
 describe("POST /resolveQuestion", () => {
@@ -378,6 +437,25 @@ describe("POST /resolveQuestion", () => {
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Question not found" });
   })
+
+  it("should return status 500 with an error message", async () => {
+    const mockReqBody = {
+      qid: "65e9b58910afe6e94fc6e6dc",
+    };
+
+    Question.exists.mockImplementation(() => {
+      throw new Error("Random!");
+    });
+
+    // Making the request
+    const response = await supertest(server)
+      .post(`/question/resolveQuestion/${mockReqBody.qid}`)
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
+  });
 });
 
 
@@ -427,8 +505,71 @@ describe("DELETE /deleteQuestion", () => {
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Question not found" });
   });
+
+  it("should return status 500 with an error message", async () => {
+    const mockReqParams = {
+      questionId: "65e9b58910afe6e94fc6e6dc",
+    };
+
+    Question.exists.mockImplementation(() => {
+      throw new Error("Random!");
+    });
+
+    // Making the request
+    const response = await supertest(server)
+      .delete(`/question/deleteQuestion/${mockReqParams.questionId}`)
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
+  });
 }); 
 
+describe("GET /getTrendingQuestions", () => {
+  beforeEach(async () => {
+    server = require("../server");
+  });
+
+  afterEach(async () => {
+    server.close();
+    await mongoose.disconnect();
+  });
+
+  it("should return trending questions", async () => {
+    Question.find = jest.fn().mockImplementation(() => ({
+      populate: jest.fn().mockResolvedValueOnce(mockQuestions),
+    }));
+
+    getTop10Questions.mockResolvedValueOnce(mockQuestions);
+    // Making the request
+    const response = await supertest(server)
+      .get("/question/getTrendingQuestions")
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(mockQuestions);
+  });
+
+  it("should return status 500 with an error message", async () => {
+    Question.find = jest.fn().mockImplementation(() => {
+      throw new Error("Random!");
+    });
+
+    getTop10Questions.mockImplementation(() => {
+      throw new Error("Random!");
+    });
+    // Making the request
+    const response = await supertest(server)
+      .get("/question/getTrendingQuestions")
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error", details: "Random!" });
+  });
+});
 
 
 describe("Test general user authentication", () => {

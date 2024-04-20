@@ -147,7 +147,45 @@ describe("POST /addComment", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ message: "Invalid parent id" });
   })
+
+  it("should expect 404 with a non-existent parent", async () => {
+    const mockReqBody = {
+      parentId: "6615559a12306c6dda654821",
+      parentType: "question",
+      description: "This is a test comment"
+    };
+
+    Comment.create.mockResolvedValueOnce();
+    Question.exists = jest.fn().mockResolvedValueOnce(false);
+
+    const response = await supertest(server)
+      .post("/comment/addComment")
+      .send(mockReqBody)
+      .set('Cookie', moderatorCookie);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toEqual({ message: "Parent not found" });
+  });
+
+  it("should expect 500 with an internal server error", async () => {
+    const mockReqBody = {
+      parentId: "6615559a12306c6dda654821",
+      parentType: "question",
+      description: "This is a test comment"
+    };
+
+    Comment.create.mockRejectedValueOnce();
+
+    const response = await supertest(server)
+      .post("/comment/addComment")
+      .send(mockReqBody)
+      .set('Cookie', moderatorCookie);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ status: 500, message: "Internal Server Error" });
+  });
 });
+
 
 describe("POST /reportComment", () => {
   beforeEach(async () => {
@@ -191,6 +229,22 @@ describe("POST /reportComment", () => {
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Comment not found" });
   });
+
+  it("should return status 500 with an error message for an internal server error", async () => {
+    const mockReqBody = {
+      cid: "dummyCommentId",
+    };
+
+    Comment.exists.mockRejectedValueOnce();
+
+    const response = await supertest(server)
+      .post("/comment/reportComment")
+      .send(mockReqBody)
+      .set('Cookie', moderatorCookie);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ status: 500, message: "Internal Server Error" });
+  });
 });
 
 describe("DELETE /deleteComment/:commentId", () => {
@@ -233,6 +287,21 @@ describe("DELETE /deleteComment/:commentId", () => {
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Comment not found" });
   });
+
+  it("should return status 500 with an error message for an internal server error", async () => {
+    const mockReqParams = {
+      commentId: "dummyCommentId",
+    };
+
+    Comment.exists.mockRejectedValueOnce();
+
+    const response = await supertest(server)
+      .delete(`/comment/deleteComment/${mockReqParams.commentId}`)
+      .set('Cookie', moderatorCookie);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
+  });
 });
 
 describe("POST /resolveComment/:commentId", () => {
@@ -274,6 +343,21 @@ describe("POST /resolveComment/:commentId", () => {
 
     expect(response.status).toBe(404);
     expect(response.body).toEqual({ message: "Comment not found" });
+  });
+  
+  it("should return status 500 with an error message for an internal server error", async () => {
+    const mockReqParams = {
+      commentId: "dummyCommentId",
+    };
+
+    Comment.exists.mockRejectedValueOnce();
+
+    const response = await supertest(server)
+      .post(`/comment/resolveComment/${mockReqParams.commentId}`)
+      .set('Cookie', moderatorCookie);
+
+    expect(response.status).toBe(500);
+    expect(response.body).toEqual({ message: "Internal Server Error" });
   });
 });
 

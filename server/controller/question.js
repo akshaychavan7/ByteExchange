@@ -25,7 +25,7 @@ const getQuestionsByFilter = async (req, res) => {
     res.status(200).json(questions);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({  details: error.message, message: "Internal Server Error" });
   }
 };
 
@@ -112,7 +112,7 @@ const reportQuestion = async (req, res) => {
       .send({ message: "Question reported successfully" });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send({ status: 500, message: "Internal Server Error" });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -125,7 +125,7 @@ const getReportedQuestions = async (req, res) => {
     res.status(200).json(questions);
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send({ status: 500, message: "Internal Server Error" });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -143,7 +143,7 @@ const deleteQuestion = async (req, res) => {
     });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -152,7 +152,7 @@ const getTrendingQuestions = async (req, res) => {
     let questions = await getTop10Questions();
     res.status(200).json(questions);
   } catch (err) {
-    res.status(500).json({ error: `Cannot fetch treding questions: ${err}` });
+    res.status(500).json({ message: `Internal Server Error`, details: err.message});
   }
 };
 
@@ -171,7 +171,7 @@ const resolveQuestion = async (req, res) => {
     res.status(200).send({ message: "Question resolved successfully" });
   } catch (error) {
     console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 

@@ -99,8 +99,8 @@ const deleteComment = async (req, res) => {
     await Comment.findByIdAndDelete(req.params.commentId);
     res.status(200).send( { message: "Comment deleted successfully" });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    // console.error("Error:", error);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -118,8 +118,8 @@ const resolveComment = async (req, res) => {
     );
     res.status(200).send({ message: "Comment resolved successfully" });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    // console.error("Error:", error);
+    res.statclearus(500).send({ message: "Internal Server Error" });
   }
 };
 
