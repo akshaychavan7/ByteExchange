@@ -67,7 +67,8 @@ export default function SignUp() {
       !payload.firstname ||
       !payload.lastname ||
       !payload.username ||
-      !payload.password;
+      !payload.password ||
+      !payload.location;
 
     if (fiedlsMissing) {
       alert.showAlert("Make sure you fill all the required fields!", "error");
@@ -83,7 +84,7 @@ export default function SignUp() {
         navigate("/login");
         break;
       case 400:
-        alert.showAlert("User already exists", "error");
+        alert.showAlert(response.message, "error");
         break;
       default:
         alert.showAlert("Failed to register user", "error");
@@ -200,6 +201,7 @@ export default function SignUp() {
                     options={citiesList}
                     value={location}
                     setValue={(value) => setLocation(value)}
+                    id="location"
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -226,6 +228,7 @@ export default function SignUp() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                id="signUpButton"
               >
                 Sign Up
               </Button>

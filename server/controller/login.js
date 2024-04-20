@@ -55,6 +55,15 @@ const registerUser = async (req, res) => {
   try {
     const { username, password, firstname, lastname, profilePic, location } =
       req.body;
+
+    // check if any of the items is missing
+    if (!username || !password || !firstname || !lastname || !location) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Make sure you fill all the required fields!" });
+    }
+
+    
     // check if user already exists
     const existing = await User.findOne({ username });
     if (existing) {
