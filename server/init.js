@@ -146,7 +146,7 @@ const init = async () => {
       lastName: "Chen",
       role: "general",
       profilePic:
-        "https://media.licdn.com/dms/image/D5635AQF6RnnnfLnHKg/profile-framedphoto-shrink_800_800/0/1704817671459?e=1713466800&v=beta&t=4JeVmgx6iTPpVXl9XklrUZMybK8xrFO7K_v8PU0DFdM",
+        "https://media.licdn.com/dms/image/D5635AQF6RnnnfLnHKg/profile-framedphoto-shrink_800_800/0/1704817671459?e=1714165200&v=beta&t=STJUAJEaYCvHKYJuD9TuopdJyv5duHQyBcRSFnan3Ck",
       technologies: ["Angular", "Android", "Swift"],
       location: "Boston, MA",
     },
@@ -157,7 +157,7 @@ const init = async () => {
       lastName: "Das",
       role: "general",
       profilePic:
-        "https://media.licdn.com/dms/image/D4E35AQG8Yfomd408IA/profile-framedphoto-shrink_800_800/0/1704981593017?e=1713466800&v=beta&t=BQSjkAoBNo-AY8OeH17e3sxfLMiotPI076sXouEFask",
+        "https://media.licdn.com/dms/image/D4E35AQG8Yfomd408IA/profile-framedphoto-shrink_800_800/0/1704981593017?e=1714165200&v=beta&t=W8J-02hAfyb8l0z1khNtJerEefjOo2Ytuq2Q7YLbZrc",
       technologies: ["Machine Learning", "Python"],
       location: "Boston, MA",
     },

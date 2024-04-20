@@ -16,6 +16,7 @@ import Users from "./Users/Users";
 import { getUsersList } from "../../services/userService";
 import { useAlert } from "../../context/AlertContext";
 import HomePage from "./HomePage/HomePage";
+import { constants } from "../../config";
 
 const Main = ({
   search = "",
@@ -26,7 +27,7 @@ const Main = ({
   const alert = useAlert();
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState("home");
-  const [questionOrder, setQuestionOrder] = useState("newest");
+  const [questionOrder, setQuestionOrder] = useState(constants.ORDER_NEWEST);
   const [qid, setQid] = useState("");
   const [selected, setSelected] = useState("h");
   const [qlist, setQlist] = useState([]);
@@ -129,7 +130,7 @@ const Main = ({
   };
 
   switch (page) {
-    case "home": {
+    case constants.HOME_PAGE: {
       content = (
         <HomePage
           title_text={title}
@@ -147,11 +148,11 @@ const Main = ({
       );
       break;
     }
-    case "question": {
+    case constants.QUESTION_PAGE: {
       content = getQuestionPage(questionOrder.toLowerCase(), search);
       break;
     }
-    case "answer": {
+    case constants.ANSWER_PAGE: {
       content = (
         <AnswerPage
           qid={qid}
@@ -162,19 +163,19 @@ const Main = ({
       );
       break;
     }
-    case "newAnswer": {
+    case constants.NEW_ANSWER_PAGE: {
       content = (
         <NewAnswer handleAddAnswer={(answer) => handleAddAnswer(qid, answer)} />
       );
       break;
     }
-    case "newQuestion": {
+    case constants.NEW_QUESTION_PAGE: {
       content = (
         <NewQuestion addQuestion={(question) => handleAddQuestion(question)} />
       );
       break;
     }
-    case "tag": {
+    case constants.TAG_PAGE: {
       content = (
         <TagPage
           getTagsWithQuestionNumber={getTagsWithQuestionNumber}
@@ -184,7 +185,7 @@ const Main = ({
       );
       break;
     }
-    case "user":
+    case constants.USER_PAGE:
       content = (
         <Users
           users={users}

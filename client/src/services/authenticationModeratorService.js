@@ -1,4 +1,4 @@
-import config from "../config";
+import { config } from "../config";
 export default async function isModeratorAuthenticated() {
   try {
     const myHeaders = new Headers();

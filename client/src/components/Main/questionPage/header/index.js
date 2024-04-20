@@ -3,6 +3,7 @@ import "./index.css";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import AskAQuestionButton from "../../AskAQuestionButton/AskAQuestionButton";
+import { constants } from "../../../../config";
 
 const QuestionHeader = ({
   title_text,
@@ -10,7 +11,7 @@ const QuestionHeader = ({
   setQuestionOrder,
   handleNewQuestion,
 }) => {
-  const [selectedOrder, setSelectedOrder] = useState("newest");
+  const [selectedOrder, setSelectedOrder] = useState(constants.ORDER_NEWEST);
 
   const handleChange = (event, newOrder) => {
     setSelectedOrder(newOrder);
@@ -32,20 +33,20 @@ const QuestionHeader = ({
             onChange={handleChange}
           >
             <ToggleButton
-              value={"newest"}
-              onClick={() => setQuestionOrder("newest")}
+              value={constants.ORDER_NEWEST}
+              onClick={() => setQuestionOrder(constants.ORDER_NEWEST)}
             >
               Newest
             </ToggleButton>
             <ToggleButton
-              value={"active"}
-              onClick={() => setQuestionOrder("active")}
+              value={constants.ORDER_ACTIVE}
+              onClick={() => setQuestionOrder(constants.ORDER_ACTIVE)}
             >
               Active
             </ToggleButton>
             <ToggleButton
-              value={"unanswered"}
-              onClick={() => setQuestionOrder("unanswered")}
+              value={constants.ORDER_UNANSWERED}
+              onClick={() => setQuestionOrder(constants.ORDER_UNANSWERED)}
             >
               Unanswered
             </ToggleButton>
