@@ -302,6 +302,17 @@ const init = async () => {
     false
   );
 
+  let comment6 = await commentCreate(
+    "This is so helpful",
+    user6,
+    new Date("2023-11-23T08:24:00"),
+    0,
+    [],
+    [],
+    true
+  );
+
+
 
   let a1 = await answerCreate(
     "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.",
@@ -341,7 +352,7 @@ const init = async () => {
     0,
     [],
     [],
-    false
+    true
   );
   let a5 = await answerCreate(
     "I just found all the above examples just too confusing, so I wrote my own. ",
@@ -396,7 +407,7 @@ const init = async () => {
     1,
     [user1, user2],
     [user4],
-    false
+    true
   );
   await questionCreate(
     "android studio save string shared preference, start activity and load the saved string",
@@ -420,7 +431,7 @@ const init = async () => {
     200,
     [t5, t6],
     [a6, a7],
-    [],
+    [comment6],
     -1,
     [],
     [user5],

@@ -341,29 +341,29 @@
 //     cy.get("#signInButton").click()
 //   })
 
-  // it("Created new answer should be displayed at the top of the answers page", () => {
-  //   const answers = [
-  //     "Test Answer 1",
-  //     "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.",
-  //     "On my end, I like to have a single history object that I can carry even outside components. I like to have a single history.js file that I import on demand, and just manipulate it. You just have to change BrowserRouter to Router, and specify the history prop. This doesn't change anything for you, except that you have your own history object that you can manipulate as you want. You need to install history, the library used by react-router.",
-  //   ];
-  //   cy.contains("Programmatically navigate using React router").click();
-  //   cy.get("#answerQuestionBtn").click();
-  //   cy.get("#description").type(answers[0]);
-  //   cy.get("#postAnswerBtn").click();
-  //   cy.get(".answerText").each(($el, index) => {
-  //     cy.contains(answers[index]);
-  //   });
-  //   cy.contains("general");
-  //   cy.contains("0 seconds ago");
-  // });
+//   it("Created new answer should be displayed at the top of the answers page", () => {
+//     const answers = [
+//       "Test Answer 1",
+//       "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.",
+//       "On my end, I like to have a single history object that I can carry even outside components. I like to have a single history.js file that I import on demand, and just manipulate it. You just have to change BrowserRouter to Router, and specify the history prop. This doesn't change anything for you, except that you have your own history object that you can manipulate as you want. You need to install history, the library used by react-router.",
+//     ];
+//     cy.contains("Programmatically navigate using React router").click();
+//     cy.get("#answerQuestionBtn").click();
+//     cy.get("#description").type(answers[0]);
+//     cy.get("#postAnswerBtn").click();
+//     cy.get(".answerText").each(($el, index) => {
+//       cy.contains(answers[index]);
+//     });
+//     cy.contains("general");
+//     cy.contains("0 seconds ago");
+//   });
 
-  // it("Answer is mandatory when creating a new answer", () => {
-  //   cy.contains("Programmatically navigate using React router").click();
-  //   cy.get("#answerQuestionBtn").click();
-  //   cy.get("#postAnswerBtn").click();
-  //   // cy.contains("Answer description can not be empty");
-  // });
+//   it("Answer is mandatory when creating a new answer", () => {
+//     cy.contains("Programmatically navigate using React router").click();
+//     cy.get("#answerQuestionBtn").click();
+//     cy.get("#postAnswerBtn").click();
+//     // cy.contains("Answer description can not be empty");
+//   });
 
   
 
@@ -436,21 +436,21 @@
   
 //   });
 
-  // it("Checks if a6 and a7 exist in q3 answers page", () => {
-  //   const answers = [
-  //     "Using GridFS to chunk and store content.",
-  //     "Storing content as BLOBs in databases.",
-  //   ];
-  //   cy.contains("Object storage for a web application").click();
-  //   cy.get(".answerText").each(($el, index) => {
-  //     cy.contains(answers[index]);
-  //   });
-  // });
+//   it("Checks if a6 and a7 exist in q3 answers page", () => {
+//     const answers = [
+//       "Using GridFS to chunk and store content.",
+//       "Storing content as BLOBs in databases.",
+//     ];
+//     cy.contains("Object storage for a web application").click();
+//     cy.get(".answerText").each(($el, index) => {
+//       cy.contains(answers[index]);
+//     });
+//   });
 
-  // it("Checks if a8 exist in q4 answers page", () => {
-  //   cy.contains("Quick question about storage on android").click();
-  //   cy.contains("Store data in a SQLLite database.");
-  // });
+//   it("Checks if a8 exist in q4 answers page", () => {
+//     cy.contains("Quick question about storage on android").click();
+//     cy.contains("Store data in a SQLLite database.");
+//   });
 
 // });
 
@@ -568,95 +568,95 @@
 //     cy.get("#signInButton").click()
 //   })
 
-  // it("9.1 | Adds a question with a hyperlink and verifies", () => {
-  //   // ask a question
-  //   cy.get("#askQuestionButton").click()
-  //   cy.get("#title").type("How to add a hyperlink in Markdown?");
-  //   cy.get("#description").type(
-  //     "Here is a link: [Google](https://www.google.com)"
-  //   );
-  //   cy.get("#tags").type("markdown").type("{enter}")
-  //   cy.get("#postQuestionButton").click()
-  //   cy.contains("How to add a hyperlink in Markdown?").click();
-  //   cy.get("#questionBody")
-  //     .find("a")
-  //     .should("have.attr", "href", "https://www.google.com");
-  // });
+//   it("9.1 | Adds a question with a hyperlink and verifies", () => {
+//     // ask a question
+//     cy.get("#askQuestionButton").click()
+//     cy.get("#title").type("How to add a hyperlink in Markdown?");
+//     cy.get("#description").type(
+//       "Here is a link: [Google](https://www.google.com)"
+//     );
+//     cy.get("#tags").type("markdown").type("{enter}")
+//     cy.get("#postQuestionButton").click()
+//     cy.contains("How to add a hyperlink in Markdown?").click();
+//     cy.get("#questionBody")
+//       .find("a")
+//       .should("have.attr", "href", "https://www.google.com");
+//   });
 
   
-  // it("9.2 | Create new answer should be displayed at the top of the answers page", () => {
-  //   const answers = [
-  //     "Check this link for more info: [Documentation](https://docs.example.com)",
-  //     "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.",
-  //     "On my end, I like to have a single history object that I can carry even outside components. I like to have a single history.js file that I import on demand, and just manipulate it. You just have to change BrowserRouter to Router, and specify the history prop. This doesn't change anything for you, except that you have your own history object that you can manipulate as you want. You need to install history, the library used by react-router.",
-  //   ];
+//   it("9.2 | Create new answer should be displayed at the top of the answers page", () => {
+//     const answers = [
+//       "Check this link for more info: [Documentation](https://docs.example.com)",
+//       "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.",
+//       "On my end, I like to have a single history object that I can carry even outside components. I like to have a single history.js file that I import on demand, and just manipulate it. You just have to change BrowserRouter to Router, and specify the history prop. This doesn't change anything for you, except that you have your own history object that you can manipulate as you want. You need to install history, the library used by react-router.",
+//     ];
 
-  //   cy.contains("Programmatically navigate using React router").click();
-  //   cy.get("#answerQuestionBtn").click();
-  //   cy.get("#description").type(
-  //     "Check this link for more info: [Documentation](https://docs.example.com)"
-  //   );
-  //   cy.get("#postAnswerBtn").click();
-  //   cy.get(".answerText")
-  //     .first()
-  //     .within(() => {
-  //       cy.get("a").should("have.attr", "href", "https://docs.example.com");
-  //     });
-  //   cy.contains("general");
-  //   cy.contains("0 seconds ago");
-  // });
+//     cy.contains("Programmatically navigate using React router").click();
+//     cy.get("#answerQuestionBtn").click();
+//     cy.get("#description").type(
+//       "Check this link for more info: [Documentation](https://docs.example.com)"
+//     );
+//     cy.get("#postAnswerBtn").click();
+//     cy.get(".answerText")
+//       .first()
+//       .within(() => {
+//         cy.get("a").should("have.attr", "href", "https://docs.example.com");
+//       });
+//     cy.contains("general");
+//     cy.contains("0 seconds ago");
+//   });
 
-  // it("9.3 | Tries to add a question with an invalid hyperlink and verifies failure", () => {
-  //   const invalidUrls = [
-  //     "[Google](htt://www.google.com)",
-  //     "[Microsoft](microsoft.com)",
-  //     "[](https://www.google.com/)",
-  //     "[link]()",
-  //     "dfv[]()",
-  //     "[link](http://www.google.com/)",
-  //     "[Google](https//www.google.com)",
-  //     "[GitHub](http//github.com)",
-  //     "[Facebook](https:/facebook.com)",
-  //     "[Twitter](://twitter.com)",
-  //     "[Netflix](htps://www.netflix)",
-  //     "[Google](htts://www.goo<gle.com)",
-  //     "[Google](http://www.google)",
-  //     "[Dropbox](ttps://www.dropbox.c-m)",
-  //     "[LinkedIn](ps:/www.linkedin.com)",
-  //     "[Adobe](ttps://www.adobe..com)",
-  //     "[Spotify](ttp:///www.spotify.com)",
-  //     "[Reddit](http://reddit)",
-  //     "[Wikipedia](tps://www.wikipedia=com)",
-  //   ];
-  //   cy.get("#askQuestionButton").click()
-  //   cy.get("#title").type(
-  //     "How to add an invalid hyperlink in Markdown?"
-  //   );
-  //   invalidUrls.forEach((url) => {
-  //     cy.get("#description").clear().type(`This is an invalid link: ${url}`);
-  //     cy.get("#tags").clear().type("markdown").type("{enter}");
-  //     cy.get("#postQuestionButton").click();
-  //     cy.contains("Invalid hyperlink");
-  //   });
-  //   cy.visit("http://localhost:3000/home");
-  //   cy.contains("How to add an invalid hyperlink in Markdown?").should(
-  //     "not.exist"
-  //   );
-  // });
+//   it("9.3 | Tries to add a question with an invalid hyperlink and verifies failure", () => {
+//     const invalidUrls = [
+//       "[Google](htt://www.google.com)",
+//       "[Microsoft](microsoft.com)",
+//       "[](https://www.google.com/)",
+//       "[link]()",
+//       "dfv[]()",
+//       "[link](http://www.google.com/)",
+//       "[Google](https//www.google.com)",
+//       "[GitHub](http//github.com)",
+//       "[Facebook](https:/facebook.com)",
+//       "[Twitter](://twitter.com)",
+//       "[Netflix](htps://www.netflix)",
+//       "[Google](htts://www.goo<gle.com)",
+//       "[Google](http://www.google)",
+//       "[Dropbox](ttps://www.dropbox.c-m)",
+//       "[LinkedIn](ps:/www.linkedin.com)",
+//       "[Adobe](ttps://www.adobe..com)",
+//       "[Spotify](ttp:///www.spotify.com)",
+//       "[Reddit](http://reddit)",
+//       "[Wikipedia](tps://www.wikipedia=com)",
+//     ];
+//     cy.get("#askQuestionButton").click()
+//     cy.get("#title").type(
+//       "How to add an invalid hyperlink in Markdown?"
+//     );
+//     invalidUrls.forEach((url) => {
+//       cy.get("#description").clear().type(`This is an invalid link: ${url}`);
+//       cy.get("#tags").clear().type("markdown").type("{enter}");
+//       cy.get("#postQuestionButton").click();
+//       cy.contains("Invalid hyperlink");
+//     });
+//     cy.visit("http://localhost:3000/home");
+//     cy.contains("How to add an invalid hyperlink in Markdown?").should(
+//       "not.exist"
+//     );
+//   });
 
 
-  // it("9.4 | Attempts to add an answer with an invalid hyperlink and verifies failure", () => {
-  //   cy.contains("Programmatically navigate using React router").click();
-  //   cy.get("#answerQuestionBtn").click();
-  //   cy.get("#description").type(
-  //     "Check this invalid link: [](https://wrong.url)"
-  //   );
-  //   cy.get("#postAnswerBtn").click();
-  //   cy.contains("Invalid hyperlink");
-  //   cy.visit("http://localhost:3000/home");
-  //   cy.contains("Programmatically navigate using React router").click();
-  //   cy.get(".answerText").should("not.contain", "https://wrong.url");
-  // });
+//   it("9.4 | Attempts to add an answer with an invalid hyperlink and verifies failure", () => {
+//     cy.contains("Programmatically navigate using React router").click();
+//     cy.get("#answerQuestionBtn").click();
+//     cy.get("#description").type(
+//       "Check this invalid link: [](https://wrong.url)"
+//     );
+//     cy.get("#postAnswerBtn").click();
+//     cy.contains("Invalid hyperlink");
+//     cy.visit("http://localhost:3000/home");
+//     cy.contains("Programmatically navigate using React router").click();
+//     cy.get(".answerText").should("not.contain", "https://wrong.url");
+//   });
 
 //   it("9.5 | Adds multiple questions with valid hyperlinks and verify", () => {
 //     cy.visit("http://localhost:3000");
@@ -851,20 +851,20 @@
 //     cy.get("#signInButton").click()
 //   });
 
-  // it("should display user page", () => {
-  //   const nameList = [
-  //     "Akshay",
-  //     "John",
-  //     "Shiu",
-  //     "Vedant Rishi",
-  //     "Sameer",
-  //     "Sudhanva"
-  //   ]
-  //   cy.get("#sideBarUsers").click();
-  //   nameList.forEach((name) => {
-  //     cy.contains(name);
-  //   });
-  // })
+//   it("should display user page", () => {
+//     const nameList = [
+//       "Akshay",
+//       "John",
+//       "Shiu",
+//       "Vedant Rishi",
+//       "Sameer",
+//       "Sudhanva"
+//     ]
+//     cy.get("#sideBarUsers").click();
+//     nameList.forEach((name) => {
+//       cy.contains(name);
+//     });
+//   })
 
 //   it("Click on name should display user info", () => {
 //     cy.get("#sideBarUsers").click();
@@ -878,3 +878,136 @@
 //     cy.contains("TypeScript")
 //   })
 // })
+
+
+// describe("test report", () => {
+//   before(() => {
+//     // Seed the database before each test
+//     cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
+//     cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
+//   });
+
+//   beforeEach(() => {
+//     cy.visit("http://localhost:3000");
+//     cy.get("#email").type("general")
+//     cy.get("#password").type("test")
+//     cy.get("#signInButton").click()
+//   });
+
+//   it("report question", () => {
+//     cy.contains("Quick question about storage on android").click();
+//     cy.get("#reportBtn-question").click();
+//     cy.contains("Post has been flagged for review");
+
+//     cy.get("#sideBarLogout").click()
+//     cy.get("#email").type("moderator")
+//     cy.get("#password").type("test")
+//     cy.get("#signInButton").click()
+
+//     cy.contains("I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains")
+//   });
+
+//   it("report answer", () => {
+//     cy.contains("Quick question about storage on android").click();
+//     cy.get("#panel1-header-answer").click();
+//     cy.get("#reportBtn-answer").click();
+//     cy.contains("Post has been flagged for review");
+    
+//     cy.get("#sideBarLogout").click()
+//     cy.get("#email").type("moderator")
+//     cy.get("#password").type("test")
+//     cy.get("#signInButton").click()
+
+//     cy.get("#answersBtn").click();
+
+//     cy.contains("Store data in a SQLLite database.");    
+//   });
+
+//   it("report comment", () => {
+//     cy.contains("Quick question about storage on android").click();
+//     cy.get("#panel1-header-question").click();
+//     cy.get("#reportBtn-comment").click();
+//     cy.contains("Post has been flagged for review");
+
+//     cy.get("#sideBarLogout").click()
+//     cy.get("#email").type("moderator")
+//     cy.get("#password").type("test")
+//     cy.get("#signInButton").click()
+
+//     cy.get("#commentsBtn").click();
+
+//     cy.contains("This is great")
+//   });
+// })
+
+
+describe("test Moderator", () => {
+  before(() => {
+    // Seed the database before each test
+    cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
+    cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
+  });
+
+  beforeEach(() => {
+    cy.visit("http://localhost:3000");
+    cy.get("#email").type("moderator")
+    cy.get("#password").type("test")
+    cy.get("#signInButton").click()
+  });
+
+
+  // it("moderator can delete question", () => {
+  //   cy.contains("the alert shows the proper index for the li clicked, and when I alert the variable within the last function Im calling, moveToNextImage(stepClicked), the same value shows but the animation isnt happening. This works many other ways, but Im trying to pass the index value of the list item clicked to use for the math to calculate.")
+  //   cy.get("#deleteBtn").click();
+
+  //   cy.get('#root').should('not.contain', 'the alert shows the proper index for the li clicked, and when I alert the variable within the last function Im calling, moveToNextImage(stepClicked), the same value shows but the animation isnt happening. This works many other ways, but Im trying to pass the index value of the list item clicked to use for the math to calculate.');
+
+  //   cy.get(".header-avatar").click();
+
+  //   cy.get("#signOutBtn").click();
+  //   cy.get("#email").type("general");
+  //   cy.get("#password").type("test");
+  //   cy.get("#signInButton").click();
+
+  //   cy.get("#root").should('not.contain', 'Programmatically navigate using React router');
+  // });
+
+  it("moderator can delete answer", () => {
+    cy.get('#answersBtn').click();
+    cy.contains("YourPreference yourPrefrence = YourPreference.getInstance(context); yourPreference.saveData(YOUR_KEY,YOUR_VALUE);")
+    cy.get("#deleteBtn").click();
+    cy.get('#root').should('not.contain', 'YourPreference yourPrefrence = YourPreference.getInstance(context); yourPreference.saveData(YOUR_KEY,YOUR_VALUE);');
+    
+    cy.get(".header-avatar").click();
+
+    cy.get("#signOutBtn").click();
+    cy.get("#email").type("general")
+    cy.get("#password").type("test")
+    cy.get("#signInButton").click()
+
+    cy.contains("android studio save string shared preference, start activity and load the saved string").click()
+
+    cy.get("#answers-section").should('not.contain', 'YourPreference yourPrefrence = YourPreference.getInstance(context); yourPreference.saveData(YOUR_KEY,YOUR_VALUE);');
+  });
+
+  it("moderator can delete comment", () => {
+    cy.get('#commentsBtn').click();
+    cy.contains("This is so helpful")
+    cy.get("#deleteBtn").click();
+
+    cy.get('#root').should('not.contain', 'This is so helpful');
+
+    cy.get(".header-avatar").click();
+
+    cy.get("#signOutBtn").click();
+    cy.get("#email").type("general")
+    cy.get("#password").type("test")
+    cy.get("#signInButton").click()
+
+    cy.contains("Object storage for a web application").click()
+    
+    cy.get("#panel1-header-question").click();
+
+    cy.get("#root").should('not.contain', 'This is so helpful');
+  });
+});

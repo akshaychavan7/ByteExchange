@@ -240,7 +240,7 @@ export default function Moderator() {
               className="profile-popover popover-list-item"
               onClick={handleSignOut}
             >
-              <Logout fontSize="18px" /> &nbsp; Sign Out
+              <Logout fontSize="18px" id="signOutBtn"/> &nbsp; Sign Out
             </Typography>
           </Stack>
         </Popover>
@@ -273,15 +273,17 @@ export default function Moderator() {
               <ToggleButton
                 value={"question"}
                 onClick={() => setType("question")}
+                id="questionsBtn"
               >
                 Questions
               </ToggleButton>
-              <ToggleButton value={"answer"} onClick={() => setType("answer")}>
+              <ToggleButton value={"answer"} onClick={() => setType("answer")} id="answersBtn">
                 Answers
               </ToggleButton>
               <ToggleButton
                 value={"comment"}
                 onClick={() => setType("comment")}
+                id="commentsBtn"
               >
                 Comments
               </ToggleButton>
@@ -300,12 +302,12 @@ export default function Moderator() {
 
               <div className="icons">
                 <Tooltip title="Delete">
-                  <IconButton onClick={() => handleDelete(data._id)}>
+                  <IconButton onClick={() => handleDelete(data._id)} id="deleteBtn">
                     <Close color="warning" />
                   </IconButton>
                 </Tooltip>
                 <Tooltip title="Ignore">
-                  <IconButton onClick={() => handleResolve(data._id)}>
+                  <IconButton onClick={() => handleResolve(data._id)} id="ignoreBtn">
                     <Check color="success" />
                   </IconButton>
                 </Tooltip>
