@@ -34,7 +34,6 @@ const reportAnswer = async (req, res) => {
     await Answer.findByIdAndUpdate(req.body.aid, { flag: true }, { new: true });
     res.status(200).send({ message: "Answer reported" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -47,7 +46,6 @@ const getReportedAnswers = async (req, res) => {
     });
     res.status(200).json(answers);
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -62,7 +60,6 @@ const deleteAnswer = async (req, res) => {
     await Answer.findByIdAndDelete(req.params.answerId);
     res.status(200).send( { message: "Answer deleted successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -81,7 +78,6 @@ const resolveAnswer = async (req, res) => {
     );
     res.status(200).send({ message: "Answer resolved successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
 };

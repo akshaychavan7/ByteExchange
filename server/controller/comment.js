@@ -48,7 +48,6 @@ const addComment = async (req, res) => {
 
     res.status(200).json( comment );
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -71,7 +70,6 @@ const reportComment = async (req, res) => {
       .status(200)
       .send({ message: "Comment reported successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -84,7 +82,6 @@ const getReportedComments = async (req, res) => {
     });
     res.status(200).json(comments);
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -99,7 +96,7 @@ const deleteComment = async (req, res) => {
     await Comment.findByIdAndDelete(req.params.commentId);
     res.status(200).send( { message: "Comment deleted successfully" });
   } catch (error) {
-    // console.error("Error:", error);
+    
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
@@ -118,7 +115,7 @@ const resolveComment = async (req, res) => {
     );
     res.status(200).send({ message: "Comment resolved successfully" });
   } catch (error) {
-    // console.error("Error:", error);
+    
     res.statclearus(500).send({ message: "Internal Server Error" });
   }
 };

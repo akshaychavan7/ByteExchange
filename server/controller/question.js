@@ -24,7 +24,6 @@ const getQuestionsByFilter = async (req, res) => {
 
     res.status(200).json(questions);
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({  details: error.message, message: "Internal Server Error" });
   }
 };
@@ -111,7 +110,6 @@ const reportQuestion = async (req, res) => {
       .status(200)
       .send({ message: "Question reported successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
@@ -124,7 +122,6 @@ const getReportedQuestions = async (req, res) => {
     });
     res.status(200).json(questions);
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
@@ -142,7 +139,6 @@ const deleteQuestion = async (req, res) => {
       message: "Question deleted successfully",
     });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
@@ -170,7 +166,6 @@ const resolveQuestion = async (req, res) => {
     );
     res.status(200).send({ message: "Question resolved successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ message: "Internal Server Error" });
   }
 };
