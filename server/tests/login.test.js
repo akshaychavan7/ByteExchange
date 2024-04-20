@@ -60,7 +60,44 @@ it("should return 400 if user already exists", async () => {
     // Check the response
     expect(response.status).toBe(400);
     expect(response.body.message).toBe("User already exists");
-})
+    })
+
+    it("should return 400 if any of the required fields are missing", async () => {
+        // Making the request
+        const response = await supertest(server)
+        .post("/login/register")
+        .send({
+            username: "test1",
+            password: "test1",
+            firstname: "firstName1",
+            lastname: "lastName1",
+        });
+    
+        // Check the response
+        expect(response.status).toBe(400);
+        expect(response.body.message).toBe("Make sure you fill all the required fields!");
+    });
+
+    it("should return 500 if internal server error", async () => {
+        // Mocking User.findOne()
+        User.findOne = jest.fn().mockRejectedValueOnce(new Error("Internal Server Error"));
+    
+        // Making the request
+        const response = await supertest(server)
+        .post("/login/register")
+        .send({
+            username: "test1",
+            password: "test1",
+            firstname: "firstName1",
+            lastname: "lastName1",
+            profilePic: "test1",
+            location: "test1",
+        });
+    
+        // Check the response
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe("Internal Server Error");
+    });
 });
 
 
@@ -123,4 +160,21 @@ describe("POST /authenticate", () => {
         expect(response.status).toBe(401);
         expect(response.body.message).toBe("Invalid username or password");
     })
+
+    it("should return 500 if internal server error", async () => {
+        // Mocking User.findOne()
+        User.findOne = jest.fn().mockRejectedValueOnce(new Error("Internal Server Error"));
+    
+        // Making the request
+        const response = await supertest(server)
+        .post("/login/authenticate")
+        .send({
+            username: "test1",
+            password: "test1",
+        });
+    
+        // Check the response
+        expect(response.status).toBe(500);
+        expect(response.body.message).toBe("Internal Server Error");
     });
+});

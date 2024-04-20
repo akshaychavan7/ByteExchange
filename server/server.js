@@ -37,11 +37,6 @@ app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 
 app.use(express.json());
 
-app.get("/", (_, res) => {
-  res.send("Fake SO Server Dummy Endpoint");
-  res.end();
-});
-
 const questionController = require("./controller/question");
 const tagController = require("./controller/tag");
 const answerController = require("./controller/answer");

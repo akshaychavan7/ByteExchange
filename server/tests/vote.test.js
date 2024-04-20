@@ -346,6 +346,38 @@ describe("POST /upvote", () => {
         expect(response.status).toBe(400);
         expect(response.body).toEqual({ status: 400, message: "Invalid type" });
     });
+
+    it("should return 400 if id is invalid", async () => {
+        // Making the request to upvote the question
+        const response = await supertest(server)
+          .post("/vote/upvote")
+          .set("Cookie", moderatorCookie)
+          .send({ id: "invalid", type: "question" });
+        
+        // Check the response
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ status: 400, message: "Invalid id" });
+    });
+
+    it("should return 500 if error in fetching object", async () => {
+        // Mock the findById method of the Question model
+        Question.findById = jest.fn().mockImplementation(() => {
+            throw new Error("Error in fetching object");
+        });
+
+        // Making the request to upvote the question
+        const response = await supertest(server)
+          .post("/vote/upvote")
+          .set("Cookie", moderatorCookie)
+          .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "question" });
+
+        // Check the response
+        expect(response.status).toBe(500);
+        expect(response.body).toEqual({ status: 500, message: "Internal Server Error" });
+
+        // Check if the upvote was recorded
+        expect(Question.findById).toBeCalledWith("65e9a5c2b26199dbcc3e6dc8");
+    });
 });
 
 
@@ -667,6 +699,50 @@ describe("POST /downvote", () => {
             $addToSet: { downvoted_by: moderatorUserId },
             $inc: { vote_count: -2 },
         });
+    });
+
+    it("should return 400 if downvote type is invalid", async () => {
+        // Making the request to downvote the question
+        const response = await supertest(server)
+          .post("/vote/downvote")
+          .set("Cookie", moderatorCookie)
+          .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "invalid" });
+        
+        // Check the response
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ status: 400, message: "Invalid type" });
+    });
+
+    it("should return 400 if id is invalid", async () => {
+        // Making the request to downvote the question
+        const response = await supertest(server)
+          .post("/vote/downvote")
+          .set("Cookie", moderatorCookie)
+          .send({ id: "invalid", type: "question" });
+        
+        // Check the response
+        expect(response.status).toBe(400);
+        expect(response.body).toEqual({ status: 400, message: "Invalid id" });
+    });
+
+    it("should return 500 if error in fetching object", async () => {
+        // Mock the findById method of the Question model
+        Question.findById = jest.fn().mockImplementation(() => {
+            throw new Error("Error in fetching object");
+        });
+
+        // Making the request to downvote the question
+        const response = await supertest(server)
+          .post("/vote/downvote")
+          .set("Cookie", moderatorCookie)
+          .send({ id: "65e9a5c2b26199dbcc3e6dc8", type: "question" });
+
+        // Check the response
+        expect(response.status).toBe(500);
+        expect(response.body).toEqual({ status: 500, message: "Internal Server Error" });
+
+        // Check if the downvote was recorded
+        expect(Question.findById).toBeCalledWith("65e9a5c2b26199dbcc3e6dc8");
     });
 });
 

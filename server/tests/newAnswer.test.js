@@ -118,6 +118,24 @@ describe("POST /addAnswer", () => {
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "Answer not found" });
     })
+
+    it("should return status 500 with an error message", async () => {
+      const mockReqBody = {
+        aid: "dummyAnswerId",
+      };
+  
+      Answer.exists.mockRejectedValueOnce(new Error("Database error"));
+  
+      // Making the request
+      const response = await supertest(server)
+        .post("/answer/reportAnswer")
+        .send(mockReqBody)
+        .set('Cookie', moderatorCookie);
+  
+      // Asserting the response
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ message: "Internal Server Error" });
+    })
   });
 
 
@@ -150,6 +168,21 @@ describe("POST /addAnswer", () => {
       expect(response.status).toBe(200);
       expect(response.body).toEqual(mockReportedAnswers);
     })
+
+    it("should return status 500 with an error message", async () => {
+      Answer.find = jest.fn().mockImplementation(() => {
+        throw new Error("Database error");
+      });
+
+      // Making the request
+      const response = await supertest(server)
+        .get("/answer/getReportedAnswers")
+        .set('Cookie', moderatorCookie);
+      
+      // Asserting the response
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ message: "Internal Server Error" });
+    });
   });
 
   describe("DELETE /deleteAnswer", () => {
@@ -198,6 +231,23 @@ describe("POST /addAnswer", () => {
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "Answer not found" });
     })
+
+    it("should return status 500 with an error message", async () => {
+      const mockReqParams = {
+        answerId: "dummyAnswerId",
+      };
+      
+      Answer.exists.mockRejectedValueOnce(new Error("Database error"));
+      
+      // Making the request
+      const response = await supertest(server)
+        .delete(`/answer/deleteAnswer/${mockReqParams.answerId}`)
+        .set('Cookie', moderatorCookie);
+      
+      // Asserting the response
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ message: "Internal Server Error" });
+    });
   });
 
   describe("POST /resolveAnswer", () => {
@@ -244,6 +294,23 @@ describe("POST /addAnswer", () => {
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: "Answer not found" });
     })
+
+    it("should return status 500 with an error message", async () => {
+      const mockReqParams = {
+        answerId: "dummyAnswerId",
+      };
+
+      Answer.exists.mockRejectedValueOnce(new Error("Database error"));
+
+      // Making the request
+      const response = await supertest(server)
+        .post(`/answer/resolveAnswer/${mockReqParams.answerId}`)
+        .set('Cookie', moderatorCookie);
+      
+      // Asserting the response
+      expect(response.status).toBe(500);
+      expect(response.body).toEqual({ message: "Internal Server Error" });
+    });
   });
 
 

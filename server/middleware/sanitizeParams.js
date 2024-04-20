@@ -28,4 +28,4 @@ function sanitizer(params) {
   return params;
 }
 
-module.exports = sanitizeParams;
+module.exports = { sanitizeParams, sanitizer };

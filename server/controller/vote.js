@@ -52,7 +52,6 @@ const upvote = async (req, res) => {
 
     res.status(200).send({ status: 200, message: "Upvoted successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -78,7 +77,7 @@ const downvote = async (req, res) => {
         voteObject = await Comment;
         break;
       default:
-        throw new Error("Invalid type");
+        return res.status(400).send({ status: 400, message: "Invalid type" });
     }
 
     const obj = await voteObject.findById(id);
@@ -103,7 +102,6 @@ const downvote = async (req, res) => {
 
     res.status(200).send({ status: 200, message: "Downvoted successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };

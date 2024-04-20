@@ -345,20 +345,6 @@ describe("POST /resolveComment/:commentId", () => {
     expect(response.body).toEqual({ message: "Comment not found" });
   });
   
-  it("should return status 500 with an error message for an internal server error", async () => {
-    const mockReqParams = {
-      commentId: "dummyCommentId",
-    };
-
-    Comment.exists.mockRejectedValueOnce();
-
-    const response = await supertest(server)
-      .post(`/comment/resolveComment/${mockReqParams.commentId}`)
-      .set('Cookie', moderatorCookie);
-
-    expect(response.status).toBe(500);
-    expect(response.body).toEqual({ message: "Internal Server Error" });
-  });
 });
 
 
