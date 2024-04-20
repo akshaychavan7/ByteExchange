@@ -94,6 +94,23 @@ function userCreate(user) {
   return userObj.save();
 }
 
+function userCreateWithId(user) {
+  let userdetail = {
+    _id: new mongoose.Types.ObjectId(user.userId),
+    username: user.username,
+    password: user.password,
+    firstname: user.firstName,
+    lastname: user.lastName,
+    userRole: user.role,
+    profilePic: user.profilePic,
+    technologies: user.technologies,
+    location: user.location,
+  };
+
+  let userObj = new User(userdetail);
+  return userObj.save();
+}
+
 function commentCreate(
   description,
   commented_by,
@@ -222,6 +239,7 @@ const init = async () => {
         "https://media.licdn.com/dms/image/D4D03AQF9WmGdmqrJMQ/profile-displayphoto-shrink_800_800/0/1692618347676?e=1718236800&v=beta&t=hVfMg8BIwFp429SB8_fKtBGMsw4pppqNpoJQRPnUBVI",
       technologies: ["JavaScript", "React", "TypeScript"],
       location: "Boston, MA",
+      userId: "6622f4902b45c4a06975c82a"
     },
     {
       username: "general",
@@ -233,6 +251,7 @@ const init = async () => {
         "https://media.licdn.com/dms/image/D4D03AQF9WmGdmqrJMQ/profile-displayphoto-shrink_800_800/0/1692618347676?e=1718236800&v=beta&t=hVfMg8BIwFp429SB8_fKtBGMsw4pppqNpoJQRPnUBVI",
       technologies: ["JavaScript", "React", "TypeScript"],
       location: "Boston, MA",
+      userId: "6622f5d28b534861b8fe7272"
     }
   ];
 
@@ -252,8 +271,8 @@ const init = async () => {
   let user7 = await userCreate(users[6]);
   let user8 = await userCreate(users[7]);
   let user9 = await userCreate(users[8]);
-  let user10 = await userCreate(users[9]);
-  let user11 = await userCreate(users[10]);
+  let user10 = await userCreateWithId(users[9]);
+  let user11 = await userCreateWithId(users[10]);
 
   let comment1 = await commentCreate(
     "Nice!",
