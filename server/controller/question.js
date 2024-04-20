@@ -194,7 +194,7 @@ router.post(
   adminAuthorization,
   resolveQuestion
 );
-router.delete("/deleteQuestion/:questionId", authorization, deleteQuestion);
+router.delete("/deleteQuestion/:questionId", adminAuthorization, deleteQuestion);
 router.get("/getTrendingQuestions", getTrendingQuestions);
 
 module.exports = router;

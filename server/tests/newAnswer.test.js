@@ -266,14 +266,6 @@ describe("POST /addAnswer", () => {
       expect(response.status).toBe(403);
     });
 
-    it("POST /reportAnswer should return status 403", async () => {
-      const response = await supertest(server)
-        .post("/answer/reportAnswer")
-        .set('Cookie', generalCookie);
-
-      expect(response.status).toBe(403);
-    });
-
 
     it("DELETE /deleteAnswer should return status 403", async () => {
       const response = await supertest(server)

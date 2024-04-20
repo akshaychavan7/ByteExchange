@@ -126,7 +126,7 @@ const resolveComment = async (req, res) => {
 router.get("/getReportedComments", adminAuthorization, getReportedComments);
 router.post("/addComment", authorization, addComment);
 router.post("/reportComment", authorization, reportComment);
-router.delete("/deleteComment/:commentId", authorization, deleteComment);
+router.delete("/deleteComment/:commentId", adminAuthorization, deleteComment);
 router.post("/resolveComment/:commentId", adminAuthorization, resolveComment);
 
 module.exports = router;

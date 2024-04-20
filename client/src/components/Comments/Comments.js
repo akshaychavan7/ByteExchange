@@ -25,7 +25,7 @@ export default function Comments({
       parentType: parentType,
     };
     const response = await postComment(data);
-    if (response.status === 200) {
+    if (response) {
       alert.showAlert("Comment posted successfully", "success");
       setDescription("");
       setUpdateState((prev) => prev + 1);
