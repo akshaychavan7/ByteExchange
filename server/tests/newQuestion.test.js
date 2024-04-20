@@ -168,19 +168,20 @@ describe("GET /getQuestionById/:qid", () => {
 
     Question.findOneAndUpdate = jest.fn().mockImplementation(() => ({
       populate: jest.fn().mockReturnThis(), 
-      exec: jest.fn().mockResolvedValueOnce(mockQuestions[0]), 
+      exec: jest.fn().mockResolvedValueOnce(mockQuestions[0])
     }));
 
-    showQuesUpDown.mockReturnValueOnce(mockQuestions[0]);
+    showQuesUpDown.mockReturnValueOnce({...mockQuestions[0], upvote: false, downvote: false});
 
     // Making the request
     const response = await supertest(server).get(
       `/question/getQuestionById/${mockReqParams.qid}`
     )
     .set('Cookie', moderatorCookie);
+
     // Asserting the response
     expect(response.status).toBe(200);
-    expect(response.body).toEqual(mockPopulatedQuestion);
+    expect(response.body).toEqual({...mockQuestions[0], upvote: false, downvote: false});
   });
 
   it("should return status as 500 and empty object in the response", async () => {

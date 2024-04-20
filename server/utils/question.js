@@ -138,6 +138,7 @@ const getTop10Questions = async () => {
 };
 
 const showQuesUpDown = (uid, question) => {
+  question = question.toJSON();
   question.upvote = false;
   question.downvote = false;
   let ques_upvoteBy = question["upvoted_by"].map((objectId) =>
