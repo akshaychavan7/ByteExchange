@@ -45,7 +45,7 @@ export default function Comments({
       <AccordionSummary
         expandIcon={<ExpandMoreIcon className="expand-more-icon-color" />}
         aria-controls="panel1-content"
-        id="panel1-header"
+        id={`panel1-header-${parentType}`}
         className="comments-accordion-summary"
       >
         Comments ({commentsList?.length})
@@ -82,7 +82,7 @@ export default function Comments({
         })}
         <div className="add-comment-container">
           <TextField
-            id="comment-input"
+            id={`comment-input-${parentType}`}
             label="Add a comment"
             variant="outlined"
             sx={{ width: "80%" }}
@@ -96,6 +96,7 @@ export default function Comments({
             color="primary"
             size="small"
             onClick={handlePostComment}
+            id={`postCommentBtn-${parentType}`}
           >
             Post Comment
           </Button>

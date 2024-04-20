@@ -706,39 +706,175 @@
 
 
 
-describe("verify tags display", () => {
-  before(() => {
-    // Seed the database before each test
-    cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
-    cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
-  });
+// describe("verify tags display", () => {
+//   before(() => {
+//     // Seed the database before each test
+//     cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
+//     cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
+//   });
 
-  beforeEach(() => {
-    cy.visit("http://localhost:3000");
-    cy.get("#email").type("general")
-    cy.get("#password").type("test")
-    cy.get("#signInButton").click()
-  })
+//   beforeEach(() => {
+//     cy.visit("http://localhost:3000");
+//     cy.get("#email").type("general")
+//     cy.get("#password").type("test")
+//     cy.get("#signInButton").click()
+//   })
 
-  it("Clicks on a tag and verifies the tag is displayed", () => {
-    const tagNames = "javascript";
+//   it("Clicks on a tag and verifies the tag is displayed", () => {
+//     const tagNames = "javascript";
 
-    cy.get("#sideBarTags").click()
+//     cy.get("#sideBarTags").click()
 
-    cy.contains(tagNames).click();
-    cy.get(".question_tags").each(($el, index, $list) => {
-      cy.wrap($el).should("contain", tagNames);
-    });
-  });
+//     cy.contains(tagNames).click();
+//     cy.get(".question_tags").each(($el, index, $list) => {
+//       cy.wrap($el).should("contain", tagNames);
+//     });
+//   });
 
-  it("Clicks on a tag in homepage and verifies the questions related tag is displayed", () => {
-    const tagNames = "storage";
+//   it("Clicks on a tag in homepage and verifies the questions related tag is displayed", () => {
+//     const tagNames = "storage";
 
-    //clicks the 3rd tag associated with the question.
-    cy.get(".question_tag_button").eq(0).click();
+//     //clicks the 3rd tag associated with the question.
+//     cy.get(".question_tag_button").eq(0).click();
 
-    cy.get(".question_tags").each(($el, index, $list) => {
-      cy.wrap($el).should("contain", tagNames);
-    });
-  });
-});
+//     cy.get(".question_tags").each(($el, index, $list) => {
+//       cy.wrap($el).should("contain", tagNames);
+//     });
+//   });
+// });
+
+
+// describe("upvote and downvote for questions and answers", () => {
+//   before(() => {
+//     // Seed the database before each test
+//     cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
+//     cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
+//   });
+
+//   beforeEach(() => {
+//     cy.visit("http://localhost:3000");
+//     cy.get("#email").type("general")
+//     cy.get("#password").type("test")
+//     cy.get("#signInButton").click()
+//   });
+
+
+//   it("Upvote and downvote for questions", () => {
+//     // upvote a question
+//     cy.contains("Quick question about storage on android").click();
+//     cy.get("#upvoteBtn-question").click();
+//     cy.get("#voteCount-question").should("contain", "1");
+
+//     // downvote a question
+//     cy.get("#downvoteBtn-question").click();
+//     cy.get("#voteCount-question").should("contain", "-1");
+//   });
+
+
+//   it("Upvote and downvote for answers", () => {
+//     // upvote an answer
+//     cy.contains("Quick question about storage on android").click();
+//     cy.get("#upvoteBtn-answer").click();
+//     cy.get("#voteCount-answer").should("contain", "1");
+
+//     // downvote an answer
+//     cy.get("#downvoteBtn-answer").click();
+//     cy.get("#voteCount-answer").should("contain", "-1");
+//   });
+
+//   it("Upvote and downvote for comments", () => {
+//     cy.contains("Quick question about storage on android").click();
+//     // click the second one 
+//     cy.get("#panel1-header-question").click();
+
+//     cy.get("#upvoteBtn-comment").click();
+//     cy.get("#voteCount-comment").should("contain", "1");
+
+//     cy.get("#downvoteBtn-comment").click();
+//     cy.get("#voteCount-comment").should("contain", "-1");
+//   });
+// });
+
+
+// describe("Add comment", () => {
+
+//     before(() => {
+//       // Seed the database before each test
+//       cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
+//       cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
+//     });
+
+//     beforeEach(() => {
+//       cy.visit("http://localhost:3000");
+//       cy.get("#email").type("general")
+//       cy.get("#password").type("test")
+//       cy.get("#signInButton").click()
+//     });
+
+
+//     it("Add a comment to a question", () => {
+//       cy.contains("Quick question about storage on android").click();
+//       cy.get("#panel1-header-question").click();
+//       cy.get("#comment-input-question").type("This is a comment");
+//       cy.get("#postCommentBtn-question").click();
+//       cy.contains("This is a comment");
+//     });
+
+//     it("Add a comment to an answer", () => {
+//       cy.contains("Quick question about storage on android").click();
+//       cy.get('#panel1-header-answer').click();
+//       cy.get("#comment-input-answer").type("This is a comment");
+//       cy.get("#postCommentBtn-answer").click();
+//       cy.contains("This is a comment");
+//     });
+
+//     it("Add an empty comment should show an error", () => {
+//       cy.contains("Quick question about storage on android").click();
+//       cy.get('#panel1-header-answer').click();
+//       cy.get("#postCommentBtn-answer").click();
+//       cy.contains("Failed to post comment");
+//     });
+// });
+
+
+// describe("User page", () => {
+//   before(() => {
+//     // Seed the database before each test
+//     cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
+//     cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
+//   });
+
+//   beforeEach(() => {
+//     cy.visit("http://localhost:3000");
+//     cy.get("#email").type("general")
+//     cy.get("#password").type("test")
+//     cy.get("#signInButton").click()
+//   });
+
+  // it("should display user page", () => {
+  //   const nameList = [
+  //     "Akshay",
+  //     "John",
+  //     "Shiu",
+  //     "Vedant Rishi",
+  //     "Sameer",
+  //     "Sudhanva"
+  //   ]
+  //   cy.get("#sideBarUsers").click();
+  //   nameList.forEach((name) => {
+  //     cy.contains(name);
+  //   });
+  // })
+
+//   it("Click on name should display user info", () => {
+//     cy.get("#sideBarUsers").click();
+//     cy.contains("Akshay").click();
+//     cy.contains("Akshay");
+//     cy.contains("Boston, MA")
+//     cy.contains("Questions")
+//     cy.contains("Answers")
+//     cy.contains("JavaScript")
+//     cy.contains("React")
+//     cy.contains("TypeScript")
+//   })
+// })

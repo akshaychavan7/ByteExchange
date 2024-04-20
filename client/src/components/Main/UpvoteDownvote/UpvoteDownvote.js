@@ -103,6 +103,7 @@ const UpvoteDownvote = ({
             onClick={() => handleVote("up")}
             color={voted === "up" ? "primary" : "default"}
             size="small"
+            id={`upvoteBtn-${postType}`}
           >
             <UploadRounded />
           </IconButton>
@@ -111,6 +112,7 @@ const UpvoteDownvote = ({
           variant="body1"
           className="vote-count"
           sx={{ marginTop: "-5px", marginBottom: "-5px" }}
+          id={`voteCount-${postType}`}
         >
           {votes}
         </Typography>
@@ -119,6 +121,7 @@ const UpvoteDownvote = ({
             onClick={() => handleVote("down")}
             color={voted === "down" ? "primary" : "default"}
             size="small"
+            id={`downvoteBtn-${postType}`}
           >
             <DownloadRounded />
           </IconButton>

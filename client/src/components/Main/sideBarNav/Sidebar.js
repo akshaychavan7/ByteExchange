@@ -290,6 +290,7 @@ export default function Sidebar({
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              id="sideBarUsers"
             >
               <ListItemIcon
                 sx={{
