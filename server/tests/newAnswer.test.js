@@ -137,7 +137,9 @@ describe("POST /addAnswer", () => {
         { description: "This is another test answer", flag: true }
       ];
 
-      Answer.find.mockResolvedValueOnce(mockReportedAnswers);
+      Answer.find = jest.fn().mockImplementation(() => ({
+        populate: jest.fn().mockResolvedValueOnce(mockReportedAnswers),
+      }));
 
       // Making the request
       const response = await supertest(server)

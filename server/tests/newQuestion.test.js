@@ -269,7 +269,9 @@ describe("GET /getReportedQuestions", () => {
       return q;
     });
   
-    Question.find.mockResolvedValueOnce(mockReportedQuestions);
+    Question.find = jest.fn().mockImplementation(() => ({
+      populate: jest.fn().mockResolvedValueOnce(mockReportedQuestions),
+    }));
 
     // Making the request
     const response = await supertest(server)

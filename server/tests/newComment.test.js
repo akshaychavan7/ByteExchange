@@ -30,7 +30,9 @@ describe("GET /getReportedComments", () => {
       { description: "Reported comment 2" }
     ];
 
-    Comment.find.mockResolvedValueOnce(mockReportedComments);
+    Comment.find = jest.fn().mockImplementation(() => ({
+        populate: jest.fn().mockResolvedValueOnce(mockReportedComments),
+    }));
 
     // Making the request
     const response = await supertest(server)
