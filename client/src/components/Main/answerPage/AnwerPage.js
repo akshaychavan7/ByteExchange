@@ -34,7 +34,7 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, clickTag }) => {
       />
       <div id="answers-section" className="pl-30 pr-30">
         <h3 className="answers-count">{question?.answers?.length} Answers</h3>
-
+        <div className="answerText">
         {question.answers?.map((answer, idx) => {
           return (
             <div key={idx}>
@@ -61,12 +61,14 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, clickTag }) => {
             </div>
           );
         })}
+        </div>
       </div>
       <div className="answer-question-btn">
         <Button
           variant="contained"
           startIcon={<SendIcon />}
           onClick={handleNewAnswer}
+          id="answerQuestionBtn"
         >
           Answer Question
         </Button>

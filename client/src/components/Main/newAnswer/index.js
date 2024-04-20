@@ -9,7 +9,7 @@ const NewAnswer = ({ handleAddAnswer }) => {
 
   const postAnswer = () => {
     if (answerDescription.length === 0) {
-      alert.showAlert("Answer Description cannot be empty", "error");
+      alert.showAlert("Answer Description can not be empty", "error");
       return;
     }
     let answer = {
@@ -62,6 +62,7 @@ const NewAnswer = ({ handleAddAnswer }) => {
             onClick={() => {
               postAnswer();
             }}
+            id="postAnswerBtn"
           >
             Post Answer
           </Button>
