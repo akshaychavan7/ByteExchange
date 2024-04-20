@@ -254,6 +254,39 @@ describe("question util module", () => {
     expect(result).toEqual(Error("Error in extracting questions: Error: Could not fetch questions. "));
   });
 
+  test("showQuesUpDown return questions with upvotes and downvotes", async () => {
+    const questions = [
+      {
+        _id: "65e9b716ff0e892116b2de01",
+        upvoted_by: ["user1", "user2"],
+        downvoted_by: ["user3"],
+      },
+      {
+        _id: "65e9b716ff0e892116b2de02",
+        upvoted_by: ["user1"],
+        downvoted_by: ["user2", "user3"],
+      },
+      {
+        _id: "65e9b716ff0e892116b2de03",
+        upvoted_by: [],
+        downvoted_by: [],
+      },
+    ];
+    mockingoose(Question).toReturn(questions, "find");
+
+    const result = await showQuesUpDown();
+    expect(result.length).toEqual(3);
+    expect(result[0]._id.toString()).toEqual("65e9b716ff0e892116b2de01");
+    expect(result[0].upvoted_by).toEqual(2);
+    expect(result[0].downvoted_by).toEqual(1);
+    expect(result[1]._id.toString()).toEqual("65e9b716ff0e892116b2de02");
+    expect(result[1].upvoted_by).toEqual(1);
+    expect(result[1].downvoted_by).toEqual(2);
+    expect(result[2]._id.toString()).toEqual("65e9b716ff0e892116b2de03");
+    expect(result[2].upvoted_by).toEqual(0);
+    expect(result[2].downvoted_by).toEqual(0);
+  });
+
 });
 
 
