@@ -42,12 +42,16 @@ const ans1 = {
   _id: "65e9b58910afe6e94fc6e6dc",
   text: "Answer 1 Text",
   ans_by: "answer1_user",
+  upvoted_by: ["6622f4902b45c4a06975c82a"],
+  downvoted_by: []
 };
 
 const ans2 = {
   _id: "65e9b58910afe6e94fc6e6dd",
   text: "Answer 2 Text",
   ans_by: "answer2_user",
+  upvoted_by: [],
+  downvoted_by: ["6622f4902b45c4a06975c82a"]
 };
 
 
@@ -55,12 +59,16 @@ const comment1 = {
   _id: "65e9b58910afe6e94fc6e6de",
   description: "Comment 1 Description",
   commented_by: "comment1_user",
+  upvoted_by: ["6622f4902b45c4a06975c82a"],
+  downvoted_by: []
 };
 
 const comment2 = {
   _id: "6wfwefwefwefwefwefwefwef",
   description: "Comment 2 Description",
   commented_by: "comment2_user",
+  upvoted_by: [],
+  downvoted_by: ["6622f4902b45c4a06975c82a"]
 };
 
 
@@ -99,8 +107,8 @@ const mockQuestions = [
     answers: [ans2],
     comments: [comment1],
     vote_count: 0,
-    upvoted_by: [user1],
-    downvoted_by: [user2],
+    upvoted_by: ["6622f4902b45c4a06975c82a"],
+    downvoted_by: [],
     flag: false,
   },
   {
@@ -110,11 +118,11 @@ const mockQuestions = [
     asked_by: user2,
     views: 99,
     tags: [tag1, tag2],
-    answers: [ans1],
+    answers: [ans2],
     comments: [comment2],
     vote_count: 1,
-    upvoted_by: [user1],
-    downvoted_by: [],
+    upvoted_by: [],
+    downvoted_by: ["6622f4902b45c4a06975c82a"],
     flag: false,
   },
 ];
@@ -184,18 +192,18 @@ describe("GET /getQuestionById/:qid", () => {
     await mongoose.disconnect();
   });
 
+
   it("should return a question by id and increment its views by 1", async () => {
     // Mock request parameters
     const mockReqParams = {
       qid: "65e9b5a995b6c7045a30d823",
     };
-
+    
+    const mockToJSON = jest.fn().mockReturnValue(mockQuestions[0]);
     Question.findOneAndUpdate = jest.fn().mockImplementation(() => ({
       populate: jest.fn().mockReturnThis(), 
-      exec: jest.fn().mockResolvedValueOnce(mockQuestions[0])
+      exec: jest.fn().mockResolvedValue({ toJSON: mockToJSON })
     }));
-
-    showQuesUpDown.mockReturnValueOnce({...mockQuestions[0], upvote: false, downvote: false});
 
     // Making the request
     const response = await supertest(server).get(
@@ -205,7 +213,31 @@ describe("GET /getQuestionById/:qid", () => {
 
     // Asserting the response
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({...mockQuestions[0], upvote: false, downvote: false});
+    expect(response.body).toEqual({...mockQuestions[0], upvote: true, downvote: false});
+  });
+
+  it("should return a question by id and increment its views by 1 | 2", async () => {
+    // Mock request parameters
+    const mockReqParams = {
+      qid: "65e9b5a995b6c7045a30d823",
+    };
+    
+    const mockToJSON = jest.fn().mockReturnValue(mockQuestions[1]);
+    Question.findOneAndUpdate = jest.fn().mockImplementation(() => ({
+      populate: jest.fn().mockReturnThis(), 
+      exec: jest.fn().mockResolvedValue({ toJSON: mockToJSON })
+    }));
+
+
+    // Making the request
+    const response = await supertest(server).get(
+      `/question/getQuestionById/${mockReqParams.qid}`
+    )
+    .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({...mockQuestions[1], upvote: false, downvote: true});
   });
 
   it("should return status as 500 and empty object in the response", async () => {
