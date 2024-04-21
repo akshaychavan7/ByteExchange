@@ -101,8 +101,7 @@ const getQuestionsByOrder = async (order = "active") => {
         return questions;
     }
   } catch (err) {
-    console.error("err", err);
-    return null;
+    return Error("Error in extracting questions: Error: Could not fetch questions. ");
   }
 };
 

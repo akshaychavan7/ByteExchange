@@ -1,7 +1,11 @@
+const mockingoose = require("mockingoose");
 const supertest = require("supertest");
 const { default: mongoose } = require("mongoose");
 
 const User = require("../models/users");
+const Question = require("../models/questions");
+const Answer = require("../models/answers");
+const Comment = require("../models/comments");
 
 jest.mock("../models/comments");
 
@@ -14,6 +18,81 @@ jest.mock('../utils/user', () => ({
 }));
 
 
+const _tag1 = {
+    _id: "507f191e810c19729de860ea",
+    name: "react",
+  };
+  const _tag2 = {
+    _id: "65e9a5c2b26199dbcc3e6dc8",
+    name: "javascript",
+  };
+  const _tag3 = {
+    _id: "65e9b4b1766fca9451cba653",
+    name: "android",
+  };
+  const _ans1 = {
+    _id: "65e9b58910afe6e94fc6e6dc",
+    description: "ans1",
+    ans_by: "ans_by1",
+    ans_date_time: new Date("2023-11-18T09:24:00"),
+  };
+  
+  const _ans2 = {
+    _id: "65e9b58910afe6e94fc6e6dd",
+    description: "ans2",
+    ans_by: "ans_by2",
+    ans_date_time: new Date("2023-11-20T09:24:00"),
+  };
+  
+  const _ans3 = {
+    _id: "65e9b58910afe6e94fc6e6de",
+    description: "ans3",
+    ans_by: "ans_by3",
+    ans_date_time: new Date("2023-11-19T09:24:00"),
+  };
+  
+  const _ans4 = {
+    _id: "65e9b58910afe6e94fc6e6df",
+    description: "ans4",
+    ans_by: "ans_by4",
+    ans_date_time: new Date("2023-11-19T09:24:00"),
+  };
+
+  
+const _questions = [
+    {
+      _id: "65e9b58910afe6e94fc6e6dc",
+      title: "Quick question about storage on android",
+      description: "I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains",
+      tags: [_tag3, _tag2],
+      answers: [_ans1, _ans2],
+      ask_date_time: new Date("2023-11-16T09:24:00"),
+    },
+    {
+      _id: "65e9b5a995b6c7045a30d823",
+      title: "Object storage for a web application",
+      description: "I am currently working on a website where, roughly 40 million documents and images should be served to its users. I need suggestions on which method is the most suitable for storing content with subject to these requirements.",
+      tags: [_tag1, _tag2],
+      answers: [_ans1, _ans2, _ans3],
+      ask_date_time: new Date("2023-11-17T09:24:00"),
+    },
+    {
+      _id: "65e9b9b44c052f0a08ecade0",
+      title: "Is there a language to write programmes by pictures?",
+      description: "Does something like that exist?",
+      tags: [],
+      answers: [],
+      ask_date_time: new Date("2023-11-19T09:24:00"),
+    },
+    {
+      _id: "65e9b716ff0e892116b2de09",
+      title: "Unanswered Question #2",
+      description: "Does something like that exist?",
+      tags: [],
+      answers: [],
+      ask_date_time: new Date("2023-11-20T09:24:00"),
+    },
+  ];
 
 let server;
 let moderatorCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjQ5MDJiNDVjNGEwNjk3NWM4MmEiLCJ1c2VybmFtZSI6Im1vZGVyYXRvciIsInVzZXJSb2xlIjoibW9kZXJhdG9yIiwiaWF0IjoxNzEzNjUzODMyfQ.cp7VPqo7Lp6z7THvvxqA2FBSvl0bGrZF9D5CX7cl2uU; Expires=Wed, 30 May 2300 12:30:00 GMT; Path=/; Secure; HttpOnly"
@@ -192,10 +271,19 @@ describe("POST /getUserDetails", () => {
         }
 
         User.findOne = jest.fn().mockResolvedValueOnce(mockUser);
-        getQuestionsByUser.mockResolvedValueOnce(mockQuestions);
-        getAnswersByUser.mockResolvedValueOnce(mockAnswers);
-        getCommentsByUser.mockResolvedValueOnce(mockComments);
+        Question.find = jest.fn().mockImplementationOnce(() => ({
+            populate: jest.fn().mockReturnThis(), 
+            exec: jest.fn().mockResolvedValueOnce(mockQuestions)
+        }))
 
+        Answer.find = jest.fn().mockImplementationOnce(() => ({
+            populate: jest.fn().mockReturnThis(), 
+            exec: jest.fn().mockResolvedValueOnce(mockAnswers)
+        }))
+        Comment.find = jest.fn().mockImplementationOnce(() => ({
+            populate: jest.fn().mockReturnThis(), 
+            exec: jest.fn().mockResolvedValueOnce(mockComments)
+        }))
         
         // Making the request
         const response = await supertest(server)

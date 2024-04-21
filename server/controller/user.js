@@ -34,9 +34,31 @@ const getUserDetails = async (req, res) => {
     let user = await User.findOne({
       username: preprocessing(req.params.username),
     });
-    let questions = await getQuestionsByUser(user._id.toString());
-    let answers = await getAnswersByUser(user._id.toString());
-    let comments = await getCommentsByUser(user._id.toString());
+
+    let questions = await Question.find({ asked_by: user._id })
+    .populate({ path: "asked_by", select: "username -_id" })
+    .populate("tags")
+    .populate("answers")
+    .populate("comments")
+    .populate("upvoted_by")
+    .populate("downvoted_by")
+    .exec();
+
+
+    let answers = await Answer.find({ ans_by: user._id })
+    .populate({ path: "ans_by", select: "username -_id" })
+    .populate("comments")
+    .populate("upvoted_by")
+    .populate("downvoted_by")
+    .exec();
+
+    let comments = await Comment.find({ commented_by: user._id })
+    .populate({ path: "commented_by", select: "username -_id" })
+    .populate("upvoted_by")
+    .exec();
+
+
+
     let udetails = {
       username: user["username"],
       firstname: user["firstname"],

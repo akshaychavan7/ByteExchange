@@ -1,6 +1,5 @@
 const express = require("express");
 const Question = require("../models/questions");
-const { updateReputation } = require("../utils/user");
 const {
   addTag,
   getQuestionsByOrder,

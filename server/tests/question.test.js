@@ -6,6 +6,8 @@ const {
   addTag,
   getQuestionsByOrder,
   filterQuestionsBySearch,
+  getTop10Questions,
+  showQuesUpDown
 } = require("../utils/question");
 Question.schema.path("answers", Array);
 
@@ -105,6 +107,14 @@ describe("question util module", () => {
     expect(result.toString()).toEqual(_tag2._id);
   });
 
+  test("addTag return error if error occurs while adding tag", async () => {
+    mockingoose(Tag).toReturn(null, "findOne");
+    mockingoose(Tag).toReturn(new Error("Could not add tag. "), "save");
+
+    const result = await addTag("javascript");
+    expect(result).toEqual(Error("Could not add tag. "));
+  });
+
   // filterQuestionsBySearch
   test("filter question empty string", () => {
     const result = filterQuestionsBySearch(_questions, "");
@@ -142,6 +152,17 @@ describe("question util module", () => {
     expect(result[1]._id).toEqual("65e9b5a995b6c7045a30d823");
   });
 
+  test("get top 10 questions", async () => {
+    mockingoose(Question).toReturn(_questions, "find");
+
+    const result = await getTop10Questions();
+    expect(result.length).toEqual(4);
+    expect(result[0]._id.toString()).toEqual("65e9b58910afe6e94fc6e6dc");
+    expect(result[1]._id.toString()).toEqual("65e9b5a995b6c7045a30d823");
+    expect(result[2]._id.toString()).toEqual("65e9b9b44c052f0a08ecade0");
+    expect(result[3]._id.toString()).toEqual("65e9b716ff0e892116b2de09");
+  });
+  
   // getQuestionsByOrder
   test("get active questions, newest questions sorted by most recently answered 1", async () => {
     mockingoose(Question).toReturn(_questions.slice(0, 3), "find");
@@ -225,4 +246,12 @@ describe("question util module", () => {
     expect(result[1]._id.toString()).toEqual("65e9b716ff0e892116b2de01");
     expect(result[2]._id.toString()).toEqual("65e9b716ff0e892116b2de05");
   });
+
+  test("get Questions By Order return error if error occurs while fetching questions", async () => {
+    mockingoose(Question).toReturn(new Error("Could not fetch questions. "), "find");
+
+    const result = await getQuestionsByOrder("active");
+    expect(result).toEqual(Error("Error in extracting questions: Error: Could not fetch questions. "));
+  });
+
 });
