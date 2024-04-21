@@ -13,6 +13,16 @@ services:
       - ./server:/usr/src/app
     depends_on:
       - mongodb
+  # add python server steps
+  pyserver:
+    build: server/python utils
+    ports:
+      - "8001:8001"
+    volumes:
+      - logs:/app/logs
+      - ./pyserver:/usr/src/app
+    depends_on:
+      - mongodb
   client:
     build: client
     ports:
@@ -23,6 +33,7 @@ services:
     tty: true
     depends_on:
       - server
+      - pyserver
 
 volumes:
   data:
