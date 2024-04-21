@@ -48,12 +48,12 @@ const NewQuestion = ({ addQuestion }) => {
     }
 
     if (description.length === 0) {
-      alert.showAlert("Question Description cannot be empty", "error");
+      alert.showAlert("Question Description can not be empty", "error");
       return;
     }
 
     if (tags.length === 0) {
-      alert.showAlert("Please add atleast one tag", "error");
+      alert.showAlert("Please add at least one tag", "error");
       return;
     }
 

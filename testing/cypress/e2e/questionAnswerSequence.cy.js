@@ -1,7 +1,7 @@
 
 describe("Verifies Question Answer sequence", () => {
 
-    before(() => {
+    beforeEach(() => {
       // Seed the database before each test
       cy.exec("node ../server/destroy.js mongodb://127.0.0.1:27017/fake_so");
       cy.exec("node ../server/init.js mongodb://127.0.0.1:27017/fake_so");
@@ -14,7 +14,7 @@ describe("Verifies Question Answer sequence", () => {
       cy.get("#signInButton").click()
     })
   
-    it("6.1 | Adds a question, click active button, verifies the sequence", () => {
+    it("Adds a question, click active button, verifies the sequence", () => {
       // add a question
       cy.get("#askQuestionButton").click()
       cy.get("#title").type("Test Question A")
@@ -64,7 +64,66 @@ describe("Verifies Question Answer sequence", () => {
       });
     
     });
-  
+
+    it("click unanswered button, verifies the sequence", () => {
+
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("Test Question A")
+        cy.get("#description").type("Test Question A Description")
+        cy.get("#tags").type("tag1").type("{enter}")
+        cy.get("#postQuestionButton").click()
+
+        cy.get("#unanswered").click();
+    
+        const qTitles = [
+            "Test Question A"
+        ];
+
+        cy.get(".postTitle").each(($el, index, $list) => {
+            cy.wrap($el).should("contain", qTitles[index]);
+        });
+    });
+    
+    it("click trending button, verifies the sequence", () => {     
+        cy.get("#sideBarHome").click();
+        cy.get("#active").click();
+        cy.get("#newest").click();
+    
+        const qTitles = [
+            "Object storage for a web application",
+            "Quick question about storage on android",
+            "android studio save string shared preference, start activity and load the saved string",
+            "Programmatically navigate using React router",
+          ];
+          cy.get(".postTitle").each(($el, index, $list) => {
+            cy.wrap($el).should("contain", qTitles[index]);
+          });
+    });
+
+    it("click active button, verifies the sequence", () => {
+        cy.get("#sideBarHome").click();
+        cy.get("#active").click();
+    
+        const qTitles = [
+            "Quick question about storage on android",
+            "Object storage for a web application",
+            "android studio save string shared preference, start activity and load the saved string",
+            "Programmatically navigate using React router",
+          ];
+          cy.get(".postTitle").each(($el, index, $list) => {
+            cy.wrap($el).should("contain", qTitles[index]);
+          });
+    });
+
+    it("click unanswered button, verifies the sequence", () => {
+        cy.get("#sideBarHome").click();
+        cy.get("#unanswered").click();
+    
+        cy.contains("No questions found");
+    });
+
+
+
     it("Checks if a6 and a7 exist in q3 answers page", () => {
       const answers = [
         "Using GridFS to chunk and store content.",

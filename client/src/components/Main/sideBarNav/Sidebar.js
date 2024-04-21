@@ -205,6 +205,7 @@ export default function Sidebar({
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              id="sideBarHome"
             >
               <ListItemIcon
                 sx={{

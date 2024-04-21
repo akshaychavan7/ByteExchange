@@ -27,11 +27,9 @@ export default function ProfilePage({ username, setViewUserProfile }) {
       .then((data) => {
         setUser(data.userDetails);
       })
-      .catch((e) => {
-        console.error(e);
+      .catch(() => {
         alert.showAlert("Could not fetch user details", "error");
         setUser(null);
-        setViewUserProfile({ view: false, username: "" });
       });
   }, []);
 

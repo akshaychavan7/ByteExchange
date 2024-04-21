@@ -12,7 +12,18 @@ describe("User page", () => {
       cy.get("#password").type("test")
       cy.get("#signInButton").click()
     });
-  
+    
+    it("click user profile icon should display user page", () => {
+        cy.get("#profilePic").click();
+        cy.contains("Akshay");
+        cy.contains("Boston, MA")
+        cy.contains("Questions")
+        cy.contains("Answers")
+        cy.contains("JavaScript")
+        cy.contains("React")
+        cy.contains("TypeScript")
+    });
+
     it("should display user page", () => {
       const nameList = [
         "Akshay",
