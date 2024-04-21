@@ -7,7 +7,6 @@ const Comment = require("../models/comments");
 const { preprocessing } = require("../utils/textpreprocess");
 
 const { authorization } = require("../middleware/authorization");
-const { sanitizeParams } = require("../middleware/sanitizeParams");
 
 const router = express.Router();
 
@@ -78,11 +77,10 @@ const getUserDetails = async (req, res) => {
 };
 
 
-router.post("/getUsersList", authorization, sanitizeParams, getUsersList);
+router.post("/getUsersList", authorization, getUsersList);
 router.get(
   "/getUserDetails/:username",
   authorization,
-  sanitizeParams,
   getUserDetails
 );
 

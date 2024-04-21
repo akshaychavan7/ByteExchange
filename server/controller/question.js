@@ -135,6 +135,9 @@ const showCommentUpDown = (uid, comments) => {
 
 // To add Question
 const addQuestion = async (req, res) => {
+  if(req.body.tags.length > 5){
+    return res.status(400).json({ message: "Maximum 5 tags are allowed" });
+  }
   let tags = await Promise.all(
     req.body.tags.map(async (tag) => {
       return await addTag(tag);

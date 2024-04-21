@@ -261,6 +261,25 @@ describe("GET /getQuestionById/:qid", () => {
     expect(response.status).toBe(500);
     expect(response.body).toEqual({ error: 'Something went wrong', details: 'Random!' });
   });
+
+  it("add question with more than 5 tags should return error", async () => {
+    // Mock request body
+    const mockQuestion = {
+      title: "test",
+      description: "test description",
+      tags: ["tag1", "tag2", "tag3", "tag4", "tag5", "tag6"]
+    };
+
+    // Making the request
+    const response = await supertest(server)
+      .post("/question/addQuestion")
+      .send(mockQuestion)
+      .set('Cookie', moderatorCookie);
+
+    // Asserting the response
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ message: "Maximum 5 tags are allowed" });
+  });
 });
 
 describe("POST /addQuestion", () => {

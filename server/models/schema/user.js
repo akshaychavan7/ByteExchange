@@ -24,15 +24,8 @@ const userSchema = mongoose.Schema(
 
 // Middleware to hash the password before saving
 userSchema.pre("save", function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
-  try {
-    this.password = bcrypt.hashSync(this.password, 10);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  this.password = bcrypt.hashSync(this.password, 10);
+  next();
 });
 
 module.exports = userSchema;
