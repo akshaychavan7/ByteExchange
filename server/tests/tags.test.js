@@ -19,10 +19,13 @@ const mockQuestions = [
 ];
 
 let server;
+let moderatorCookie = "access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NjIyZjQ5MDJiNDVjNGEwNjk3NWM4MmEiLCJ1c2VybmFtZSI6Im1vZGVyYXRvciIsInVzZXJSb2xlIjoibW9kZXJhdG9yIiwiaWF0IjoxNzEzNjUzODMyfQ.cp7VPqo7Lp6z7THvvxqA2FBSvl0bGrZF9D5CX7cl2uU; Expires=Wed, 30 May 2300 12:30:00 GMT; Path=/; Secure; HttpOnly"
+
 describe("GET /getTagsWithQuestionNumber", () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     server = require("../server");
   });
+
   afterEach(async () => {
     server.close();
     await mongoose.disconnect();
@@ -39,7 +42,8 @@ describe("GET /getTagsWithQuestionNumber", () => {
     // Making the request
     const response = await supertest(server).get(
       "/tag/getTagsWithQuestionNumber"
-    );
+    )
+    .set('Cookie', moderatorCookie);
 
     // Asserting the response
     expect(response.status).toBe(200);

@@ -43,7 +43,7 @@ const NewQuestion = ({ addQuestion }) => {
 
   const postQuestion = () => {
     if (title.length === 0) {
-      alert.showAlert("Question Title cannot be empty", "error");
+      alert.showAlert("Question title can not be empty", "error");
       return;
     }
 
@@ -185,6 +185,7 @@ const NewQuestion = ({ addQuestion }) => {
             onClick={() => {
               postQuestion();
             }}
+            id="postQuestionButton"
           >
             Post Question
           </Button>

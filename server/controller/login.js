@@ -7,6 +7,7 @@ const { SECRET_KEY } = require("../config");
 
 const router = express.Router();
 
+
 // validate crentials of the user - LOGIN
 const authenticateCredentials = async (req, res) => {
   try {
@@ -40,6 +41,7 @@ const authenticateCredentials = async (req, res) => {
           firstname: user.firstname,
           lastname: user.lastname,
           username: user.username,
+          userId: user._id,
           profilePic: user.profilePic,
         },
       });
@@ -53,6 +55,15 @@ const registerUser = async (req, res) => {
   try {
     const { username, password, firstname, lastname, profilePic, location } =
       req.body;
+
+    // check if any of the items is missing
+    if (!username || !password || !firstname || !lastname || !location) {
+      return res
+        .status(400)
+        .json({ status: 400, message: "Make sure you fill all the required fields!" });
+    }
+
+    
     // check if user already exists
     const existing = await User.findOne({ username });
     if (existing) {
@@ -60,19 +71,19 @@ const registerUser = async (req, res) => {
         .status(400)
         .json({ status: 400, message: "User already exists" });
     } else {
-      const user = new User({
+       User.create({
         username,
         password,
         firstname,
         lastname,
         profilePic,
         location,
-      });
-      await user.save();
-      res
+      })
+      return res
         .status(200)
         .json({ status: 200, message: "User registered successfully" });
-    }
+  
+      }
   } catch (error) {
     console.error(`Error while calling register API: ${error}`);
     res.status(500).json({ message: "Internal Server Error" });

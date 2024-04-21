@@ -14,8 +14,7 @@ const addComment = async (req, res) => {
   try {
     let comment = await Comment.create({
       description: req.body.description,
-      commented_by: req.userId,
-      comment_date_time: new Date(),
+      commented_by: req.userId
     });
 
     let parentId = req.body.parentId;
@@ -24,7 +23,7 @@ const addComment = async (req, res) => {
     if (!validateId(parentId)) {
       return res
         .status(400)
-        .send({ status: 400, message: "Invalid parent id" });
+        .send({ message: "Invalid parent id" });
     }
 
     let parentModel;
@@ -33,12 +32,12 @@ const addComment = async (req, res) => {
     } else if (parentType === "answer") {
       parentModel = Answer;
     } else {
-      return res.status(400).send({ status: 400, message: "Invalid parent" });
+      return res.status(400).send({ message: "Invalid parent" });
     }
 
     let parentObject = await parentModel.exists({ _id: parentId });
     if (!parentObject) {
-      return res.status(404).send({ status: 404, message: "Parent not found" });
+      return res.status(404).send({ message: "Parent not found" });
     }
 
     await parentModel.findByIdAndUpdate(
@@ -47,9 +46,8 @@ const addComment = async (req, res) => {
       { new: true }
     );
 
-    res.status(200).json({ status: 200, body: comment });
+    res.status(200).json( comment );
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -60,7 +58,7 @@ const reportComment = async (req, res) => {
     if (!comment) {
       return res
         .status(404)
-        .send({ status: 404, message: "Comment not found" });
+        .send({ message: "Comment not found" });
     }
 
     await Comment.findByIdAndUpdate(
@@ -70,9 +68,8 @@ const reportComment = async (req, res) => {
     );
     res
       .status(200)
-      .send({ status: 200, message: "Comment reported successfully" });
+      .send({ message: "Comment reported successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -85,7 +82,6 @@ const getReportedComments = async (req, res) => {
     });
     res.status(200).json(comments);
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -94,14 +90,14 @@ const deleteComment = async (req, res) => {
   try {
     let comment = await Comment.exists({ _id: req.params.commentId });
     if (!comment) {
-      return res.status(404).send("Comment not found");
+      return res.status(404).send({ message: "Comment not found" });
     }
 
     await Comment.findByIdAndDelete(req.params.commentId);
-    res.status(200).send("Comment deleted successfully");
+    res.status(200).send( { message: "Comment deleted successfully" });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -109,7 +105,7 @@ const resolveComment = async (req, res) => {
   try {
     let comment = await Comment.exists({ _id: req.params.commentId });
     if (!comment) {
-      return res.status(404).send("Comment not found");
+      return res.status(404).send({ message: "Comment not found" });
     }
 
     await Comment.findByIdAndUpdate(
@@ -117,17 +113,17 @@ const resolveComment = async (req, res) => {
       { flag: false },
       { new: true }
     );
-    res.status(200).send("Comment resolved successfully");
+    res.status(200).send({ message: "Comment resolved successfully" });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    
+    res.statclearus(500).send({ message: "Internal Server Error" });
   }
 };
 
-router.get("/getReportedComments", authorization, getReportedComments);
+router.get("/getReportedComments", adminAuthorization, getReportedComments);
 router.post("/addComment", authorization, addComment);
 router.post("/reportComment", authorization, reportComment);
-router.delete("/deleteComment/:commentId", authorization, deleteComment);
+router.delete("/deleteComment/:commentId", adminAuthorization, deleteComment);
 router.post("/resolveComment/:commentId", adminAuthorization, resolveComment);
 
 module.exports = router;

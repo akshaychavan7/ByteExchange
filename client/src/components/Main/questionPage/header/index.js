@@ -35,18 +35,21 @@ const QuestionHeader = ({
             <ToggleButton
               value={constants.ORDER_NEWEST}
               onClick={() => setQuestionOrder(constants.ORDER_NEWEST)}
+              id="newest"
             >
               Newest
             </ToggleButton>
             <ToggleButton
               value={constants.ORDER_ACTIVE}
               onClick={() => setQuestionOrder(constants.ORDER_ACTIVE)}
+              id="active"
             >
               Active
             </ToggleButton>
             <ToggleButton
               value={constants.ORDER_UNANSWERED}
               onClick={() => setQuestionOrder(constants.ORDER_UNANSWERED)}
+              id="unanswered"
             >
               Unanswered
             </ToggleButton>

@@ -6,6 +6,8 @@ const {
   addTag,
   getQuestionsByOrder,
   filterQuestionsBySearch,
+  getTop10Questions,
+  showQuesUpDown
 } = require("../utils/question");
 Question.schema.path("answers", Array);
 
@@ -23,28 +25,28 @@ const _tag3 = {
 };
 const _ans1 = {
   _id: "65e9b58910afe6e94fc6e6dc",
-  text: "ans1",
+  description: "ans1",
   ans_by: "ans_by1",
   ans_date_time: new Date("2023-11-18T09:24:00"),
 };
 
 const _ans2 = {
   _id: "65e9b58910afe6e94fc6e6dd",
-  text: "ans2",
+  description: "ans2",
   ans_by: "ans_by2",
   ans_date_time: new Date("2023-11-20T09:24:00"),
 };
 
 const _ans3 = {
   _id: "65e9b58910afe6e94fc6e6de",
-  text: "ans3",
+  description: "ans3",
   ans_by: "ans_by3",
   ans_date_time: new Date("2023-11-19T09:24:00"),
 };
 
 const _ans4 = {
   _id: "65e9b58910afe6e94fc6e6df",
-  text: "ans4",
+  description: "ans4",
   ans_by: "ans_by4",
   ans_date_time: new Date("2023-11-19T09:24:00"),
 };
@@ -53,7 +55,7 @@ const _questions = [
   {
     _id: "65e9b58910afe6e94fc6e6dc",
     title: "Quick question about storage on android",
-    text: "I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains",
+    description: "I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains",
     tags: [_tag3, _tag2],
     answers: [_ans1, _ans2],
     ask_date_time: new Date("2023-11-16T09:24:00"),
@@ -61,7 +63,7 @@ const _questions = [
   {
     _id: "65e9b5a995b6c7045a30d823",
     title: "Object storage for a web application",
-    text: "I am currently working on a website where, roughly 40 million documents and images should be served to its users. I need suggestions on which method is the most suitable for storing content with subject to these requirements.",
+    description: "I am currently working on a website where, roughly 40 million documents and images should be served to its users. I need suggestions on which method is the most suitable for storing content with subject to these requirements.",
     tags: [_tag1, _tag2],
     answers: [_ans1, _ans2, _ans3],
     ask_date_time: new Date("2023-11-17T09:24:00"),
@@ -69,7 +71,7 @@ const _questions = [
   {
     _id: "65e9b9b44c052f0a08ecade0",
     title: "Is there a language to write programmes by pictures?",
-    text: "Does something like that exist?",
+    description: "Does something like that exist?",
     tags: [],
     answers: [],
     ask_date_time: new Date("2023-11-19T09:24:00"),
@@ -77,7 +79,7 @@ const _questions = [
   {
     _id: "65e9b716ff0e892116b2de09",
     title: "Unanswered Question #2",
-    text: "Does something like that exist?",
+    description: "Does something like that exist?",
     tags: [],
     answers: [],
     ask_date_time: new Date("2023-11-20T09:24:00"),
@@ -103,6 +105,14 @@ describe("question util module", () => {
 
     const result = await addTag("javascript");
     expect(result.toString()).toEqual(_tag2._id);
+  });
+
+  test("addTag return error if error occurs while adding tag", async () => {
+    mockingoose(Tag).toReturn(null, "findOne");
+    mockingoose(Tag).toReturn(new Error("Could not add tag. "), "save");
+
+    const result = await addTag("javascript");
+    expect(result).toEqual(Error("Could not add tag. "));
   });
 
   // filterQuestionsBySearch
@@ -142,6 +152,17 @@ describe("question util module", () => {
     expect(result[1]._id).toEqual("65e9b5a995b6c7045a30d823");
   });
 
+  test("get top 10 questions", async () => {
+    mockingoose(Question).toReturn(_questions, "find");
+
+    const result = await getTop10Questions();
+    expect(result.length).toEqual(4);
+    expect(result[0]._id.toString()).toEqual("65e9b58910afe6e94fc6e6dc");
+    expect(result[1]._id.toString()).toEqual("65e9b5a995b6c7045a30d823");
+    expect(result[2]._id.toString()).toEqual("65e9b9b44c052f0a08ecade0");
+    expect(result[3]._id.toString()).toEqual("65e9b716ff0e892116b2de09");
+  });
+  
   // getQuestionsByOrder
   test("get active questions, newest questions sorted by most recently answered 1", async () => {
     mockingoose(Question).toReturn(_questions.slice(0, 3), "find");
@@ -225,4 +246,73 @@ describe("question util module", () => {
     expect(result[1]._id.toString()).toEqual("65e9b716ff0e892116b2de01");
     expect(result[2]._id.toString()).toEqual("65e9b716ff0e892116b2de05");
   });
+
+  test("get Questions By Order return error if error occurs while fetching questions", async () => {
+    mockingoose(Question).toReturn(new Error("Could not fetch questions. "), "find");
+
+    const result = await getQuestionsByOrder("active");
+    expect(result).toEqual(Error("Error in extracting questions: Error: Could not fetch questions. "));
+  });
+
+  // test("showQuesUpDown return questions with upvotes and downvotes", async () => {
+  //   const questions = [
+  //     {
+  //       _id: "65e9b716ff0e892116b2de01",
+  //       upvoted_by: ["user1", "user2"],
+  //       downvoted_by: ["user3"],
+  //     },
+  //     {
+  //       _id: "65e9b716ff0e892116b2de02",
+  //       upvoted_by: ["user1"],
+  //       downvoted_by: ["user2", "user3"],
+  //     },
+  //     {
+  //       _id: "65e9b716ff0e892116b2de03",
+  //       upvoted_by: [],
+  //       downvoted_by: [],
+  //     },
+  //   ];
+  //   mockingoose(Question).toReturn(questions, "find");
+
+  //   const result = await showQuesUpDown();
+  //   expect(result.length).toEqual(3);
+  //   expect(result[0]._id.toString()).toEqual("65e9b716ff0e892116b2de01");
+  //   expect(result[0].upvoted_by).toEqual(2);
+  //   expect(result[0].downvoted_by).toEqual(1);
+  //   expect(result[1]._id.toString()).toEqual("65e9b716ff0e892116b2de02");
+  //   expect(result[1].upvoted_by).toEqual(1);
+  //   expect(result[1].downvoted_by).toEqual(2);
+  //   expect(result[2]._id.toString()).toEqual("65e9b716ff0e892116b2de03");
+  //   expect(result[2].upvoted_by).toEqual(0);
+  //   expect(result[2].downvoted_by).toEqual(0);
+  // });
+
 });
+
+
+// describe("showQuesUpDown", () => {
+//   test("showQuesUpDown should respond correctly", () => {
+//     const q = {
+//       "_id": "662442c6f504c5166b9c6056",
+//       "title": "test",
+//       "description": "test description",
+//       "asked_by": {},
+//       "views": 1,
+//       "tags": ["tag1"],
+//       "answers": [],
+//       "comments": [],
+//       "vote_count": -1,
+//       "upvoted_by": [],
+//       "downvoted_by": ["6622f5d28b534861b8fe7272"],
+//       "flag": false,
+//       "ask_date_time": "2024-04-20T22:33:42.075Z",
+//       "__v": 0,
+//       "upvote": false,
+//       "downvote": false
+//     }
+
+//     const result = showQuesUpDown("6622f5d28b534861b8fe7272", q)
+
+//     expect({...q, upvote: false, downvote: true}).toEqual(result)
+//   })
+// });

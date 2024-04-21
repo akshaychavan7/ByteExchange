@@ -231,6 +231,7 @@ export default function Sidebar({
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              id="sideBarQuestions"
             >
               <ListItemIcon
                 sx={{
@@ -262,6 +263,7 @@ export default function Sidebar({
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              id="sideBarTags"
             >
               <ListItemIcon
                 sx={{
@@ -288,6 +290,7 @@ export default function Sidebar({
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              id="sideBarUsers"
             >
               <ListItemIcon
                 sx={{
@@ -316,6 +319,7 @@ export default function Sidebar({
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              id="sideBarLogout"
             >
               <ListItemIcon
                 sx={{

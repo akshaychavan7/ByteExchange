@@ -101,8 +101,7 @@ const getQuestionsByOrder = async (order = "active") => {
         return questions;
     }
   } catch (err) {
-    console.error("err", err);
-    return null;
+    return Error(`Error in extracting questions: ${err}`);
   }
 };
 
@@ -138,6 +137,7 @@ const getTop10Questions = async () => {
 };
 
 const showQuesUpDown = (uid, question) => {
+  question = question.toJSON();
   question.upvote = false;
   question.downvote = false;
   let ques_upvoteBy = question["upvoted_by"].map((objectId) =>

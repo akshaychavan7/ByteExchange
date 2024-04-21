@@ -36,7 +36,7 @@ const upvote = async (req, res) => {
     }
 
     if (obj.upvoted_by.includes(req.userId)) {
-      return res.status(200).send("User already upvoted");
+      return res.status(200).send({ message: "User already upvoted" });
     } else if (obj.downvoted_by.includes(req.userId)) {
       await voteObject.findByIdAndUpdate(id, {
         $pull: { downvoted_by: req.userId },
@@ -52,7 +52,6 @@ const upvote = async (req, res) => {
 
     res.status(200).send({ status: 200, message: "Upvoted successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };
@@ -78,7 +77,7 @@ const downvote = async (req, res) => {
         voteObject = await Comment;
         break;
       default:
-        throw new Error("Invalid type");
+        return res.status(400).send({ status: 400, message: "Invalid type" });
     }
 
     const obj = await voteObject.findById(id);
@@ -87,7 +86,7 @@ const downvote = async (req, res) => {
     }
 
     if (obj.downvoted_by.includes(req.userId)) {
-      return res.status(200).send("User already downvoted");
+      return res.status(200).send({ message: "User already downvoted" });
     } else if (obj.upvoted_by.includes(req.userId)) {
       await voteObject.findByIdAndUpdate(id, {
         $pull: { upvoted_by: req.userId },
@@ -103,7 +102,6 @@ const downvote = async (req, res) => {
 
     res.status(200).send({ status: 200, message: "Downvoted successfully" });
   } catch (error) {
-    console.error("Error:", error);
     res.status(500).send({ status: 500, message: "Internal Server Error" });
   }
 };

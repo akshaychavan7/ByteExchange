@@ -17,7 +17,7 @@ const app = express();
 // Define rate limiting options
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 300, // limit each IP to 300 requests per windowMs
+  max: 10000, // limit each IP to 300 requests per windowMs
   message: "Too many requests from this IP, please try again later",
 });
 
@@ -36,11 +36,6 @@ app.use(
 app.use(bodyParser.json({ limit: "50mb", type: "application/json" }));
 
 app.use(express.json());
-
-app.get("/", (_, res) => {
-  res.send("Fake SO Server Dummy Endpoint");
-  res.end();
-});
 
 const questionController = require("./controller/question");
 const tagController = require("./controller/tag");
@@ -92,4 +87,4 @@ process.on("SIGINT", () => {
   process.exit(0);
 });
 
-module.exports = { server, authorization };
+module.exports = server

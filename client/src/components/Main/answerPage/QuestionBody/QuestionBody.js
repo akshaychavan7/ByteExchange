@@ -6,7 +6,7 @@ import Comments from "../../../Comments/Comments";
 
 const QuestionBody = ({ question, clickTag, setUpdateState }) => {
   return (
-    <div className="pl-30 pr-30">
+    <div className="pl-30 pr-30" id="questionBody">
       <UserResponse
         className="right_padding pt-0"
         description={question?.description}

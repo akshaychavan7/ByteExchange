@@ -150,13 +150,14 @@ export default function Login() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                id="signInButton"
               >
                 Sign In
               </Button>
               <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>
-                  <Link href="/signup" variant="body2">
+                  <Link href="/signup" variant="body2" id="signUpLink">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>

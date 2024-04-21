@@ -12,8 +12,7 @@ const {
 const addAnswer = async (req, res) => {
   let answer = await Answer.create({
     ...req.body.ans,
-    ans_by: req.userId,
-    ans_date_time: new Date(),
+    ans_by: req.userId
   });
   res.status(200);
   let qid = req.body.qid;
@@ -29,14 +28,13 @@ const reportAnswer = async (req, res) => {
   try {
     let answer = await Answer.exists({ _id: req.body.aid });
     if (!answer) {
-      return res.status(404).send({ status: 404, message: "Answer not found" });
+      return res.status(404).send({ message: "Answer not found" });
     }
 
     await Answer.findByIdAndUpdate(req.body.aid, { flag: true }, { new: true });
-    res.status(200).send({ status: 200, message: "Answer reported" });
+    res.status(200).send({ message: "Answer reported" });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send({ status: 500, message: "Internal Server Error" });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -48,8 +46,7 @@ const getReportedAnswers = async (req, res) => {
     });
     res.status(200).json(answers);
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send({ status: 500, message: "Internal Server Error" });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -57,14 +54,13 @@ const deleteAnswer = async (req, res) => {
   try {
     let answer = await Answer.exists({ _id: req.params.answerId });
     if (!answer) {
-      return res.status(404).send("Answer not found");
+      return res.status(404).send({ message: "Answer not found" });
     }
 
     await Answer.findByIdAndDelete(req.params.answerId);
-    res.status(200).send("Answer deleted successfully");
+    res.status(200).send( { message: "Answer deleted successfully" });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -72,7 +68,7 @@ const resolveAnswer = async (req, res) => {
   try {
     let answer = await Answer.exists({ _id: req.params.answerId });
     if (!answer) {
-      return res.status(404).send("Answer not found");
+      return res.status(404).send({ message: "Answer not found" });
     }
 
     await Answer.findByIdAndUpdate(
@@ -80,10 +76,9 @@ const resolveAnswer = async (req, res) => {
       { flag: false },
       { new: true }
     );
-    res.status(200).send("Answer resolved successfully");
+    res.status(200).send({ message: "Answer resolved successfully" });
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 

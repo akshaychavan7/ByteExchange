@@ -7,7 +7,7 @@ const Comment = require("../models/comments");
 const { preprocessing } = require("../utils/textpreprocess");
 
 const { authorization } = require("../middleware/authorization");
-const sanitizeParams = require("../middleware/sanitizeParams");
+const { sanitizeParams } = require("../middleware/sanitizeParams");
 
 const router = express.Router();
 
@@ -32,9 +32,31 @@ const getUserDetails = async (req, res) => {
     let user = await User.findOne({
       username: preprocessing(req.params.username),
     });
-    let questions = await getQuestionsByUser(user._id.toString());
-    let answers = await getAnswersByUser(user._id.toString());
-    let comments = await getCommentsByUser(user._id.toString());
+
+    let questions = await Question.find({ asked_by: user._id })
+    .populate({ path: "asked_by", select: "username -_id" })
+    .populate("tags")
+    .populate("answers")
+    .populate("comments")
+    .populate("upvoted_by")
+    .populate("downvoted_by")
+    .exec();
+
+
+    let answers = await Answer.find({ ans_by: user._id })
+    .populate({ path: "ans_by", select: "username -_id" })
+    .populate("comments")
+    .populate("upvoted_by")
+    .populate("downvoted_by")
+    .exec();
+
+    let comments = await Comment.find({ commented_by: user._id })
+    .populate({ path: "commented_by", select: "username -_id" })
+    .populate("upvoted_by")
+    .exec();
+
+
+
     let udetails = {
       username: user["username"],
       firstname: user["firstname"],
@@ -55,66 +77,6 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-const getQuestionsByUser = async (uid) => {
-  try {
-    let questions = await Question.find({ asked_by: preprocessing(uid) })
-      .populate({ path: "asked_by", select: "username -_id" })
-      .populate("tags")
-      .populate("answers")
-      .populate("comments")
-      .populate("upvoted_by")
-      .populate("downvoted_by")
-      .exec();
-
-    return questions;
-  } catch (err) {
-    return Error(`Error in extracting questions: ${err}`);
-  }
-};
-
-const getAnswersByUser = async (uid) => {
-  try {
-    let answers = await Answer.find({ ans_by: preprocessing(uid) })
-      .populate({ path: "ans_by", select: "username -_id" })
-      .populate("comments")
-      .populate("upvoted_by")
-      .populate("downvoted_by")
-      .exec();
-
-    return answers;
-  } catch (err) {
-    return Error(`Error in extracting answers: ${err}`);
-  }
-};
-
-const getCommentsByUser = async (uid) => {
-  try {
-    let comments = await Comment.find({ commented_by: preprocessing(uid) })
-      .populate({ path: "commented_by", select: "username -_id" })
-      .populate("upvoted_by")
-      .exec();
-
-    return comments;
-  } catch (err) {
-    return Error(`Error in extracting comments: ${err}`);
-  }
-};
-
-const getUserPosts = async (req, res) => {
-  try {
-    let uid = preprocessing(req.userId);
-    let questions = await getQuestionsByUser(uid);
-    let answers = await getAnswersByUser(uid);
-    let comments = await getCommentsByUser(uid);
-
-    res
-      .status(200)
-      .send({ questions: questions, answers: answers, comments: comments });
-  } catch (err) {
-    res.status(500).send(`Error in fetching user contributed posts: ${err}`);
-  }
-};
-// have to make route to update user details.
 
 router.post("/getUsersList", authorization, sanitizeParams, getUsersList);
 router.get(
@@ -123,6 +85,5 @@ router.get(
   sanitizeParams,
   getUserDetails
 );
-router.get("/getUserPosts", authorization, sanitizeParams, getUserPosts);
 
 module.exports = router;

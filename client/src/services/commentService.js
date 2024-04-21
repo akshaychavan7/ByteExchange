@@ -10,6 +10,9 @@ const reportComment = async (cid) => {
 const postComment = async (data) => {
   const res = await api.post(`${COMMENT_API_URL}/addComment`, data);
 
+  if (res.status !== 200) {
+    return false
+  }
   return res.data;
 };
 

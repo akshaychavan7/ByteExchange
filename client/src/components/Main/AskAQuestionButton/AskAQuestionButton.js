@@ -6,6 +6,7 @@ export default function AskAQuestionButton({ handleNewQuestion }) {
       variant="contained"
       startIcon={<SendIcon />}
       onClick={handleNewQuestion}
+      id="askQuestionButton"
     >
       Ask A Question
     </Button>

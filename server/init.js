@@ -94,6 +94,23 @@ function userCreate(user) {
   return userObj.save();
 }
 
+function userCreateWithId(user) {
+  let userdetail = {
+    _id: new mongoose.Types.ObjectId(user.userId),
+    username: user.username,
+    password: user.password,
+    firstname: user.firstName,
+    lastname: user.lastName,
+    userRole: user.role,
+    profilePic: user.profilePic,
+    technologies: user.technologies,
+    location: user.location,
+  };
+
+  let userObj = new User(userdetail);
+  return userObj.save();
+}
+
 function commentCreate(
   description,
   commented_by,
@@ -212,6 +229,30 @@ const init = async () => {
       technologies: ["Typescript", "React"],
       location: "Pune, India",
     },
+    {
+      username: "moderator",
+      password: "test",
+      firstName: "moderator",
+      lastName: "moderator",
+      role: "moderator",
+      profilePic:
+        "https://media.licdn.com/dms/image/D4D03AQF9WmGdmqrJMQ/profile-displayphoto-shrink_800_800/0/1692618347676?e=1718236800&v=beta&t=hVfMg8BIwFp429SB8_fKtBGMsw4pppqNpoJQRPnUBVI",
+      technologies: ["JavaScript", "React", "TypeScript"],
+      location: "Boston, MA",
+      userId: "6622f4902b45c4a06975c82a"
+    },
+    {
+      username: "general",
+      password: "test",
+      firstName: "general",
+      lastName: "general",
+      role: "general",
+      profilePic:
+        "https://media.licdn.com/dms/image/D4D03AQF9WmGdmqrJMQ/profile-displayphoto-shrink_800_800/0/1692618347676?e=1718236800&v=beta&t=hVfMg8BIwFp429SB8_fKtBGMsw4pppqNpoJQRPnUBVI",
+      technologies: ["JavaScript", "React", "TypeScript"],
+      location: "Boston, MA",
+      userId: "6622f5d28b534861b8fe7272"
+    }
   ];
 
   let t1 = await tagCreate("react");
@@ -228,6 +269,10 @@ const init = async () => {
   let user5 = await userCreate(users[4]);
   let user6 = await userCreate(users[5]);
   let user7 = await userCreate(users[6]);
+  let user8 = await userCreate(users[7]);
+  let user9 = await userCreate(users[8]);
+  let user10 = await userCreateWithId(users[9]);
+  let user11 = await userCreateWithId(users[10]);
 
   let comment1 = await commentCreate(
     "Nice!",
@@ -265,6 +310,28 @@ const init = async () => {
     [],
     false
   );
+
+  let comment5 = await commentCreate(
+    "This is great",
+    user5,
+    new Date("2023-11-23T08:24:00"),
+    0,
+    [],
+    [],
+    false
+  );
+
+  let comment6 = await commentCreate(
+    "This is so helpful",
+    user6,
+    new Date("2023-11-23T08:24:00"),
+    0,
+    [],
+    [],
+    true
+  );
+
+
 
   let a1 = await answerCreate(
     "React Router is mostly a wrapper around the history library. history handles interaction with the browser's window.history for you with its browser and hash histories. It also provides a memory history which is useful for environments that don't have a global history. This is particularly useful in mobile app development (react-native) and unit testing with Node.",
@@ -304,7 +371,7 @@ const init = async () => {
     0,
     [],
     [],
-    false
+    true
   );
   let a5 = await answerCreate(
     "I just found all the above examples just too confusing, so I wrote my own. ",
@@ -359,7 +426,7 @@ const init = async () => {
     1,
     [user1, user2],
     [user4],
-    false
+    true
   );
   await questionCreate(
     "android studio save string shared preference, start activity and load the saved string",
@@ -383,7 +450,7 @@ const init = async () => {
     200,
     [t5, t6],
     [a6, a7],
-    [],
+    [comment6],
     -1,
     [],
     [user5],
@@ -397,7 +464,7 @@ const init = async () => {
     103,
     [t3, t4, t5],
     [a8],
-    [],
+    [comment5],
     0,
     [],
     [],
