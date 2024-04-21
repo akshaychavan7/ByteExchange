@@ -9,14 +9,6 @@ const Comment = require("../models/comments");
 
 jest.mock("../models/comments");
 
-const { getQuestionsByUser, getAnswersByUser, getCommentsByUser } = require("../utils/user");
-
-jest.mock('../utils/user', () => ({
-    getQuestionsByUser: jest.fn(),
-    getAnswersByUser: jest.fn(),
-    getCommentsByUser: jest.fn()
-}));
-
 
 const _tag1 = {
     _id: "507f191e810c19729de860ea",

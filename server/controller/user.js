@@ -6,8 +6,6 @@ const Comment = require("../models/comments");
 
 const { preprocessing } = require("../utils/textpreprocess");
 
-const { getQuestionsByUser, getAnswersByUser, getCommentsByUser } = require("../utils/user");
-
 const { authorization } = require("../middleware/authorization");
 const { sanitizeParams } = require("../middleware/sanitizeParams");
 
