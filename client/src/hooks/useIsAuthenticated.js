@@ -21,6 +21,13 @@ export default function useIsAuthenticated() {
         type: constants.SET_IS_MODERATOR,
         payload: moderatorResponse,
       });
+
+      if(!response && !moderatorResponse) {
+        applicationCtx.dispatch({
+          type: constants.SET_IS_AUTHENTICATED,
+          payload: false,
+        });
+      }
     })();
   }, []);
   return;

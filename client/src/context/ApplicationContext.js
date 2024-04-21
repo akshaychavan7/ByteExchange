@@ -10,11 +10,12 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  if (action.type === constants.SET_IS_AUTHENTICATED) {
+  if (action.type === constants.SET_IS_AUTHENTICATED && action.payload) {
     return { ...state, isAuthenticated: action.payload };
-  }
-  if (action.type === constants.SET_IS_MODERATOR) {
+  } else if (action.type === constants.SET_IS_MODERATOR) {
     return { ...state, isModerator: action.payload };
+  } else {
+    return { ...state, isAuthenticated: false, isModerator: false };
   }
 };
 
