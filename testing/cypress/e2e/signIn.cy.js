@@ -53,7 +53,9 @@ describe("Sign In", () => {
         cy.get("#email").type("general")
         cy.get("#password").type("test")
         cy.get("#signInButton").click()
-    
+        
+        // sleep for 1 seconds
+        cy.wait(500);
         cy.visit("http://localhost:3000/login");
         cy.contains('Trending Questions');
     });

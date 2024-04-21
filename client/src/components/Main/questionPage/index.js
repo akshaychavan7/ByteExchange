@@ -21,7 +21,7 @@ const QuestionPage = ({
   useEffect(() => {
     const fetchData = async () => {
       let res = await getQuestionsByFilter(order, search);
-      setQlist(res || []);
+      setQlist(res);
     };
 
     fetchData().catch((e) => console.log(e));
