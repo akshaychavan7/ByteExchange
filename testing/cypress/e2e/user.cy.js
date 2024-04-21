@@ -22,22 +22,22 @@ describe("User page", () => {
         cy.contains("JavaScript")
         cy.contains("React")
         cy.contains("TypeScript")
-    });
 
-    it("should display user page", () => {
-      const nameList = [
-        "Akshay",
-        "John",
-        "Shiu",
-        "Vedant Rishi",
-        "Sameer",
-        "Sudhanva"
-      ]
-      cy.get("#sideBarUsers").click();
-      nameList.forEach((name) => {
+        cy.get("#closeProfile").click()
+
+        const nameList = [
+            "Akshay",
+            "John",
+            "Shiu",
+            "Vedant Rishi",
+            "Sameer",
+            "Sudhanva"
+          ]
+        cy.get("#sideBarUsers").click();
+        nameList.forEach((name) => {
         cy.contains(name);
-      });
-    })
+        });
+    });
   
     it("Click on name should display user info", () => {
       cy.get("#sideBarUsers").click();
@@ -50,6 +50,18 @@ describe("User page", () => {
       cy.contains("React")
       cy.contains("TypeScript")
     })
+
+    it("Search for user should display user info", () => {
+      cy.get("#sideBarUsers").click();
+      cy.get('#search').type('Shawn')
+      cy.contains("Shiu Chen");
+    })
+
+    it("Search for invalid user should display no user found", () => {
+        cy.get("#sideBarUsers").click();
+        cy.get('#search').type('invalid')
+        cy.contains("User not found");
+    });
   })
   
   

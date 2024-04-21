@@ -14,7 +14,7 @@ const AnswerPage = ({ qid, handleNewQuestion, handleNewAnswer, clickTag }) => {
   useEffect(() => {
     const fetchData = async () => {
       let res = await getQuestionById(qid);
-      setQuestion(res || {});
+      setQuestion(res);
     };
     fetchData().catch((e) => console.log(e));
   }, [updateState]);

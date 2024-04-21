@@ -19,8 +19,8 @@ import HomePage from "./HomePage/HomePage";
 import { constants } from "../../config";
 
 const Main = ({
-  search = "",
-  setSearch = () => {},
+  search,
+  setSearch,
   title,
   setQuestionPage,
 }) => {

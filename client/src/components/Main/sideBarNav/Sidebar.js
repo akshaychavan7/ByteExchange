@@ -154,7 +154,7 @@ export default function Sidebar({
             onClick={() => setOpen(!open)}
             edge="start"
           >
-            <MenuIcon />
+            <MenuIcon id="menuIcon"/>
           </IconButton>
           <Typography variant="h5" noWrap component="div">
             Stack Overflow

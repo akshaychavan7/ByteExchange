@@ -175,7 +175,7 @@ const NewQuestion = ({ addQuestion }) => {
               onClick={handleSuggestTagsClick}
               title="Suggest AI Generated Tags"
             >
-              <AssistantRoundedIcon color="primary" sx={{ fontSize: "36px" }} />
+              <AssistantRoundedIcon color="primary" sx={{ fontSize: "36px" }} id="suggestTagsButton"/>
             </IconButton>
           </div>
         </div>

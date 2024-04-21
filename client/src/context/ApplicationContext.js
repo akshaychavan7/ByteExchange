@@ -10,14 +10,13 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  switch (action.type) {
-    case constants.SET_IS_AUTHENTICATED:
-      return { ...state, isAuthenticated: action.payload };
-    case constants.SET_IS_MODERATOR:
-      return { ...state, isModerator: action.payload };
-    default:
-      return state;
+  if (action.type === constants.SET_IS_AUTHENTICATED) {
+    return { ...state, isAuthenticated: action.payload };
   }
+  if (action.type === constants.SET_IS_MODERATOR) {
+    return { ...state, isModerator: action.payload };
+  }
+  return state;
 };
 
 // Create a provider component

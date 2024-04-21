@@ -41,6 +41,7 @@ const Users = ({ users, viewUserProfile, setViewUserProfile }) => {
         margin="normal"
         value={searchTerm}
         onChange={handleSearchChange}
+        id="search"
       />
       <Grid
         container

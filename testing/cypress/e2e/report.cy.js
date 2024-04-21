@@ -19,11 +19,11 @@ describe("report question, answer, comment", () => {
       cy.contains("Quick question about storage on android").click();
       cy.get("#reportBtn-question").click();
       cy.contains("Post has been flagged for review");
-  
-      cy.get("#sideBarLogout").click()
-      cy.get("#email").type("moderator")
-      cy.get("#password").type("test")
-      cy.get("#signInButton").click()
+      cy.get("#alert-close").click();
+      cy.get("#sideBarLogout").click();
+      cy.get("#email").type("moderator");
+      cy.get("#password").type("test");
+      cy.get("#signInButton").click();
   
       cy.contains("I would like to know the best way to go about storing an array on an android phone so that even when the app/activity ended the data remains")
     });

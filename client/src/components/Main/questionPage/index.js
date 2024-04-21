@@ -6,7 +6,7 @@ import { getQuestionsByFilter } from "../../../services/questionService";
 import { useEffect, useState } from "react";
 
 const QuestionPage = ({
-  title_text = "All Questions",
+  title_text,
   order,
   search,
   setQuestionOrder,

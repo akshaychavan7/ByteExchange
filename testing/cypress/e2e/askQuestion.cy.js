@@ -196,8 +196,18 @@ describe("Ask Question", () => {
         cy.get("#postQuestionButton").click()
 
         cy.contains('Question Tags should be less than 5');
-        });
-    
+    });
+
+    it("Aska a question and generate tags using suggest tags button", () => {
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("hello world")
+        cy.get("#description").type("hello world in java?")
+
+        cy.get("#suggestTagsButton").click()
+        cy.contains('java')
+        cy.contains('world')
+    });
+
   });
   
   

@@ -6,7 +6,7 @@ import "./HomePage.css";
 import { useEffect, useState } from "react";
 
 const HomePage = ({
-  title_text = "Trending Questions",
+  title_text,
   order,
   search,
   setQuestionOrder,

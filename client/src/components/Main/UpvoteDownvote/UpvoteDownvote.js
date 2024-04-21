@@ -76,18 +76,13 @@ const UpvoteDownvote = ({
       return;
     } else {
       let response;
-      switch (postType) {
-        case "question":
-          response = reportQuestion(id);
-          break;
-        case "answer":
-          response = reportAnswer(id);
-          break;
-        case "comment":
-          response = reportComment(id);
-          break;
-        default:
-          break;
+
+      if (postType === "question") {
+        response = reportQuestion(id);
+      } else if (postType === "answer") {
+        response = reportAnswer(id);
+      } else if (postType === "comment") {
+        response = reportComment(id);
       }
       console.log(response);
       setFlagged(true);
