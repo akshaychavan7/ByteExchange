@@ -51,6 +51,13 @@ describe("User page", () => {
       cy.contains("TypeScript")
     })
 
+    it("User with no questions and answers should display no questions and answers", () => {
+        cy.get("#sideBarUsers").click();
+        cy.contains("Jane Doe").click();
+        cy.contains("No questions posted yet");
+        cy.contains("No answers posted yet");
+    });
+
     it("Search for user should display user info", () => {
       cy.get("#sideBarUsers").click();
       cy.get('#search').type('Shawn')

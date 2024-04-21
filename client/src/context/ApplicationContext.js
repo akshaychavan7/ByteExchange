@@ -16,7 +16,6 @@ const reducer = (state, action) => {
   if (action.type === constants.SET_IS_MODERATOR) {
     return { ...state, isModerator: action.payload };
   }
-  return state;
 };
 
 // Create a provider component
