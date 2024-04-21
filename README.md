@@ -17,29 +17,31 @@ Clearly indicate which feature is an additional feature for extra credit.
 
 - Feature 4: Allowing user to post a question with title, body, and tags.
 
-- Feature 5: Allowing user to post an answer to a question.
+- Feature 5: AI suggestion for tags when posting a question based on title and description. (Additional Feature - Extra Credit)
 
-- Feature 6: Allowing user to post a comment to a question or answer.
+- Feature 6: Allowing user to post an answer to a question.
 
-- Feature 7: Allowing user to upvote or downvote a question, answer, or comment.
+- Feature 7: Allowing user to post a comment to a question or answer.
 
-- Feature 8: Allowing user to report a question, answer, or comment.
+- Feature 8: Allowing user to upvote or downvote a question, answer, or comment.
 
-- Feature 9: ALlowing user to search for questions by title, body, or tags.
+- Feature 9: Allowing user to report a question, answer, or comment.
 
-- Feature 10: Allowing user to view all tags and view all questions with a specific tag.
+- Feature 10: ALlowing user to search for questions by title, body, or tags.
 
-- Feature 11: Allowing user to view all other users and their profile information, including questions, answers.
+- Feature 11: Allowing user to view all tags and view all questions with a specific tag.
 
-- Feature 12: Allowing user to navigate each page with the sidebar.
+- Feature 12: Allowing user to view all other users and their profile information, including questions, answers.
 
-- Feature 13: Allowing moderator to delete reported questions, answers, or comments.
+- Feature 13: Allowing user to navigate each page with the sidebar.
 
-- Feature 14: Allowing moderator to ignore reported questions, answers, or comments. 
+- Feature 14: Allowing moderator to delete reported questions, answers, or comments.
 
-- Feature 15: If page is not found, display a 404 page.
+- Feature 15: Allowing moderator to ignore reported questions, answers, or comments. 
 
-- Feature 16: Display question posted time in a human readable format.
+- Feature 16: If page is not found, display a 404 page.
+
+- Feature 17: Display question posted time in a human readable format.
 
 ## For each feature indicate the test
 
@@ -51,30 +53,31 @@ Clearly indicate which feature is an additional feature for extra credit.
 
 - Feature 4: testing/cypress/e2e/askQuestion.cy.js
 
-- Feature 5: testing/cypress/e2e/answerQuestion.cy.js
+- Feature 5: testing/cypress/e2e/askQuestion.cy.js (Additional Feature - Extra Credit)
 
-- Feature 6: testing/cypress/e2e/comment.cy.js
+- Feature 6: testing/cypress/e2e/answerQuestion.cy.js
 
-- Feature 7: testing/cypress/e2e/upvoteDownvote.cy.js
+- Feature 7: testing/cypress/e2e/comment.cy.js
 
-- Feature 8: testing/cypress/e2e/report.cy.js
+- Feature 8: testing/cypress/e2e/upvoteDownvote.cy.js
 
-- Feature 9: testing/cypress/e2e/search.cy.js
+- Feature 9: testing/cypress/e2e/report.cy.js
 
-- Feature 10: testing/cypress/e2e/tags.cy.js
+- Feature 10: testing/cypress/e2e/search.cy.js
 
-- Feature 11: testing/cypress/e2e/userProfile.cy.js
+- Feature 11: testing/cypress/e2e/tags.cy.js
 
-- Feature 12: testing/cypress/e2e/sidebar.cy.js
+- Feature 12: testing/cypress/e2e/userProfile.cy.js
 
-- Feature 13: testing/cypress/e2e/moderatorDelete.cy.js
+- Feature 13: testing/cypress/e2e/sidebar.cy.js
 
-- Feature 14: testing/cypress/e2e/moderatorIgnore.cy.js
+- Feature 14: testing/cypress/e2e/moderatorDelete.cy.js
 
-- Feature 15: testing/cypress/e2e/notFoundPage.cy.js
+- Feature 15: testing/cypress/e2e/moderatorIgnore.cy.js
 
-- Feature 16: testing/cypress/e2e/duration.cy.js
+- Feature 16: testing/cypress/e2e/notFoundPage.cy.js
 
+- Feature 17: testing/cypress/e2e/duration.cy.js
 
 ## List of server endpoints
 
