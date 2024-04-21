@@ -78,16 +78,11 @@ export default function SignUp() {
     if (!validateEmail(payload.username)) return;
 
     const response = await register(payload);
-    switch (response.status) {
-      case 200:
-        alert.showAlert("User registered successfully", "success");
-        navigate("/login");
-        break;
-      case 400:
-        alert.showAlert(response.message, "error");
-        break;
-      default:
-        alert.showAlert("Failed to register user", "error");
+    if (response.status == 200){
+      alert.showAlert("User registered successfully", "success");
+      navigate("/login");
+    } else {
+      alert.showAlert("Failed to register user", "error");
     }
   };
 
@@ -211,6 +206,7 @@ export default function SignUp() {
                     variant="outlined"
                     tabIndex={-1}
                     startIcon={<AccountCircle />}
+                    id="uploadProfilePic"
                   >
                     Upload Profile Picture
                     <VisuallyHiddenInput
