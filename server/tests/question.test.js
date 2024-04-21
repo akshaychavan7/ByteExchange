@@ -255,3 +255,31 @@ describe("question util module", () => {
   });
 
 });
+
+
+// describe("showQuesUpDown", () => {
+//   test("showQuesUpDown should respond correctly", () => {
+//     const q = {
+//       "_id": "662442c6f504c5166b9c6056",
+//       "title": "test",
+//       "description": "test description",
+//       "asked_by": {},
+//       "views": 1,
+//       "tags": ["tag1"],
+//       "answers": [],
+//       "comments": [],
+//       "vote_count": -1,
+//       "upvoted_by": [],
+//       "downvoted_by": ["6622f5d28b534861b8fe7272"],
+//       "flag": false,
+//       "ask_date_time": "2024-04-20T22:33:42.075Z",
+//       "__v": 0,
+//       "upvote": false,
+//       "downvote": false
+//     }
+
+//     const result = showQuesUpDown("6622f5d28b534861b8fe7272", q)
+
+//     expect({...q, upvote: false, downvote: true}).toEqual(result)
+//   })
+// });
