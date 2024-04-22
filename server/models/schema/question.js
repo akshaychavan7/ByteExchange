@@ -8,7 +8,7 @@ module.exports = mongoose.Schema(
         asked_by: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         ask_date_time: { type: Date, required: true, default: Date.now },
         views: { type: Number, required: true, default: 0 },
-        tags: {type: [{  type: mongoose.Schema.Types.ObjectId, ref: "Tag"}], validate: [arrayLimit, '{PATH} exceeds the limit of 5']},
+        tags: {type: [{  type: mongoose.Schema.Types.ObjectId, ref: "Tag"}]},
         answers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Answer" }],
         comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
         vote_count: { type: Number, required: true, default: 0 },
@@ -18,7 +18,3 @@ module.exports = mongoose.Schema(
     },
     { collection: "Question" }
 );
-
-function arrayLimit(val) {
-    return val.length <= 5;
-}

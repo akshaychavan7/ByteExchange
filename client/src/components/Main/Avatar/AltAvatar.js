@@ -22,11 +22,8 @@ function stringToColor(string) {
 
 function initials(name) {
   const nameSplit = name.split(" ");
-  const initials =
-    nameSplit.length > 1
-      ? nameSplit[0].charAt(0) + nameSplit[1].charAt(0)
-      : nameSplit[0].charAt(0);
-  return initials.toUpperCase() || "NA";
+  const initials = nameSplit[0].charAt(0) + nameSplit[1].charAt(0)
+  return initials.toUpperCase()
 }
 
 function stringAvatar(name, width, height) {

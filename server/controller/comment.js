@@ -82,7 +82,7 @@ const getReportedComments = async (req, res) => {
     });
     res.status(200).json(comments);
   } catch (error) {
-    res.status(500).send("Internal Server Error");
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 
@@ -115,8 +115,7 @@ const resolveComment = async (req, res) => {
     );
     res.status(200).send({ message: "Comment resolved successfully" });
   } catch (error) {
-    
-    res.statclearus(500).send({ message: "Internal Server Error" });
+    res.status(500).send({ message: "Internal Server Error" });
   }
 };
 

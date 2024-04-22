@@ -4,7 +4,6 @@ const {
   addTag,
   getQuestionsByOrder,
   filterQuestionsBySearch,
-  showQuesUpDown,
   getTop10Questions,
 } = require("../utils/question");
 
@@ -67,7 +66,8 @@ const getQuestionById = async (req, res) => {
         },
       ])
       .exec();
-    let jsonQuestion = showQuesUpDown(req.userId, question);
+    let jsonQuestion = question.toJSON();  
+    jsonQuestion = showQuesUpDown(req.userId, jsonQuestion);
     res.status(200).json(jsonQuestion);
   } catch (err) {
     res.status(500);
@@ -75,8 +75,69 @@ const getQuestionById = async (req, res) => {
   }
 };
 
+
+const showQuesUpDown = (uid, question) => {
+  question.upvote = false;
+  question.downvote = false;
+  let ques_upvoteBy = question["upvoted_by"].map((objectId) =>
+    objectId.toString()
+  );
+  let ques_downvoteBy = question["downvoted_by"].map((objectId) =>
+    objectId.toString()
+  );
+  if (ques_upvoteBy.includes(uid)) {
+    question.upvote = true;
+  } else if (ques_downvoteBy.includes(uid)) {
+    question.downvote = true;
+  }
+  question["answers"] = showAnsUpDown(uid, question["answers"]);
+  question["comments"] = showCommentUpDown(uid, question["comments"]);
+  return question;
+};
+
+const showAnsUpDown = (uid, answers) => {
+  for (let answer in answers) {
+    answers[answer].upvote = false;
+    answers[answer].downvote = false;
+    let ans_upvoteBy = answers[answer]["upvoted_by"].map((objectId) =>
+      objectId.toString()
+    );
+    let ans_downvoteBy = answers[answer]["downvoted_by"].map((objectId) =>
+      objectId.toString()
+    );
+    if (ans_upvoteBy.includes(uid)) {
+      answers[answer].upvote = true;
+    } else if (ans_downvoteBy.includes(uid)) {
+      answers[answer].downvote = true;
+    }
+    answers[answer]["comments"] = showCommentUpDown(
+      uid,
+      answers[answer]["comments"]
+    );
+  }
+  return answers;
+};
+
+const showCommentUpDown = (uid, comments) => {
+  for (let comment in comments) {
+    comments[comment].upvote = false;
+    comments[comment].downvote = false;
+    let com_upvoteBy = comments[comment]["upvoted_by"].map((objectId) =>
+      objectId.toString()
+    );
+    if (com_upvoteBy.includes(uid)) {
+      comments[comment].upvote = true;
+    }
+  }
+  return comments;
+};
+
+
 // To add Question
 const addQuestion = async (req, res) => {
+  if(req.body.tags.length > 5){
+    return res.status(400).json({ message: "Maximum 5 tags are allowed" });
+  }
   let tags = await Promise.all(
     req.body.tags.map(async (tag) => {
       return await addTag(tag);

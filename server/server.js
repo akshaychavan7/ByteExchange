@@ -49,9 +49,9 @@ app.use("/question", questionController);
 app.use("/tag", tagController);
 app.use("/answer", answerController);
 app.use("/login", loginController);
-app.use("/register", loginController);
-app.use("/user", userController);
+// app.use("/register", loginController);
 app.use("/comment", commentController);
+app.use("/user", userController);
 app.use("/vote", voteController);
 
 let server = app.listen(port, () => {

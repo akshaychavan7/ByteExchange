@@ -27,11 +27,9 @@ export default function ProfilePage({ username, setViewUserProfile }) {
       .then((data) => {
         setUser(data.userDetails);
       })
-      .catch((e) => {
-        console.error(e);
+      .catch(() => {
         alert.showAlert("Could not fetch user details", "error");
         setUser(null);
-        setViewUserProfile({ view: false, username: "" });
       });
   }, []);
 
@@ -52,6 +50,7 @@ export default function ProfilePage({ username, setViewUserProfile }) {
             fontSize: "2rem",
             color: "darkgray",
           }}
+          id="closeProfile"
         />
       </Tooltip>
       <Stack direction="row" alignItems="center" spacing={4}>

@@ -19,8 +19,8 @@ import HomePage from "./HomePage/HomePage";
 import { constants } from "../../config";
 
 const Main = ({
-  search = "",
-  setSearch = () => {},
+  search,
+  setSearch,
   title,
   setQuestionPage,
 }) => {
@@ -36,6 +36,7 @@ const Main = ({
     username: "",
   });
   let content = null;
+
 
   useEffect(() => {
     async function fetchUsersList() {
@@ -54,6 +55,7 @@ const Main = ({
       let res = await getTrendingQuestions();
       setQlist(res || []);
     }
+
     fetchTrendingQuestions().catch((e) => {
       console.error(e);
       alert.showAlert(
@@ -133,9 +135,7 @@ const Main = ({
     case constants.HOME_PAGE: {
       content = (
         <HomePage
-          title_text={title}
           order={questionOrder.toLowerCase()}
-          search={search}
           setQuestionOrder={setQuestionOrder}
           clickTag={clickTag}
           handleAnswer={handleAnswer}
