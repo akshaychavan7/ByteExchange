@@ -62,7 +62,5 @@ export const sortByActiveOrder = (qList) => {
     return dateB - dateA;
   });
 
-  console.log("qList after sorting", qList);
-
   return qList;
 };

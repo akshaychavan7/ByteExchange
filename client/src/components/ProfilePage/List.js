@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-export default function List({ list, title = "Questions", type = "question" }) {
+export default function  List({ list, title, type }) {
   return (
     <>
       <Typography variant="h6">{title}</Typography>

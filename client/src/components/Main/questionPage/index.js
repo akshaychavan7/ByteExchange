@@ -6,7 +6,7 @@ import { getQuestionsByFilter } from "../../../services/questionService";
 import { useEffect, useState } from "react";
 
 const QuestionPage = ({
-  title_text = "All Questions",
+  title_text,
   order,
   search,
   setQuestionOrder,
@@ -21,7 +21,7 @@ const QuestionPage = ({
   useEffect(() => {
     const fetchData = async () => {
       let res = await getQuestionsByFilter(order, search);
-      setQlist(res || []);
+      setQlist(res);
     };
 
     fetchData().catch((e) => console.log(e));

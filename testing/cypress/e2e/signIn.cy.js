@@ -36,4 +36,27 @@ describe("Sign In", () => {
       
       cy.contains('Invalid credentials');
     });
+
+    it("access home page without signing in should show unauthorized access and click on log in button to direct back to login page", () => {
+        cy.visit("http://localhost:3000/home");
+        cy.contains("Unauthorized Access");
+        cy.get("#signInLink").click();
+        cy.get("#email").type("general")
+        cy.get("#password").type("test")
+        cy.get("#signInButton").click()
+    
+        cy.contains('Trending Questions');
+    });
+
+    it("if user is already logged in then redirect to home page", () => {
+        cy.visit("http://localhost:3000/login");
+        cy.get("#email").type("general")
+        cy.get("#password").type("test")
+        cy.get("#signInButton").click()
+        
+        // sleep for 1 seconds
+        cy.wait(500);
+        cy.visit("http://localhost:3000/login");
+        cy.contains('Trending Questions');
+    });
   });

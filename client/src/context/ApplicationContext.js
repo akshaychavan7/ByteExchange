@@ -10,13 +10,12 @@ const initialState = {
 };
 
 const reducer = (state, action) => {
-  switch (action.type) {
-    case constants.SET_IS_AUTHENTICATED:
-      return { ...state, isAuthenticated: action.payload };
-    case constants.SET_IS_MODERATOR:
-      return { ...state, isModerator: action.payload };
-    default:
-      return state;
+  if (action.type === constants.SET_IS_AUTHENTICATED && action.payload) {
+    return { ...state, isAuthenticated: action.payload };
+  } else if (action.type === constants.SET_IS_MODERATOR) {
+    return { ...state, isModerator: action.payload };
+  } else {
+    return { ...state, isAuthenticated: false, isModerator: false };
   }
 };
 

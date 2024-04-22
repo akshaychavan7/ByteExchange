@@ -11,7 +11,7 @@ export const AlertContextProvider = ({ children }) => {
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("info");
 
-  const showAlert = (message, severity = "info") => {
+  const showAlert = (message, severity) => {
     setMessage(message);
     setSeverity(severity);
     setOpen(true);
@@ -31,6 +31,7 @@ export const AlertContextProvider = ({ children }) => {
                 aria-label="close"
                 color="inherit"
                 size="small"
+                id="alert-close"
                 onClick={() => {
                   setOpen(false);
                 }}

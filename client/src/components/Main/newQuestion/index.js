@@ -48,12 +48,12 @@ const NewQuestion = ({ addQuestion }) => {
     }
 
     if (description.length === 0) {
-      alert.showAlert("Question Description cannot be empty", "error");
+      alert.showAlert("Question Description can not be empty", "error");
       return;
     }
 
     if (tags.length === 0) {
-      alert.showAlert("Please add atleast one tag", "error");
+      alert.showAlert("Please add at least one tag", "error");
       return;
     }
 
@@ -175,7 +175,7 @@ const NewQuestion = ({ addQuestion }) => {
               onClick={handleSuggestTagsClick}
               title="Suggest AI Generated Tags"
             >
-              <AssistantRoundedIcon color="primary" sx={{ fontSize: "36px" }} />
+              <AssistantRoundedIcon color="primary" sx={{ fontSize: "36px" }} id="suggestTagsButton"/>
             </IconButton>
           </div>
         </div>

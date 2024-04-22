@@ -91,10 +91,7 @@ export default function Login() {
           sx={{
             backgroundImage: `url(${Background})`,
             backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
+            backgroundColor: "lightgrey",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

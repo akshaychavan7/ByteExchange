@@ -154,7 +154,7 @@ export default function Sidebar({
             onClick={() => setOpen(!open)}
             edge="start"
           >
-            <MenuIcon />
+            <MenuIcon id="menuIcon"/>
           </IconButton>
           <Typography variant="h5" noWrap component="div">
             Stack Overflow
@@ -205,6 +205,7 @@ export default function Sidebar({
                 justifyContent: open ? "initial" : "center",
                 px: 2.5,
               }}
+              id="sideBarHome"
             >
               <ListItemIcon
                 sx={{

@@ -137,6 +137,77 @@ describe("Ask Question", () => {
   
       cy.contains('Question title can not be empty');
     });
+
+    it("Ask a question with empty description shows error", () => {
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("How to compare two double values in Java?")
+        cy.get("#tags").type("tag1").type("{enter}")
+        
+        cy.get("#postQuestionButton").click()
+    
+        cy.contains('Question Description can not be empty');
+        }
+    );
+
+    it("Ask a question with empty tags shows error", () => {
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("How to compare two double values in Java?")
+        cy.get("#description").type("A simple comparison of two double values in Java creates some problems.")
+        
+        cy.get("#postQuestionButton").click()
+    
+        cy.contains('Please add at least one tag');
+        }
+    );
+    it("Ask a question with more than 100 characters in title shows error", () => {
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("A simple comparison of two double values in Java creates some problems. Let's consider the following simple code snippet in Java.")
+        cy.get("#description").type("A simple comparison of two double values in Java creates some problems.")
+        cy.get("#tags").type("tag1").type("{enter}")
+
+        cy.get("#postQuestionButton").click()
+
+        cy.contains('Question Title should be less than 100 characters');
+        }
+    );
+
+    it("Ask a question with more than 500 characters in description shows error", () => {
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("How to compare two double values in Java?")
+        cy.get("#description").type("In a Cypress test report, the percentages you provided typically refer to code coverage metrics. Here's what each of these metrics represents:Statements: This indicates the percentage of executable code statements that were executed during the test run. For example, if your codebase has 100 statements and during the test run, only 6 of them were executed, the statement coverage would be 6%.Branches: This represents the percentage of decision points or branches in your code that were executed during the test run. ")
+        cy.get("#tags").type("tag1").type("{enter}")
+
+        cy.get("#postQuestionButton").click()
+
+        cy.contains('Question Description should be less than 500 characters');
+        });
+
+    it("Ask a question with more than 5 tags shows error", () => {
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("How to compare two double values in Java?")
+        cy.get("#description").type("A simple comparison of two double values in Java creates some problems.")
+        cy.get("#tags").type("tag1").type("{enter}")
+        cy.get("#tags").type("tag2").type("{enter}")
+        cy.get("#tags").type("tag3").type("{enter}")
+        cy.get("#tags").type("tag4").type("{enter}")
+        cy.get("#tags").type("tag5").type("{enter}")
+        cy.get("#tags").type("tag6").type("{enter}")
+
+        cy.get("#postQuestionButton").click()
+
+        cy.contains('Question Tags should be less than 5');
+    });
+
+    it("Aska a question and generate tags using suggest tags button", () => {
+        cy.get("#askQuestionButton").click()
+        cy.get("#title").type("hello world")
+        cy.get("#description").type("hello world in java?")
+
+        cy.get("#suggestTagsButton").click()
+        cy.contains('java')
+        cy.contains('world')
+    });
+
   });
   
   

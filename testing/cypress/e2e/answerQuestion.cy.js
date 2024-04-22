@@ -32,7 +32,6 @@ describe("Answer Question", () => {
       cy.contains("Programmatically navigate using React router").click();
       cy.get("#answerQuestionBtn").click();
       cy.get("#postAnswerBtn").click();
-      // cy.contains("Answer description can not be empty");
     });
   
     

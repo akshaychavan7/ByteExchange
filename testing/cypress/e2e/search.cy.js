@@ -20,16 +20,6 @@ describe("Search Question", () => {
     });
   
     it("Search string in question text", () => {
-      const qTitles = ["Object storage for a web application"];
-      cy.visit("http://localhost:3000");
-      cy.get("#searchBar").type("40 million{enter}");
-      cy.get(".postTitle").each(($el, index, $list) => {
-        cy.wrap($el).should("contain", qTitles[index]);
-      });
-    });
-  
-  
-    it("Search string in question text", () => {
       const qTitles = ["Quick question about storage on android"];
       cy.get("#searchBar").type("data remains{enter}");
       cy.get(".postTitle").each(($el, index, $list) => {

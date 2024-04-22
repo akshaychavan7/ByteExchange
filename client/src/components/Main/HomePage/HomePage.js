@@ -6,9 +6,7 @@ import "./HomePage.css";
 import { useEffect, useState } from "react";
 
 const HomePage = ({
-  title_text = "Trending Questions",
   order,
-  search,
   setQuestionOrder,
   clickTag,
   handleAnswer,
@@ -25,28 +23,15 @@ const HomePage = ({
   }, [qlist]);
 
   useEffect(() => {
-    if (search === "" && order === constants.ORDER_NEWEST) {
+    if ( order === constants.ORDER_NEWEST) {
       setFilteredQlist(qlist);
       return;
+    } else if(order === constants.ORDER_ACTIVE) {
+      setFilteredQlist(sortByActiveOrder(qlist));
+    } else if(order === constants.ORDER_UNANSWERED) {
+      setFilteredQlist(qlist.filter((q) => q.answers.length === 0));
     }
-    let list = qlist.filter((q) => {
-      return q.title.toLowerCase().includes(search.toLowerCase());
-    });
-    switch (order) {
-      case constants.ORDER_NEWEST:
-        list.sort((a, b) => {
-          return new Date(b.ask_date_time) - new Date(a.ask_date_time);
-        });
-        break;
-      case constants.ORDER_ACTIVE:
-        list = sortByActiveOrder(list);
-        break;
-      case constants.ORDER_UNANSWERED:
-        list = list.filter((q) => q.answers.length === 0);
-        break;
-    }
-    setFilteredQlist(list);
-  }, [order, search]);
+  }, [order]);
 
   return (
     <>
@@ -72,9 +57,6 @@ const HomePage = ({
           <h2 className="center">No questions found</h2>
         )}
       </div>
-      {title_text === "Search Results" && !filteredQlist.length && (
-        <div className="bold_title right_padding">No Questions Found</div>
-      )}
     </>
   );
 };

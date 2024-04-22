@@ -1,9 +1,5 @@
 const BadWordsFilter = require("bad-words");
 
-const textfiltering = (input) => {
-  const filter = new BadWordsFilter();
-  return filter.isProfane(input);
-};
 
 const preprocessing = (input) => {
   input = input.trim();
@@ -15,4 +11,4 @@ const preprocessing = (input) => {
     .replace(/'/g, "&#39;");
 };
 
-module.exports = { preprocessing, textfiltering };
+module.exports = { preprocessing };

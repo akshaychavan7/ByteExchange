@@ -115,6 +115,7 @@ describe("POST /authenticate", () => {
         server.close();
         await mongoose.disconnect();
     });
+
     
     it("should authenticate a user", async () => {
         // Mocking User.findOne()
@@ -177,4 +178,42 @@ describe("POST /authenticate", () => {
         expect(response.status).toBe(500);
         expect(response.body.message).toBe("Internal Server Error");
     });
+});
+
+
+
+describe("User presave", () => {
+    beforeEach(async () => {
+        await mongoose.connect('mongodb://localhost:27017/fake_so', {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        });
+    
+        server = require("../server");
+    });
+    
+    afterEach(async () => {
+        //delete user test1
+        await User.deleteOne({username: "test1"});
+
+        server.close();
+        await mongoose.disconnect();
+    });
+
+    it("should hash the password when save a user", async () => {
+        const user = new User({
+            username: "test1",
+            password: "test1",
+            firstname: "firstName1",
+            lastname: "lastName1",
+            profilePic: "test1",
+            location: "test1",
+        });
+
+        await user.save();
+
+        expect(user.password).not.toBe("test1");
+    });
+
+    
 });
