@@ -248,6 +248,6 @@ router.post(
   resolveQuestion
 );
 router.delete("/deleteQuestion/:questionId", adminAuthorization, deleteQuestion);
-router.get("/getTrendingQuestions", getTrendingQuestions);
+router.get("/getTrendingQuestions", authorization, getTrendingQuestions);
 
 module.exports = router;
